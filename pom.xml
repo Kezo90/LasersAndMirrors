@@ -164,6 +164,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>logs/</directory>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 			
             <plugin>
