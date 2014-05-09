@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<configuration scan="false">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{YYYY.MM.dd. HH:mm:ss.SSS} [%-5level] %logger{50} [%thread] - %msg%n</pattern>
+		</encoder>
+		<!--
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		-->
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>logs/warnings.log</file>
+		<append>true</append>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+		<encoder>
+			<pattern>%d{YYYY.MM.dd. HH:mm:ss.SSS} [%-5level] %logger{50} [%thread] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="FULL_LOG_FILE" class="ch.qos.logback.core.FileAppender">
+		<file>logs/full.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{YYYY.MM.dd. HH:mm:ss.SSS} [%-5level] %logger{50} [%thread] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="ALL">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE"/>
+		<appender-ref ref="FULL_LOG_FILE"/>
+	</root>
+	
+	<!--
+	<logger name="hu.unideb.inf.lasersandmirrors.DB" level="ALL" additivity="false">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE"/>
+		<appender-ref ref="FULL_LOG_FILE"/>
+	</logger>
+	-->
+</configuration>
