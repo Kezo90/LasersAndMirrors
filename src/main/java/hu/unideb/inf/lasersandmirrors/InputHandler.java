@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class InputHandler implements MouseInputListener{
 	
 	/**
-	 * A {@link InputHandler} osztály naplózója.
+	 * Az {@link InputHandler} osztály naplózója.
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 	
