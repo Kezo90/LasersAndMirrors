@@ -166,7 +166,7 @@
 				</executions>
 				<configuration>
 					<filesets>
-						<fileset>some errorasd
+						<fileset>
 							<directory>logs/</directory>
 						</fileset>
 					</filesets>
