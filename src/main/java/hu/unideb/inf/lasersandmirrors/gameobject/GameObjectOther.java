@@ -7,6 +7,8 @@ package hu.unideb.inf.lasersandmirrors.gameobject;
  * @author Kerekes Zoltán
  */
 public class GameObjectOther extends GameObject {
+	
+	/** Láthatósági érték; minnél kisebb, annál hátrébb van. */
 	private int depth = 0;
 	
 	@Override

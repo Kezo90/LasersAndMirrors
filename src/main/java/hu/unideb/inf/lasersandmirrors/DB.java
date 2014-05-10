@@ -25,19 +25,13 @@ import org.slf4j.LoggerFactory;
  */
 public class DB {
 	
-	/**
-	 * Az adatbáziskapcsolat.
-	 */
+	/** Az adatbáziskapcsolat. */
 	private static Connection connection = null;
 	
-	/**
-	 * A {@link DB} osztály naplózója.
-	 */
+	/** Az adott osztály naplózója. */
 	private static final Logger logger = LoggerFactory.getLogger(DB.class);
 	
-	/**
-	 * A játék adatbázisának neve.
-	 */
+	/** A játék adatbázisának neve. */
 	private static final String DB = "lasers_and_mirrors";
 	
 	/**

@@ -11,7 +11,7 @@ import hu.unideb.inf.lasersandmirrors.Settings;
 public class PlaygroundFrame extends javax.swing.JFrame {
 	
 	/**
-	 * Creates new form PlaygroundFrame
+	 * Creates new form PlaygroundFrame.
 	 */
 	public PlaygroundFrame() {
 		initComponents();
@@ -75,6 +75,11 @@ public class PlaygroundFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Az ablak bezárásakor hívódik meg.
+	 * 
+	 * @param evt A kiváltott esemény leírója.
+	 */
     private void windowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowClosing
         Game.exitGame();
     }//GEN-LAST:event_windowClosing

@@ -15,16 +15,34 @@ import org.slf4j.LoggerFactory;
  * @author Kerekes Zoltán
  */
 public class GameObjectDiamond extends GameObject implements GraphicBitmap {
-	private static final Logger logger = LoggerFactory.getLogger(GameObjectDiamond.class);
-	private double x;
-	private double y;
-	private double rotation;
-	private static BufferedImage image;
-	private static double bitmapCenterX;
-	private static double bitmapCenterY;
-	private double scale;
-	private boolean lightened;
 	
+	/** Az adott osztályon belüli naplózó. */
+	private static final Logger logger = LoggerFactory.getLogger(GameObjectDiamond.class);
+	
+	/** Az objektum x koordinátája. */
+	private double x;
+	
+	/** Az objektum y koordinátája. */
+	private double y;
+	
+	/** Az objektum elforgatás fokban mérve. */
+	private double rotation;
+	
+	/** Az objetkum rasztergrafikus képe. */
+	private static BufferedImage image;
+	
+	/** A rasztergrafikus kép középpontjának x koordinátája. */
+	private static double bitmapCenterX;
+	
+	/** A rasztergrafikus kép középpontjának y koordinátája. */
+	private static double bitmapCenterY;
+	
+	/** Az objektum rasztergrafikus képének és tényleges méretének aránya. */
+	private double scale;
+	
+	/** A gyémánt meg van világítva? */
+	private boolean lightened;
+
 	{
 		// kép betöltése
 		if(image == null){

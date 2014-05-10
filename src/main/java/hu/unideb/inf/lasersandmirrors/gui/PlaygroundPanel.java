@@ -12,7 +12,7 @@ import hu.unideb.inf.lasersandmirrors.Settings;
 public class PlaygroundPanel extends javax.swing.JPanel {
 
 	/**
-	 * Creates new form PlaygroundPanel
+	 * Creates new form PlaygroundPanel.
 	 */
 	public PlaygroundPanel() {
 		initComponents();

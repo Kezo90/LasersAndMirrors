@@ -33,6 +33,8 @@ public interface GraphicMultiline extends Graphic {
 	
 	/**
 	 * A vonal színe.
+	 * 
+	 * @return A vonal színe.
 	 */
 	Color getColor();
 	

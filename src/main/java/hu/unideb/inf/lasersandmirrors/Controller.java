@@ -24,14 +24,10 @@ import math.geom2d.line.Ray2D;
  */
 public class Controller {
 	
-	/**
-	 * A felhasználói interakciókat kezelő osztály egyetlen példánya.
-	 */
+	/** A felhasználói interakciókat kezelő osztály egyetlen példánya. */
 	private static final InputHandler imputHandler = new InputHandler();
 	
-	/**
-	 * A frissítéshez használt időzítő.
-	 */
+	/** A frissítéshez használt időzítő. */
 	private static final Timer timer;
 	
 	static{
@@ -41,9 +37,7 @@ public class Controller {
 		timer.setCoalesce(true);
 	}
 	
-	/**
-	 * Az aktuálisan működő panel.
-	 */
+	/** Az aktuálisan működő panel. */
 	private static JPanel activePanel = null;
 	
 	/**
@@ -90,6 +84,7 @@ public class Controller {
 	
 	
 	// TODO: (updateGame) lehet, hogy ennek nem a Controllerben van a helye
+	// TODO: massza
 	/**
 	 * A játékbeli történések frissítése.
 	 */
@@ -248,24 +243,16 @@ public class Controller {
 	 */
 	private static class Intersection{
 		
-		/**
-		 * A metszet pontja.
-		 */
+		/** A metszet pontja. */
 		public Point2D point;
 		
-		/**
-		 * A lézersugár aktuális pontjától mért távolság négyzete.
-		 */
+		/** A lézersugár aktuális pontjától mért távolság négyzete. */
 		public double squareDist;
 		
-		/**
-		 * Az a vonal, mely elmetszette a lézersugár egyenesét.
-		 */
+		/** Az a vonal, mely elmetszette a lézersugár egyenesét. */
 		public LineSegment2D lineSegment;
 		
-		/**
-		 * A vonal tükröződő vagy elnyelő?
-		 */
+		/** A vonal tükröződő vagy elnyelő? */
 		public boolean reflective;
 		
 		/**
@@ -274,6 +261,7 @@ public class Controller {
 		 * @param point A metszet pontja.
 		 * @param squareDist A lézersugár aktuális pontjától mért távolság négyzete.
 		 * @param lineSegment Az a vonal, mely elmetszette a lézersugár egyenesét.
+		 * @param reflective Tükröződő vagy elnyelő oldal.
 		 */
 		public Intersection(Point2D point, double squareDist, 
 				LineSegment2D lineSegment, boolean reflective) {

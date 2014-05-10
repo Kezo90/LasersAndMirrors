@@ -14,7 +14,10 @@ import java.util.List;
  */
 public class GameObjectLaserline extends GameObject implements GraphicMultiline{
 	
+	/** A törtvonalat jelképező pontok listája. */
 	private ArrayList<Point2D> points;
+	
+	/** A lézernyaláb színe. */
 	private Color color;
 
 	/**

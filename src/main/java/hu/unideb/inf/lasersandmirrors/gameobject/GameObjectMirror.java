@@ -20,13 +20,29 @@ import org.slf4j.LoggerFactory;
  * @author Kerekes Zoltán
  */
 public class GameObjectMirror extends GameObject implements GraphicBitmap {
+	
+	/** Az adott osztályon belüli naplózó. */
 	private static final Logger logger = LoggerFactory.getLogger(GameObjectDiamond.class);
+	
+	/** Az objektum x koordinátája. */
 	private double x;
+	
+	/** Az objektum y koordinátája. */
 	private double y;
+	
+	/** Az objektum elforgatás fokban mérve. */
 	private double rotation;
+	
+	/** Az objetkum rasztergrafikus képe. */
 	private static BufferedImage image;
+	
+	/** A rasztergrafikus kép középpontjának x koordinátája. */
 	private static double bitmapCenterX;
+	
+	/** A rasztergrafikus kép középpontjának y koordinátája. */
 	private static double bitmapCenterY;
+	
+	/** Az objektum rasztergrafikus képének és tényleges méretének aránya. */
 	private double scale;
 	
 	{

@@ -14,15 +14,21 @@ import java.util.ArrayList;
  * 
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  * TODO: Game osztály kipucolása/rendberakása
+ * TODO: Swing-es komponensek javadoc-ja.
  */
 
 /**
- * A program belépési pontja.
+ * A pályán lévő objektumokat tároló osztály.
  *
  * @author Kerekes Zoltán
  */
 public class Game {
 	
+	/**
+	 * A program belépési pontja.
+	 * 
+	 * @param args Parancssori argumentumok. (Nincs használva.)
+	 */
 	public static void main(String[] args) {
 		DB.connect();
 		
@@ -68,9 +74,7 @@ public class Game {
 	
 	
 	
-	/**
-	 * A pályán lévő {@link GameObject}-ek kollekciója.
-	 */
+	/** A pályán lévő {@link GameObject}-ek kollekciója. */
 	private static ArrayList<GameObject> gameObjects = new ArrayList<>();
 
 	/**

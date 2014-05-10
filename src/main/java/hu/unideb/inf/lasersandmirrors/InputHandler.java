@@ -21,19 +21,13 @@ import org.slf4j.LoggerFactory;
  */
 public class InputHandler implements MouseInputListener{
 	
-	/**
-	 * Az {@link InputHandler} osztály naplózója.
-	 */
+	/** Az {@link InputHandler} osztály naplózója. */
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 	
-	/**
-	 * Az aktuálisan kijelölt objektum.
-	 */
+	/** Az aktuálisan kijelölt objektum. */
 	static GraphicBitmap selectedObject = null;
 	
-	/**
-	 * Az egérgomb lenyomásakor az egérkurzor helye.
-	 */
+	/** Az egérgomb lenyomásakor az egérkurzor helye. */
 	private static Point2D mouseBeginPos = null;
 	
 	@Override
