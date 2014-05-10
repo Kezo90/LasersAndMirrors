@@ -192,10 +192,13 @@ public class Controller {
 							} else{
 								remainingLength = 0;								
 							}
-							// Az új Ray2D szögének számolása.
-							ray = MyMath.reflectionRay2D(ray, nearestIntersection.lineSegment);
+							// Az új Ray2D szögének kiszámolása.
+							ray = new Ray2D(nearestIntersection.point, 
+									MyMath.reflectionAngle(ray.horizontalAngle(), 
+									nearestIntersection.lineSegment.horizontalAngle()));
 						}
 					// Nincs metszéspont. Rajzoljuk ki a vonalat a pálya széléig.
+					// (Ez sem biztos, hogy elér a metsző vonalig.)
 					}else{
 						for (LineSegment2D drawAreaSide : drawAreaSides) {
 							Point2D intersection = ray.intersection(drawAreaSide);

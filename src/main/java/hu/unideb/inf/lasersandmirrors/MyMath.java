@@ -2,8 +2,6 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import math.geom2d.Point2D;
-import math.geom2d.line.AbstractLine2D;
-import math.geom2d.line.Ray2D;
 
 /**
  * Máshol nem található matematikai függvények gyűjteménye.
@@ -36,18 +34,6 @@ public class MyMath {
 		double reflectionAngle = 2 * mirrorAngle - rayAngle;
 		reflectionAngle %= Math.PI * 2;
 		return reflectionAngle;
-	}
-	
-	/**
-	 * A sugárnyalábnak az egyenesről visszaverődését adja vissza.
-	 * 
-	 * @param ray A kezdeti sugárnyaláb.
-	 * @param line A felület, amiről visszaverődik a sugárnyaláb.
-	 * @return A visszaverődő sugárnyaláb.
-	 */
-	public static Ray2D reflectionRay2D(Ray2D ray, AbstractLine2D line){
-		double newAngle = reflectionAngle(ray.horizontalAngle(), line.horizontalAngle());
-		return new Ray2D(ray.firstPoint(), newAngle);
 	}
 	
 }
