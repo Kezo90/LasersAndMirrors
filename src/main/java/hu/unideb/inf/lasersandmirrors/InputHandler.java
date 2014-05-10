@@ -129,9 +129,20 @@ public class InputHandler implements MouseInputListener{
 					break;
 				Ray2D oldRay = new Ray2D(gox, goy, mxOld - gox, myOld - goy);
 				Ray2D newRay = new Ray2D(gox, goy, mx - gox, my - goy);
-				double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
-				double newAngle = selectedGO.getRotation() + Math.toDegrees(angleDiff);
-				selectedGO.setRotation(newAngle);
+				double oldAngle = Math.toDegrees(oldRay.horizontalAngle());
+				double newAngle = Math.toDegrees(newRay.horizontalAngle());
+				double angleDiff = newAngle - oldAngle;
+				
+				// ne legyenek ugrások 0 forknál
+				if(angleDiff > 180){
+					angleDiff = angleDiff - 360;
+				} else if(angleDiff < - 180){
+					angleDiff = angleDiff + 360;
+				}
+				
+				double newGOAngle = selectedGO.getRotation() 
+						+ angleDiff * Settings.ROTATION_SPEED;
+				selectedGO.setRotation(newGOAngle);
 				break;
 			case DRAGGING:
 				if(!selectedGO.isDraggable())

@@ -21,9 +21,12 @@ public class Settings {
 	public static final int UPDATE_INTERVAL = 1000/100; // 100 FPS
 	
 	/** A lézersugarak maximális hossza. */
-	public static final double LASERLINE_LENGTH = 3000.0;
+	public static final double LASERLINE_LENGTH = 10000.0;
 	
 	/** Az objektumok kijelölhető körlapjának sugara. */
 	public static final double GO_SELECTION_RADIUS = 20.0;
+	
+	/** Az objektumok forgatásának sebessége. */
+	public static final double ROTATION_SPEED = 0.5;
 	
 }
