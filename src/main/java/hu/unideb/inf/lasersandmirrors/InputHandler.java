@@ -5,7 +5,7 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
-import hu.unideb.inf.lasersandmirrors.gameobject.GraphicBitmap;
+import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class InputHandler implements MouseInputListener{
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 	
 	/** Az aktuálisan kijelölt objektum. */
-	static GraphicBitmap selectedObject = null;
+	private static InteractiveGO selectedGO = null;
 	
 	/** Az egérgomb lenyomásakor az egérkurzor helye. */
 	private static Point2D mouseBeginPos = null;
@@ -38,11 +38,11 @@ public class InputHandler implements MouseInputListener{
 		GameObject.sortGameObjectsByDepth(gameObjects);
 		for (int i = gameObjects.size() - 1; i >= 0; i--) {
 			GameObject gameObject = gameObjects.get(i);
-			if(gameObject instanceof GraphicBitmap){
-				GraphicBitmap graphicBitmap = (GraphicBitmap) gameObject;
-				double distance = mousePos.distance(graphicBitmap.getX(), graphicBitmap.getY());
+			if(gameObject instanceof InteractiveGO){
+				InteractiveGO interactiveGO = (InteractiveGO) gameObject;
+				double distance = mousePos.distance(interactiveGO.getX(), interactiveGO.getY());
 				if(distance < Settings.GO_SELECTION_RADIUS){
-					selectedObject = graphicBitmap;
+					selectedGO = interactiveGO;
 					logger.trace("GameObject selected: " + gameObject);
 					return;
 				}
@@ -72,9 +72,9 @@ public class InputHandler implements MouseInputListener{
 	public void mouseDragged(MouseEvent e) {
 		Point2D mousePos = e.getPoint();
 		// objektum forgatása egérrel
-		if(selectedObject != null && mouseBeginPos != null){
-			double ox = selectedObject.getX();
-			double oy = selectedObject.getY();
+		if(selectedGO != null && mouseBeginPos != null){
+			double ox = selectedGO.getX();
+			double oy = selectedGO.getY();
 			double mx = mousePos.getX();
 			double my = mousePos.getY();
 			double mxOld = mouseBeginPos.getX();
@@ -82,8 +82,8 @@ public class InputHandler implements MouseInputListener{
 			Ray2D oldRay = new Ray2D(ox, oy, mxOld - ox, myOld - oy);
 			Ray2D newRay = new Ray2D(ox, oy, mx - ox, my - oy);
 			double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
-			double newAngle = selectedObject.getRotation() + Math.toDegrees(angleDiff);
-			selectedObject.setRotation(newAngle);
+			double newAngle = selectedGO.getRotation() + Math.toDegrees(angleDiff);
+			selectedGO.setRotation(newAngle);
 			mouseBeginPos = mousePos;
 		}
 	}

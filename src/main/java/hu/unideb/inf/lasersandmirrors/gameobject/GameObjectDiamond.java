@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kerekes Zoltán
  */
-public class GameObjectDiamond extends GameObject implements GraphicBitmap {
+public class GameObjectDiamond extends GameObject implements GraphicBitmap, InteractiveGO {
 	
 	/** Az adott osztályon belüli naplózó. */
 	private static final Logger logger = LoggerFactory.getLogger(GameObjectDiamond.class);
@@ -43,6 +43,9 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap {
 	/** A gyémánt meg van világítva? */
 	private boolean lightened;
 
+	/** Mozgatható? */
+	private boolean draggable;
+	
 	{
 		// kép betöltése
 		if(image == null){
@@ -58,6 +61,7 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap {
 		
 		this.scale = 50.0 / (double)image.getWidth();
 		this.lightened = false;
+		this.draggable = false;
 	}
 	
 	/**
@@ -173,9 +177,35 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap {
 
 	@Override
 	public String toString() {
-		return "GameObjectDiamond{" + "x=" + x + ", y=" + y 
-				+ ", rotation=" + rotation + ", scale=" + scale 
-				+ ", lightened=" + lightened + '}';
+		return "GameObjectDiamond{" + "x=" + x + ", y=" + y + '}';
+	}
+	
+	
+	
+	
+	
+	@Override
+	public boolean isRotatable() {
+		return false;
+	}
+
+	@Override
+	public boolean isDraggable() {
+		return this.draggable;
+	}
+
+	@Override
+	public boolean isSelectable() {
+		return this.isDraggable();
+	}
+
+	@Override
+	public void setRotatable(boolean val) {
+	}
+
+	@Override
+	public void setDraggable(boolean val) {
+		this.draggable = val;
 	}
 	
 }

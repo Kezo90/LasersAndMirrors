@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  * TODO: Game osztály kipucolása/rendberakása
  * TODO: Swing-es komponensek javadoc-ja.
+ * TODO: Ne csak forgatás legyen, hanem mozgatás is.
  */
 
 /**

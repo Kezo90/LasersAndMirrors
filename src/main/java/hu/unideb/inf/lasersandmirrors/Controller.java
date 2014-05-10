@@ -83,6 +83,10 @@ public class Controller {
 	
 	
 	
+	
+	//
+	
+	
 	// TODO: (updateGame) lehet, hogy ennek nem a Controllerben van a helye
 	// TODO: massza
 	/**
