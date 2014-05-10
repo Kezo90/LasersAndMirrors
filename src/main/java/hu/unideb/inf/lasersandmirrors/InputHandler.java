@@ -39,7 +39,7 @@ public class InputHandler implements MouseInputListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point2D mousePos = e.getPoint();
-		
+		// objektum kijelölése kattintással
 		ArrayList<GameObject> gameObjects = Game.getGameObjects();
 		GameObject.sortGameObjectsByDepth(gameObjects);
 		for (int i = gameObjects.size() - 1; i >= 0; i--) {
@@ -58,8 +58,8 @@ public class InputHandler implements MouseInputListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		// forgatáshoz szükséges
 		mouseBeginPos = e.getPoint();
-		System.out.println("mousePressed");
 	}
 
 	@Override
@@ -76,8 +76,9 @@ public class InputHandler implements MouseInputListener{
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		Point2D mousePos = e.getPoint();
+		// objektum forgatása egérrel
 		if(selectedObject != null && mouseBeginPos != null){
-			Point2D mousePos = e.getPoint();
 			double ox = selectedObject.getX();
 			double oy = selectedObject.getY();
 			double mx = mousePos.getX();
