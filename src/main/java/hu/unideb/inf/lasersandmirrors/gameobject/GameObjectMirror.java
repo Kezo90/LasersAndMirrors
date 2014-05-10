@@ -208,8 +208,8 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap {
 				newPoints[i01].getX(), newPoints[i01].getY()
 				));
 		lines.add(new LineSegment2D(
-				newPoints[i10].getX(), newPoints[i10].getX(), 
-				newPoints[i11].getX(), newPoints[i11].getX()
+				newPoints[i10].getX(), newPoints[i10].getY(), 
+				newPoints[i11].getX(), newPoints[i11].getY()
 				));
 		return lines;
 	}
