@@ -9,6 +9,7 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -148,6 +149,7 @@ public class Controller {
 				new LineSegment2D(drawAreaWidth, drawAreaHeight, 0, drawAreaHeight),
 				new LineSegment2D(0, drawAreaHeight, 0, 0)
 			};
+			mattSurfaces.addAll(Arrays.asList(drawAreaSides));
 			
 			// lézer útjának kiszámolása
 			for (GameObjectLaser laser : lasers) {
@@ -160,7 +162,7 @@ public class Controller {
 				laserline.clearPoints();
 				laserline.addPoint(ray.firstPoint());
 				LineSegment2D lastActor = null;
-				// míg ki nem rajzoltuk a teljes hosszúságú lézervonalat...
+				// Amíg ki nem rajzoltuk a teljes hosszúságú lézervonalat...
 				drawLineUntilTooShort:
 				while(remainingLength > 0){
 					List<Intersection> intersections = new ArrayList<>();					
@@ -214,22 +216,8 @@ public class Controller {
 									MyMath.reflectionAngle(ray.horizontalAngle(), 
 									nearestIntersection.lineSegment.horizontalAngle()));
 						}
-					// Nincs metszéspont. Rajzoljuk ki a vonalat a pálya széléig.
-					// (Ez sem biztos, hogy elér a metsző vonalig.)
-					}else{
-						for (LineSegment2D drawAreaSide : drawAreaSides) {
-							Point2D intersection = ray.intersection(drawAreaSide);
-							if(intersection != null){
-								double distance = Math.sqrt(
-										Math.pow(intersection.x() - ray.firstPoint().x(), 2)
-										+ Math.pow(intersection.y() - ray.firstPoint().y(), 2));
-								laserline.addPoint(ray.point(Math.min(remainingLength, distance)));
-								break drawLineUntilTooShort;
-							}
-						}
 					}
 				}
-				
 			}
 			
 			// lézersugarak összeszedése
