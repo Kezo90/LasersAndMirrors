@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.event.MouseInputListener;
+import math.geom2d.line.Ray2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,14 @@ public class InputHandler implements MouseInputListener{
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 	
 	/**
-	 * Az aktuálisan kijelölt GameObject.
+	 * Az aktuálisan kijelölt objektum.
 	 */
-	static GameObject selectedGO = null;
+	static GraphicBitmap selectedObject = null;
+	
+	/**
+	 * Az egérgomb lenyomásakor az egérkurzor helye.
+	 */
+	private static Point2D mouseBeginPos = null;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -42,7 +48,7 @@ public class InputHandler implements MouseInputListener{
 				GraphicBitmap graphicBitmap = (GraphicBitmap) gameObject;
 				double distance = mousePos.distance(graphicBitmap.getX(), graphicBitmap.getY());
 				if(distance < Settings.GO_SELECTION_RADIUS){
-					selectedGO = gameObject;
+					selectedObject = graphicBitmap;
 					logger.trace("GameObject selected: " + gameObject);
 					return;
 				}
@@ -52,6 +58,8 @@ public class InputHandler implements MouseInputListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		mouseBeginPos = e.getPoint();
+		System.out.println("mousePressed");
 	}
 
 	@Override
@@ -68,7 +76,21 @@ public class InputHandler implements MouseInputListener{
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		//System.out.println("dragged");
+		if(selectedObject != null && mouseBeginPos != null){
+			Point2D mousePos = e.getPoint();
+			double ox = selectedObject.getX();
+			double oy = selectedObject.getY();
+			double mx = mousePos.getX();
+			double my = mousePos.getY();
+			double mxOld = mouseBeginPos.getX();
+			double myOld = mouseBeginPos.getY();
+			Ray2D oldRay = new Ray2D(ox, oy, mxOld - ox, myOld - oy);
+			Ray2D newRay = new Ray2D(ox, oy, mx - ox, my - oy);
+			double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
+			double newAngle = selectedObject.getRotation() + Math.toDegrees(angleDiff);
+			selectedObject.setRotation(newAngle);
+			mouseBeginPos = mousePos;
+		}
 	}
 
 	@Override

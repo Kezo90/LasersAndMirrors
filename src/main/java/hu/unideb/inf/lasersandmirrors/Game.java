@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /*
- * PENDING: v0.2: falak, színek
+ * PENDING: v0.2: falak, színek, jobb képek
  * 
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  * TODO: Game osztály kipucolása/rendberakása
