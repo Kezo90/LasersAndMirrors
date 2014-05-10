@@ -51,6 +51,9 @@ public class InputHandler implements MouseInputListener{
 			GameObject gameObject = gameObjects.get(i);
 			if(gameObject instanceof InteractiveGO){
 				InteractiveGO interactiveGO = (InteractiveGO) gameObject;
+				if(!interactiveGO.isSelectable()){
+					continue;
+				}
 				double distance = mousePos.distance(interactiveGO.getX(), interactiveGO.getY());
 				if(distance < Settings.GO_SELECTION_RADIUS){
 					selectedGO = interactiveGO;
@@ -110,6 +113,8 @@ public class InputHandler implements MouseInputListener{
 		switch(mouseActionType){
 			case ROTATING:
 				// objektum forgatása egérrel
+				if(!selectedGO.isRotatable())
+					break;
 				Ray2D oldRay = new Ray2D(gox, goy, mxOld - gox, myOld - goy);
 				Ray2D newRay = new Ray2D(gox, goy, mx - gox, my - goy);
 				double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
@@ -117,6 +122,8 @@ public class InputHandler implements MouseInputListener{
 				selectedGO.setRotation(newAngle);
 				break;
 			case DRAGGING:
+				if(!selectedGO.isDraggable())
+					break;
 				// objektum mozgatása egérrel
 				selectedGO.setX(gox + mx - mxOld);
 				selectedGO.setY(goy + my - myOld);
