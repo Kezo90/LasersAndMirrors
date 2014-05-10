@@ -17,7 +17,8 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
- * A {@link Graphic} interfészt implementáló objektumok kirajzolására használatos osztály.
+ * A {@link hu.unideb.inf.lasersandmirrors.gameobject.Graphic} interfészt 
+ * implementáló objektumok kirajzolására használatos osztály.
  *
  * @author Kerekes Zoltán
  */
@@ -25,7 +26,7 @@ public class Renderer {
 	
 	/**
 	 * A paraméterül kapott JFrame-re az adott Graphics kontextusban 
-	 * kirajzolja az összes {@link Graphic} objektumot.
+	 * kirajzolja az összes {@link hu.unideb.inf.lasersandmirrors.gameobject.Graphic} objektumot.
 	 * 
 	 * A paraméterül kapott JPanel paint metódusához kell hozzárendelni ezt a metódust.
 	 * <p>
