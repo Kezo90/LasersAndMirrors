@@ -31,7 +31,9 @@ public class InputHandler implements MouseInputListener{
 	 * Az objektumon végrehajtás alatt álló egérművelet típusai.
 	 */
 	private enum MouseActionType{
+		/** Mozgató egérművelet. */
 		DRAGGING,
+		/** Forgató egérművelet. */
 		ROTATING,
 	}
 	

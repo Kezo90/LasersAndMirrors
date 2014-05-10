@@ -16,7 +16,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-	<description>Egy egyszerű játék, melyben az a cél, hogy minden gyémántot megvilágítsunk a lézerek segítségével.</description>
+	<description>Egy egyszerű játék, melyben az a cél, hogy minden gyémántot világítsunk meg a lézerek segítségével.</description>
 	<developers>
 		<developer>
 			<id>kezo90</id>
