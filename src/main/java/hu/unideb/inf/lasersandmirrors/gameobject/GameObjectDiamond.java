@@ -152,5 +152,12 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap {
 	public boolean isLightened(){
 		return this.lightened;
 	}
+
+	@Override
+	public String toString() {
+		return "GameObjectDiamond{" + "x=" + x + ", y=" + y 
+				+ ", rotation=" + rotation + ", scale=" + scale 
+				+ ", lightened=" + lightened + '}';
+	}
 	
 }

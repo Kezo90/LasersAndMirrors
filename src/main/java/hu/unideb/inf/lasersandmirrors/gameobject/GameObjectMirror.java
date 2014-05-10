@@ -213,4 +213,11 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap {
 				));
 		return lines;
 	}
+
+	@Override
+	public String toString() {
+		return "GameObjectMirror{" + "x=" + x + ", y=" + y 
+				+ ", rotation=" + rotation + ", scale=" + scale + '}';
+	}
+	
 }

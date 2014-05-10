@@ -156,5 +156,11 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap {
 	public final void setColor(Color color){
 		this.laserLine.setColor(color);
 	}
+
+	@Override
+	public String toString() {
+		return "GameObjectLaser{" + "x=" + x + ", y=" + y 
+				+ ", rotation=" + rotation + ", scale=" + scale + '}';
+	}
 	
 }
