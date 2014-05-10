@@ -254,7 +254,7 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap, Inter
 
 	@Override
 	public boolean isRotatable() {
-		return this.isRotatable();
+		return this.rotatable;
 	}
 
 	@Override
@@ -264,7 +264,7 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap, Inter
 
 	@Override
 	public boolean isDraggable() {
-		return this.isDraggable();
+		return this.draggable;
 	}
 
 	@Override

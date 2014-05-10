@@ -200,7 +200,7 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 
 	@Override
 	public boolean isRotatable() {
-		return this.isRotatable();
+		return this.rotatable;
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 
 	@Override
 	public boolean isDraggable() {
-		return this.isDraggable();
+		return this.draggable;
 	}
 
 	@Override
