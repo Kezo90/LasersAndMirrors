@@ -80,11 +80,28 @@ public class Controller {
 		return activePanel;
 	}
 	
+	/**
+	 * A paraméterül adott koordinátákat korlátozhatjuk a rajzterületre.
+	 * <p>
+	 * <strong>Note:</strong><br>
+	 * Ez a metódus az objektumot {@link Settings#GO_SELECTION_RADIUS}-nyi 
+	 * szélességűnek és magasságúnak tekinti.
+	 * 
+	 * @param x Az objektum x pozíciója.
+	 * @param y Az objektum y pozíciója.
+	 * @return A limitált pozíció.
+	 */
+	public static Point2D limitGOPositionToCurrentPanel(double x, double y){
+		double r = Settings.GO_SELECTION_RADIUS;
+		x = Math.max(x, activePanel.getX()      + r);
+		x = Math.min(x, activePanel.getWidth()  - r);
+		y = Math.max(y, activePanel.getY()      + r);
+		y = Math.min(y, activePanel.getHeight() - r);
+		return new Point2D(x, y);
+	}
 	
 	
 	
-	
-	//
 	
 	
 	// TODO: (updateGame) lehet, hogy ennek nem a Controllerben van a helye

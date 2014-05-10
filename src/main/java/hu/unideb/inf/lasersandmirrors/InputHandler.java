@@ -38,6 +38,9 @@ public class InputHandler implements MouseInputListener{
 	/** Az objektumon végrehajtás alatt álló egérművelet típusa. */
 	private static MouseActionType mouseActionType = null;
 	
+	/** Az objektum és az egérkurzor pozíciója közti különbség a mozgatás kezdetekor. */
+	private static Point2D draggingDiff = null;
+	
 	/** Az egérkurzor helye az előző eseménynél. */
 	private static Point2D mouseLastPos = null;
 	
@@ -68,9 +71,16 @@ public class InputHandler implements MouseInputListener{
 	public void mousePressed(MouseEvent e) {
 		Point2D mousePos = e.getPoint();
 		
+		// mozgatáshoz szükséges
+		if(selectedGO != null){
+			draggingDiff = new Point2D.Double(mousePos.getX() - selectedGO.getX(), 
+					mousePos.getY() - selectedGO.getY());
+		}
+		
 		// forgatáshoz szükséges
 		mouseLastPos = e.getPoint();
 		
+		// művelet kiválasztása
 		if(selectedGO != null){
 			// A kijelölt objektumon nyomtuk le az egérgombot?
 			double distance = mousePos.distance(selectedGO.getX(), selectedGO.getY());
@@ -125,8 +135,11 @@ public class InputHandler implements MouseInputListener{
 				if(!selectedGO.isDraggable())
 					break;
 				// objektum mozgatása egérrel
-				selectedGO.setX(gox + mx - mxOld);
-				selectedGO.setY(goy + my - myOld);
+				double newX = mx + draggingDiff.getX();
+				double newY = my + draggingDiff.getY();
+				math.geom2d.Point2D newPos = Controller.limitGOPositionToCurrentPanel(newX, newY);
+				selectedGO.setX(newPos.x());
+				selectedGO.setY(newPos.y());
 				break;
 		}
 		
