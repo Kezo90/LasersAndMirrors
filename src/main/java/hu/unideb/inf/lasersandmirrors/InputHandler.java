@@ -27,8 +27,19 @@ public class InputHandler implements MouseInputListener{
 	/** Az aktuálisan kijelölt objektum. */
 	private static InteractiveGO selectedGO = null;
 	
-	/** Az egérgomb lenyomásakor az egérkurzor helye. */
-	private static Point2D mouseBeginPos = null;
+	/**
+	 * Az objektumon végrehajtás alatt álló egérművelet típusai.
+	 */
+	private enum MouseActionType{
+		DRAGGING,
+		ROTATING,
+	}
+	
+	/** Az objektumon végrehajtás alatt álló egérművelet típusa. */
+	private static MouseActionType mouseActionType = null;
+	
+	/** Az egérkurzor helye az előző eseménynél. */
+	private static Point2D mouseLastPos = null;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -52,8 +63,21 @@ public class InputHandler implements MouseInputListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		Point2D mousePos = e.getPoint();
+		
 		// forgatáshoz szükséges
-		mouseBeginPos = e.getPoint();
+		mouseLastPos = e.getPoint();
+		
+		if(selectedGO != null){
+			// A kijelölt objektumon nyomtuk le az egérgombot?
+			double distance = mousePos.distance(selectedGO.getX(), selectedGO.getY());
+			if(distance < Settings.GO_SELECTION_RADIUS){
+				mouseActionType = MouseActionType.DRAGGING;
+			}
+			else{
+				mouseActionType = MouseActionType.ROTATING;
+			}
+		}
 	}
 
 	@Override
@@ -71,26 +95,39 @@ public class InputHandler implements MouseInputListener{
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		Point2D mousePos = e.getPoint();
-		// objektum forgatása egérrel
-		if(selectedGO != null && mouseBeginPos != null){
-			double ox = selectedGO.getX();
-			double oy = selectedGO.getY();
-			double mx = mousePos.getX();
-			double my = mousePos.getY();
-			double mxOld = mouseBeginPos.getX();
-			double myOld = mouseBeginPos.getY();
-			Ray2D oldRay = new Ray2D(ox, oy, mxOld - ox, myOld - oy);
-			Ray2D newRay = new Ray2D(ox, oy, mx - ox, my - oy);
-			double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
-			double newAngle = selectedGO.getRotation() + Math.toDegrees(angleDiff);
-			selectedGO.setRotation(newAngle);
-			mouseBeginPos = mousePos;
+		
+		if(selectedGO == null || mouseLastPos == null){
+			return;
 		}
+		
+		double gox = selectedGO.getX();
+		double goy = selectedGO.getY();
+		double mx = mousePos.getX();
+		double my = mousePos.getY();
+		double mxOld = mouseLastPos.getX();
+		double myOld = mouseLastPos.getY();
+		
+		switch(mouseActionType){
+			case ROTATING:
+				// objektum forgatása egérrel
+				Ray2D oldRay = new Ray2D(gox, goy, mxOld - gox, myOld - goy);
+				Ray2D newRay = new Ray2D(gox, goy, mx - gox, my - goy);
+				double angleDiff = newRay.horizontalAngle() - oldRay.horizontalAngle();
+				double newAngle = selectedGO.getRotation() + Math.toDegrees(angleDiff);
+				selectedGO.setRotation(newAngle);
+				break;
+			case DRAGGING:
+				// objektum mozgatása egérrel
+				selectedGO.setX(gox + mx - mxOld);
+				selectedGO.setY(goy + my - myOld);
+				break;
+		}
+		
+		mouseLastPos = mousePos;
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		//System.out.println("moved");
 	}
 	
 }

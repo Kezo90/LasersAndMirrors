@@ -2,6 +2,9 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import java.awt.Component;
 import javax.swing.JPanel;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
@@ -15,7 +18,6 @@ import java.util.ArrayList;
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  * TODO: Game osztály kipucolása/rendberakása
  * TODO: Swing-es komponensek javadoc-ja.
- * TODO: Ne csak forgatás legyen, hanem mozgatás is.
  */
 
 /**
@@ -33,17 +35,21 @@ public class Game {
 	public static void main(String[] args) {
 		DB.connect();
 		
-		/*
+		
 		// TODO: tesztobjektumok: maybe del it
 		addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
 		addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
 		addGameObject(new GameObjectLaser(200, 400, 170, Color.YELLOW));
 		addGameObject(new GameObjectDiamond(300, 130, 0));
 		addGameObject(new GameObjectDiamond(300, 200, 26));
-		addGameObject(new GameObjectMirror(350, 160, 10));
+		addGameObject(new GameObjectMirror(350, 160, 10));		
+		addGameObject(new GameObjectMirror(300, 160, 10));
+		addGameObject(new GameObjectMirror(250, 160, 10));
+		addGameObject(new GameObjectMirror(200, 160, 10));
+
 
 		DB.saveLevel("test");
-		*/
+		
 		List<GameObject> level = DB.loadLevel("test");
 		if(level != null){
 			removeAllGameObjects();

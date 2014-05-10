@@ -48,12 +48,6 @@ public class Renderer {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 		
-		// TODO: írjam meg a mozgatást egérrel
-		java.awt.Point mousePos = panel.getMousePosition();
-		if(mousePos != null){
-			g2d.drawLine(mousePos.x, mousePos.y, 75, 45);
-		}
-		
 		// elemek összegyűjtése
 		List<GameObject> gameObjects = Game.getGameObjects();
 		List<GameObject> drawables = new ArrayList<>();
