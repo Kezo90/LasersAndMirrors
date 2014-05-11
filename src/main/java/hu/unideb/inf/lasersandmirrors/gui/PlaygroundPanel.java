@@ -33,17 +33,20 @@ public class PlaygroundPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setMaximumSize(new java.awt.Dimension(800, 650));
+        setMinimumSize(new java.awt.Dimension(800, 650));
         setName("playgroundPanel"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(800, 650));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGap(0, 650, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables

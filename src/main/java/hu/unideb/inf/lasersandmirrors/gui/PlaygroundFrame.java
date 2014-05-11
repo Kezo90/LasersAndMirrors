@@ -1,8 +1,11 @@
 
 package hu.unideb.inf.lasersandmirrors.gui;
 
+import hu.unideb.inf.lasersandmirrors.Controller;
 import hu.unideb.inf.lasersandmirrors.Game;
 import hu.unideb.inf.lasersandmirrors.Settings;
+import java.awt.FlowLayout;
+import javax.swing.JPanel;
 
 /**
  *
@@ -15,6 +18,10 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 	 */
 	public PlaygroundFrame() {
 		initComponents();
+		setSize(Settings.WINDOW_SIZE);
+		setMenu(new LevelLoaderPanel());
+		setLocationRelativeTo(null);
+		Controller.setActivePanel(playgroundPanel);
 	}
 
 	/**
@@ -26,50 +33,18 @@ public class PlaygroundFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        playgroundPanel = new hu.unideb.inf.lasersandmirrors.gui.PlaygroundPanel()
-        ;
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lasers & Mirrors, by: Zoltán Kerekes");
         setBackground(new java.awt.Color(153, 153, 153));
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(Settings.WINDOW_SIZE);
         setName("playgroundFrame"); // NOI18N
-        setPreferredSize(Settings.WINDOW_SIZE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 PlaygroundFrame.this.windowClosing(evt);
             }
         });
-
-        playgroundPanel.setBackground(new java.awt.Color(102, 102, 102));
-        playgroundPanel.setPreferredSize(new java.awt.Dimension(874, 650));
-
-        javax.swing.GroupLayout playgroundPanelLayout = new javax.swing.GroupLayout(playgroundPanel);
-        playgroundPanel.setLayout(playgroundPanelLayout);
-        playgroundPanelLayout.setHorizontalGroup(
-            playgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 874, Short.MAX_VALUE)
-        );
-        playgroundPanelLayout.setVerticalGroup(
-            playgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 650, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(playgroundPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 150, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(playgroundPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().setLayout(null);
 
         pack();
         setLocationRelativeTo(null);
@@ -83,42 +58,59 @@ public class PlaygroundFrame extends javax.swing.JFrame {
     private void windowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowClosing
         Game.exitGame();
     }//GEN-LAST:event_windowClosing
-
-//	/**
-//	 * @param args the command line arguments
-//	 */
-//	public static void main(String args[]) {
-//		/* Set the Nimbus look and feel */
-//		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//		 */
-//		try {
-//			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//				if ("Nimbus".equals(info.getName())) {
-//					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//					break;
-//				}
-//			}
-//		} catch (ClassNotFoundException ex) {
-//			java.util.logging.Logger.getLogger(PlaygroundFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//		} catch (InstantiationException ex) {
-//			java.util.logging.Logger.getLogger(PlaygroundFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//		} catch (IllegalAccessException ex) {
-//			java.util.logging.Logger.getLogger(PlaygroundFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//			java.util.logging.Logger.getLogger(PlaygroundFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//		}
-//		//</editor-fold>
-//
-//		/* Create and display the form */
-//		java.awt.EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				new PlaygroundFrame().setVisible(true);
-//			}
-//		});
-//	}
+	
+	public JPanel getMenu(){
+		return this.menuPanel;
+	}
+	
+	public final void setMenu(JPanel menu){
+		// <editor-fold defaultstate="collapsed" desc="GroupLayout-os kódom (kikommentelve)">  
+		/*
+		remove(menuPanel);
+		JPanel contentPane = new JPanel();
+		setContentPane(contentPane);
+		GroupLayout layout = new GroupLayout(contentPane);
+		contentPane.setLayout(layout);
+		contentPane.setMaximumSize(Settings.WINDOW_SIZE);
+		
+		JTextField textField = new JTextField("asd");
+		textField.setSize(100, 50);
+		JButton button = new JButton("butt");
+		JSeparator separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(1, 1000));
+		
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addComponent(textField)
+					.addComponent(separator)
+				)
+				.addComponent(button)
+		);
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addComponent(textField)
+					.addComponent(separator)
+				)
+				.addComponent(button)
+		);
+		*/
+		// </editor-fold>
+		
+		JPanel contentPane = new JPanel();
+		setContentPane(contentPane);
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		contentPane.setLayout(layout);
+		contentPane.setMaximumSize(Settings.WINDOW_SIZE);
+		
+		add(playgroundPanel);
+		add(menu);
+		
+		pack();
+	}
+	
+	private JPanel playgroundPanel = new PlaygroundPanel();
+	private JPanel menuPanel = null;
+	
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel playgroundPanel;
     // End of variables declaration//GEN-END:variables
 }

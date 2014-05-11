@@ -283,4 +283,26 @@ public class Controller {
 			this.reflective = reflective;
 		}
 	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Betölti a paraméterül kapott pályát.
+	 * 
+	 * @param name A betöltendő pálya neve.
+	 * @return Igaz, ha sikerült betölteni; hamis egyébként.
+	 */
+	public static boolean loadLevel(String name){
+		List<GameObject> level = DB.loadLevel(name);
+		if(level != null){
+			Game.removeAllGameObjects();
+			Game.addGameObjects(level);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

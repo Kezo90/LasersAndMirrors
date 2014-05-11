@@ -5,8 +5,6 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
-import java.awt.Component;
-import javax.swing.JPanel;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
 import java.awt.Color;
 import java.util.List;
@@ -35,7 +33,7 @@ public class Game {
 	public static void main(String[] args) {
 		DB.connect();
 		
-		
+		/*
 		// TODO: tesztobjektumok: maybe del it
 		addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
 		addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
@@ -47,30 +45,12 @@ public class Game {
 		addGameObject(new GameObjectMirror(250, 160, 10));
 		addGameObject(new GameObjectMirror(200, 160, 10));
 
-
 		DB.saveLevel("test");
+		*/
 		
-		List<GameObject> level = DB.loadLevel("test");
-		if(level != null){
-			removeAllGameObjects();
-			addGameObjects(level);
-		}
-		
-		// PlaygroundFrame beállítása.
+		// ablak megnyitása.
 		PlaygroundFrame frame = new PlaygroundFrame();
 		frame.setVisible(true);
-		
-		// A playgroundPanel megkeresése.
-		JPanel playgroundPanel = null;
-		Component[] components = frame.getContentPane().getComponents();
-		for (Component component : components) {
-			String name = component.getName();
-			if(name != null && name.equals("playgroundPanel")){
-				playgroundPanel = (JPanel)component;
-			}
-		}
-		
-		Controller.setActivePanel(playgroundPanel);
 	}
 	// </main>
 	////////////////////////////////////////////////////////////////////////

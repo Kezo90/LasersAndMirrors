@@ -29,4 +29,7 @@ public class Settings {
 	/** Az objektumok forgatásának sebessége. */
 	public static final double ROTATION_SPEED = 0.5;
 	
+	/** Üres listaelembeli szöveg. */
+	public static final String EMPTY_LIST_ITEM_STRING = "<Empty>";
+	
 }
