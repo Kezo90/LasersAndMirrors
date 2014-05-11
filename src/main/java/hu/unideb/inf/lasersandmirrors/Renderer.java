@@ -51,7 +51,7 @@ public class Renderer {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		// elemek összegyűjtése
-		List<GameObject> gameObjects = Game.getGameObjects();
+		List<GameObject> gameObjects = Controller.getGameObjects();
 		List<GameObject> drawables = new ArrayList<>();
 		for (GameObject gameObject : gameObjects) {
 			if(gameObject instanceof GameObjectLaser){

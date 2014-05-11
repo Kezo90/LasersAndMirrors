@@ -30,6 +30,8 @@ public class Controller {
 	
 	/** A frissítéshez használt időzítő. */
 	private static final Timer timer;
+	/** A pályán lévő {@link GameObject}-ek kollekciója. */
+	private static ArrayList<GameObject> gameObjects = new ArrayList<>();
 	
 	static{
 		// Két frissítés között minimálisan eltelő idő beállítása.
@@ -105,7 +107,6 @@ public class Controller {
 	
 	
 	
-	// TODO: (updateGame) lehet, hogy ennek nem a Controllerben van a helye
 	// TODO: massza
 	/**
 	 * A játékbeli történések frissítése.
@@ -121,7 +122,7 @@ public class Controller {
 			List<GameObjectDiamond> diamonds = new ArrayList<>();
 			
 			// GameObject-ek szétválogatása
-			List<GameObject> gameObjects = Game.getGameObjects();
+			List<GameObject> gameObjects = getGameObjects();
 			for (GameObject gameObject : gameObjects) {
 				if(gameObject instanceof GameObjectLaser){
 					lasers.add((GameObjectLaser)gameObject);
@@ -248,7 +249,7 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	/**
 	 * A lézersugár útjának kiszámolása közben létrejött metszetekről 
 	 * ideiglenesen információkat tároló osztály.
@@ -288,6 +289,63 @@ public class Controller {
 	
 	
 	
+	/**
+	 * Új elem felvitele a pályára.
+	 *
+	 * @param gameObject Az új elem.
+	 */
+	public static void addGameObject(GameObject gameObject) {
+		gameObjects.add(gameObject);
+	}
+
+	/**
+	 * Az összes objektum eltávolítása a pályáról.
+	 */
+	public static void removeAllGameObjects() {
+		gameObjects.clear();
+	}
+
+	/**
+	 * Elem eltávolítása a pályáról.
+	 *
+	 * @param gameObject Az elem, melyet el akarunk tüntetni.
+	 */
+	public static void removeGameObject(GameObject gameObject) {
+		gameObjects.remove(gameObject);
+	}
+
+	/**
+	 * Az alkalmazás befejezése, erőforrások felszabadítása.
+	 */
+	public static void exitGame() {
+		DB.close();
+		System.exit(0);
+	}
+
+	/**
+	 * A pályán lévő {@link GameObject}-ek kollekcióját lehet lekérdezni.
+	 *
+	 * @return A pályán lévő {@link GameObject}-ek.
+	 */
+	public static ArrayList<GameObject> getGameObjects() {
+		return gameObjects;
+	}
+
+	/**
+	 * Új elemek felvitele a pályára.
+	 *
+	 * @param newObjects Az új elemek.
+	 */
+	public static void addGameObjects(List<GameObject> newObjects) {
+		for (GameObject gameObject : newObjects) {
+			gameObjects.add(gameObject);
+		}
+	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * Betölti a paraméterül kapott pályát.
@@ -298,8 +356,8 @@ public class Controller {
 	public static boolean loadLevel(String name){
 		List<GameObject> level = DB.loadLevel(name);
 		if(level != null){
-			Game.removeAllGameObjects();
-			Game.addGameObjects(level);
+			removeAllGameObjects();
+			addGameObjects(level);
 			return true;
 		} else {
 			return false;

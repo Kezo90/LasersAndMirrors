@@ -2,7 +2,6 @@
 package hu.unideb.inf.lasersandmirrors.gui;
 
 import hu.unideb.inf.lasersandmirrors.Controller;
-import hu.unideb.inf.lasersandmirrors.Game;
 import hu.unideb.inf.lasersandmirrors.Settings;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
@@ -56,7 +55,7 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 	 * @param evt A kiváltott esemény leírója.
 	 */
     private void windowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowClosing
-        Game.exitGame();
+        Controller.exitGame();
     }//GEN-LAST:event_windowClosing
 	
 	public JPanel getMenu(){
@@ -95,7 +94,6 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		);
 		*/
 		// </editor-fold>
-		
 		JPanel contentPane = new JPanel();
 		setContentPane(contentPane);
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);

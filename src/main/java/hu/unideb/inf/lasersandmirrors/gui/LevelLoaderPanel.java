@@ -6,7 +6,6 @@ package hu.unideb.inf.lasersandmirrors.gui;
 
 import hu.unideb.inf.lasersandmirrors.Controller;
 import hu.unideb.inf.lasersandmirrors.DB;
-import hu.unideb.inf.lasersandmirrors.Game;
 import hu.unideb.inf.lasersandmirrors.Settings;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -193,7 +192,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitGameButtonActionPerformed
-        Game.exitGame();
+        Controller.exitGame();
     }//GEN-LAST:event_exitGameButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
