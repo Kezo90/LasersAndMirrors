@@ -14,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +43,14 @@ public class DB {
 	 * 
 	 * @return A kapcsolatot sikerült-e létrehozni vagy sem.
 	 */
-	static boolean connect(){
+	public static boolean connect(){
 		if(connection != null){
 			return true;
 		}
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "lasersandmirrors", "123");
+			connection.createStatement().executeUpdate("USE " + DB);
 			logger.info("Database connection successfully established.");
 			return true;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
@@ -64,7 +67,7 @@ public class DB {
 	 * 
 	 * @return Igaz, ha sikerült lezárni a kapcsolatot; hamis egyénként.
 	 */
-	static boolean close(){
+	public static boolean close(){
 		try{
 			if(connection != null && !connection.isClosed()){
 				try{
@@ -95,18 +98,18 @@ public class DB {
 	 * @param name A pálya neve.
 	 * @return Igaz, ha sikerült elmenteni/felülírni a pályát, egyébként hamis.
 	 */
-	static boolean saveLevel(String name){
+	public static boolean saveLevel(String name){
 		
 		PreparedStatement levelStatement = null;
 		PreparedStatement gameObjectStatement = null;
 		PreparedStatement otherGameObjectStatement = null;
 		
 		String levelQueryString = 
-				"INSERT INTO " + DB + ".level"
+				"INSERT INTO level"
 				+ "(name) "
 				+ "VALUES(?)";
 		String gameObjectQueryString = 
-				"INSERT INTO " + DB + ".game_object"
+				"INSERT INTO game_object"
 				+ "(level_id, type, x, y, rot, color) "
 				+ "VALUES(?, ?, ?, ?, ?, ?)";
 		
@@ -199,15 +202,15 @@ public class DB {
 	 * @return Ha nem történt hiba a beolvasás során, 
 	 * akkor a pályán lévő objektumok; egyébként null.
 	 */
-	static List<GameObject> loadLevel(String name){
+	public static List<GameObject> loadLevel(String name){
 
 		List<GameObject> loadedObjects = new ArrayList<>();
 		
 		PreparedStatement gameObjectStatement = null;
 		String gameObjectQueryString = 
-				"SELECT * FROM " + DB + ".game_object "
+				"SELECT * FROM game_object "
 				+ "WHERE level_id=("
-					+ "SELECT id FROM " + DB + ".level "
+					+ "SELECT id FROM level "
 					+ "WHERE name=?"
 				+ ")";
 		
@@ -277,12 +280,12 @@ public class DB {
 	 * @return Igaz, ha a pálya létezik, hamis ha nem.
 	 * @throws SQLException Akkor dobódik, ha hiba történik az adatok lekérése közben.
 	 */
-	static boolean isLevelExists(String name) throws SQLException{
+	public static boolean isLevelExists(String name) throws SQLException{
 		PreparedStatement selectStatement = null;
 		try{
 			String queryString = 
 					"SELECT count(*) "
-					+ "FROM " + DB + ".level "
+					+ "FROM level "
 					+ "WHERE name=?";
 			selectStatement = connection.prepareStatement(queryString);
 			selectStatement.setString(1, name);
@@ -307,7 +310,7 @@ public class DB {
 	 * @param name A törlendő pálya neve.
 	 * @return Igaz, ha nem történt hiba, különben hamis.
 	 */
-	static boolean removeLevel(String name){
+	public static boolean removeLevel(String name){
 		try{
 			connection.setAutoCommit(false);
 			if(!removeLevel_TransactionFragment(name)){
@@ -348,7 +351,7 @@ public class DB {
 	private static boolean removeLevel_TransactionFragment(String name){
 		PreparedStatement deleteStatement = null;
 		String queryString = 
-				"DELETE FROM " + DB + ".level "
+				"DELETE FROM level "
 				+ "WHERE name=?";
 		try{
 			deleteStatement = connection.prepareStatement(queryString);
@@ -369,4 +372,103 @@ public class DB {
 			}
 		}
 	}
+	
+	/**
+	 * Pályán lévő objektumok darabszámát tárolja.
+	 */
+	public static class LevelObjectCounts{
+		
+		/** lézerek száma */
+		public int laserCount;
+		/** gyémántok száma */
+		public int diamondCount;
+		/** tükrök száma */
+		public int mirrorCount;
+		
+		/**
+		 * 0 értékekkel hozza létre az objektumot.
+		 */
+		public LevelObjectCounts(){
+			this.laserCount = 0;
+			this.diamondCount = 0;
+			this.mirrorCount = 0;
+		}
+		
+		/**
+		 * Egy pályán lévő objtektumok darabszámát tárolja típusonként csoportosítva.
+		 * 
+		 * @param laserCount lézerek száma
+		 * @param diamondCount gyémántok száma
+		 * @param mirrorCount tükrök száma
+		 */
+		public LevelObjectCounts(int laserCount, int diamondCount, int mirrorCount) {
+			this.laserCount = laserCount;
+			this.diamondCount = diamondCount;
+			this.mirrorCount = mirrorCount;
+		}
+	}
+	
+	/**
+	 * Betölti az adatbázisban található pályák tulajdonságait.
+	 * A kulcsok tárolják a pályák neveit. Az értékek pedig a pályához tartozó 
+	 * objektumok darabszámát.
+	 * 
+	 * @return Ha nem történt hiba a beolvasás során, 
+	 * akkor a pályák tulajdonságai; egyébként null.
+	 */
+	public static Map<String, LevelObjectCounts> loadLevelInfos(){
+		
+		Map<String, LevelObjectCounts> levelInfos = new HashMap<>();
+		PreparedStatement prepStatement = null;
+		String query = "SELECT l.name, go.type, COUNT(*) \"count\" " +
+				"FROM game_object go JOIN level l ON go.level_id=l.id " +
+				"GROUP BY l.id, go.type ORDER BY l.name";
+		
+		try{
+			prepStatement = connection.prepareStatement(query);
+			ResultSet result = prepStatement.executeQuery();
+			while(result.next()){
+				String name = result.getString("name");
+				String type = result.getString("type");
+				int count = result.getInt("count");
+				LevelObjectCounts level;
+				if(levelInfos.containsKey(name)){
+					level = levelInfos.get(name);
+				} else {
+					level = new LevelObjectCounts();
+					levelInfos.put(name, level);
+				}
+				
+				switch(type){
+					case "laser":
+						level.laserCount = count;
+						break;
+					case "mirror":
+						level.mirrorCount = count;
+						break;
+					case "diamond":
+						level.diamondCount = count;
+						break;
+					case "other":
+					default:
+						logger.warn(String.format("Unknown game_object.type readed."));
+				}
+			}
+		} catch (SQLException ex) {
+			logger.error("Failed to read levels info.");
+			return null;
+		} finally {
+			try {
+				if(prepStatement != null){
+					prepStatement.close();
+				}
+			} catch (SQLException ex) {
+				logger.warn("Failed to close PreparedStatement.");
+			}
+		}
+		
+		logger.info("Level infos successfully loaded.");
+		return levelInfos;
+	}
+	
 }
