@@ -209,7 +209,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO: Edit button
+        // TODO: Edit button (v0.2)
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged

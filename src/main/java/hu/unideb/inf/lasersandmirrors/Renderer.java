@@ -2,6 +2,7 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicBitmap;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicMultiline;
@@ -58,6 +59,12 @@ public class Renderer {
 		for (GameObject gameObject : gameObjects) {
 			if(gameObject instanceof GameObjectLaser){
 				drawables.add(((GameObjectLaser)gameObject).getLaserLine());
+			} else if(gameObject instanceof GameObjectDiamond){
+				GameObjectDiamond gameObjectDiamond = (GameObjectDiamond)gameObject;
+				if(gameObjectDiamond.isLightened()){
+					GameObjectDiamond.DiamondShineGO shine = gameObjectDiamond.new DiamondShineGO();
+					drawables.add(shine);
+				}
 			}
 			drawables.add(gameObject);
 		}

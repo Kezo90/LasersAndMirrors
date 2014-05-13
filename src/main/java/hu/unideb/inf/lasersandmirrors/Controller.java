@@ -242,7 +242,6 @@ public class Controller {
 				for (LineSegment2D line : lines) {
 					if(line.distance(diamondOrigo) < radius){
 						diamond.setLightened(true);
-						// TODO: gyémánt csillámlás
 						break;
 					}
 				}

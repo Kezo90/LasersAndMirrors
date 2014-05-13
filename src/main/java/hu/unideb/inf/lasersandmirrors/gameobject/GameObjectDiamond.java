@@ -153,7 +153,7 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 	 * @return A gyémánt sugara.
 	 */
 	public double getRadius(){
-		return image.getWidth() * this.scale;
+		return image.getWidth() * this.scale / 2.0 * 0.72;
 	}
 	
 	/**
@@ -208,4 +208,109 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 		this.draggable = val;
 	}
 	
+	
+	
+	
+	
+	/** A csillogás objektum rasztergrafikus képe. */
+	private static BufferedImage shineImage;
+	
+	/** A csillogás objektum rasztergrafikus kép középpontjának x koordinátája. */
+	private static double shineBitmapCenterX;
+	
+	/** A csillogás objektum rasztergrafikus kép középpontjának y koordinátája. */
+	private static double shineBitmapCenterY;
+	
+	{
+		// a csillám kép betöltése
+		if(shineImage == null){
+			URL resource = Object.class.getResource("/bitmaps/DiamondShine.png");
+			try{
+				shineImage = ImageIO.read(resource);
+				shineBitmapCenterX = (double)shineImage.getWidth() / 2.0;
+				shineBitmapCenterY = (double)shineImage.getHeight() / 2.0;
+			}catch(IOException | IllegalArgumentException e){
+				logger.error("Can't load bitmap: " + resource);
+			}
+		}
+	}
+	
+	/**
+	 * Az aktuális gyémánt objektum csillogása.
+	 * 
+	 * Akkor kell megejeleníteni, ha a {@link GameObjectDiamond#isLightened()} 
+	 * igazzal tér vissza.
+	 */
+	public class DiamondShineGO extends GameObject implements GraphicBitmap {
+
+		@Override
+		public int getDepth() {
+			return Graphic.DEPTH_DIAMOND_SHINE;
+		}
+		
+		@Override
+		public double getBitmapCenterX() {
+			return shineBitmapCenterX;
+		}
+
+		@Override
+		public double getBitmapCenterY() {
+			return shineBitmapCenterY;
+		}
+		
+		@Override
+		public Image getImage() {
+			return shineImage;
+		}
+
+		@Override
+		public double getRotation() {
+			return rotation;
+		}
+		
+		@Override
+		public double getX() {
+			return x;
+		}
+
+		@Override
+		public double getY() {
+			return y;
+		}
+		
+		@Override
+		public double getScale() {
+			return scale;
+		}
+		
+		@Override
+		public String toString() {
+			return "DiamondShineGO{" + "x=" + x + ", y=" + y + '}';
+		}
+
+		/** No effect on DiamondShineGO */
+		@Deprecated
+		@Override
+		public void setRotation(double val){
+		}
+
+		/** No effect on DiamondShineGO */
+		@Deprecated
+		@Override
+		public void setX(double val) {
+		}
+
+		/** No effect on DiamondShineGO */
+		@Deprecated
+		@Override
+		public void setY(double val) {
+		}
+		
+		/** No effect on DiamondShineGO */
+		@Deprecated
+		@Override
+		public void setScale(double val) {
+		}
+		
+	}
 }

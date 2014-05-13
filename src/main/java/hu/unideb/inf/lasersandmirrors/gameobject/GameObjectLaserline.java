@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// TODO: a GameObjectLaserline kötődhetne a lézeréhez (beágyazott osztály, mint a gyémántnál)
 /**
  * Egy lézer vonalait tároló objektum.
  *
