@@ -42,7 +42,7 @@ public class Game {
 
 		DB.saveLevel("test2");
 		
-		
+		// TODO: runnable a Frame-nek, hogy hiba esetén is lezáródjon az adatbáziskapcsolat.
 		// ablak megnyitása.
 		PlaygroundFrame frame = new PlaygroundFrame();
 		frame.setVisible(true);

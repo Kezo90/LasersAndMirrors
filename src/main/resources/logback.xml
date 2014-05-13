@@ -4,11 +4,11 @@
 		<encoder>
 			<pattern>%d{YYYY.MM.dd. HH:mm:ss.SSS} [%-5level] %logger{50} [%thread] - %msg%n</pattern>
 		</encoder>
-		<!--
+		
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>INFO</level>
 		</filter>
-		-->
+		
 	</appender>
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
