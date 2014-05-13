@@ -145,8 +145,8 @@ public class InputHandler implements MouseInputListener{
 				if(!selectedGO.isDraggable())
 					break;
 				// objektum mozgatása egérrel
-				double newX = mx + draggingDiff.getX();
-				double newY = my + draggingDiff.getY();
+				double newX = mx - draggingDiff.getX();
+				double newY = my - draggingDiff.getY();
 				math.geom2d.Point2D newPos = Controller.limitGOPositionToCurrentPanel(newX, newY);
 				selectedGO.setX(newPos.x());
 				selectedGO.setY(newPos.y());
