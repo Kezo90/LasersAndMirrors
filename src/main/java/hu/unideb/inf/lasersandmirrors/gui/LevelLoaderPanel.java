@@ -18,11 +18,11 @@ import javax.swing.ToolTipManager;
  */
 public class LevelLoaderPanel extends javax.swing.JPanel {
 
-	class Obj{
+	class ListItem{
 		private String name;
 		private String extraString;
 
-		public Obj(String name, String extraString) {
+		public ListItem(String name, String extraString) {
 			this.name = name;
 			this.extraString = extraString;
 		}
@@ -63,13 +63,13 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		if(levelObjectCountsMap != null){
 			for (String levelName : levelObjectCountsMap.keySet()) {
 				DB.LevelObjectCounts levelObjectCounts = levelObjectCountsMap.get(levelName);
-				levelsListItems.addElement(new Obj(levelName, String.format(" (%s, %s, %s)", 
+				levelsListItems.addElement(new ListItem(levelName, String.format(" (%s, %s, %s)", 
 						levelObjectCounts.laserCount, 
 						levelObjectCounts.mirrorCount, 
 						levelObjectCounts.diamondCount)));
 			}
 		}
-		levelsListItems.add(0, new Obj(Settings.EMPTY_LIST_ITEM_STRING, null));
+		levelsListItems.add(0, new ListItem(Settings.EMPTY_LIST_ITEM_STRING, null));
 	}
 
 	/**
@@ -196,16 +196,16 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_exitGameButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-		Controller.loadLevel( ((Obj)levelsList.getSelectedValue()).getName() );
+		Controller.loadLevel( ((ListItem)levelsList.getSelectedValue()).getName() );
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO add your handling code here:
+        // TODO: Edit button
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
 		JList list = (JList)evt.getSource();
-		String value = ((Obj)list.getSelectedValue()).getName();
+		String value = ((ListItem)list.getSelectedValue()).getName();
 		if(value.equals(Settings.EMPTY_LIST_ITEM_STRING)){
 			playButton.setEnabled(false);
 		} else {
@@ -213,7 +213,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		}
     }//GEN-LAST:event_levelsListValueChanged
 
-	DefaultListModel<Obj> levelsListItems;
+	DefaultListModel<ListItem> levelsListItems;
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton editButton;
