@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import javax.swing.JPanel;
 
 /**
+ * A játék ablaka.
  *
  * @author Kerekes Zoltán
  */
@@ -58,10 +59,20 @@ public class PlaygroundFrame extends javax.swing.JFrame {
         Controller.exitGame();
     }//GEN-LAST:event_windowClosing
 	
+	/**
+	 * Az aktuális menü kérdezhető le.
+	 * 
+	 * @return Az aktuális menu referenciája.
+	 */
 	public JPanel getMenu(){
 		return this.menuPanel;
 	}
 	
+	/**
+	 * Új menü állítható be.
+	 * 
+	 * @param menu Az új menü.
+	 */
 	public final void setMenu(JPanel menu){
 		// <editor-fold defaultstate="collapsed" desc="GroupLayout-os kódom (kikommentelve)">  
 		/*
@@ -106,7 +117,9 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		pack();
 	}
 	
+	/** A játéktér panel. */
 	private JPanel playgroundPanel = new PlaygroundPanel();
+	/** Az aktuális menü. */
 	private JPanel menuPanel = null;
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables

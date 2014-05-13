@@ -13,20 +13,35 @@ import javax.swing.JList;
 import javax.swing.ToolTipManager;
 
 /**
+ * A főmenü.
  *
- * @author KZ
+ * @author Kerekes Zoltán
  */
 public class LevelLoaderPanel extends javax.swing.JPanel {
 
+	/**
+	 * A pályákat tartalmazó lista egy-egy eleme.
+	 */
 	class ListItem{
 		private String value;
 		private String text;
 
+		/**
+		 * Új listaelem létrehozása.
+		 * 
+		 * @param value A listaelem logikai feldolgozás szerinti értéke.
+		 * @param text A megjelenítendő szöveg.
+		 */
 		public ListItem(String value, String text) {
 			this.value = value;
 			this.text = text;
 		}
 		
+		/**
+		 * A listaelem neve kérdezhető le.
+		 * 
+		 * @return A lista neve.
+		 */
 		public String getName(){
 			return value;
 		}
@@ -200,18 +215,41 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * A kilépés gombot megnyomjuk: kilép a program.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void exitGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitGameButtonActionPerformed
         Controller.exitGame();
     }//GEN-LAST:event_exitGameButtonActionPerformed
 
+	/**
+	 * A Play gombot megnyomjuk: betöltia  kijelölt pályát a játék.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
 		Controller.loadLevel( ((ListItem)levelsList.getSelectedValue()).getName() );
     }//GEN-LAST:event_playButtonActionPerformed
 
+	/**
+	 * Betölti a pályát szerkesztésre vagy csak átlép a szerkezstő menübe.
+	 * 
+	 * <strong>Még nincs implementálva a szerkesztő.</strong>
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO: Edit button (v0.2)
+        // PENDING: Edit button (v0.2)
     }//GEN-LAST:event_editButtonActionPerformed
 
+	/**
+	 * A listában kijelöltünk valamit: a Play gomb elszürkülhet, 
+	 * mert az új (szerkesztésnek fenntartott) üres páylát nem tölthetjük be.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
 		JList list = (JList)evt.getSource();
 		String value = ((ListItem)list.getSelectedValue()).getName();
@@ -222,6 +260,9 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		}
     }//GEN-LAST:event_levelsListValueChanged
 
+	/**
+	 * A listaelemek, melyeket a lista létezésekor is tudunk szerkeszteni.
+	 */
 	DefaultListModel<ListItem> levelsListItems;
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -376,19 +376,21 @@ public class DB {
 	 * Egy pálya információit tárolja.
 	 */
 	public static class LevelInfo{
-		/** lézerek száma */
+		/** Lézerek száma. */
 		public int laserCount;
-		/** gyémántok száma */
+		/** Gyémántok száma. */
 		public int diamondCount;
-		/** tükrök száma */
+		/** Tükrök száma. */
 		public int mirrorCount;
-		/** teljesítették már? */
+		/** Teljesítették-e már a pályát. */
 		public boolean completed;
-		/** a pálya neve */
+		/** A pálya neve. */
 		public String name;
 		
 		/**
 		 * 0 darabszámokkal és nem teljesített állapottal létrehozza az objektumot.
+		 * 
+		 * @param name A pálya neve.
 		 */
 		public LevelInfo(String name){
 			this.laserCount = 0;

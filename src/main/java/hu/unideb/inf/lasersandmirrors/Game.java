@@ -11,7 +11,6 @@ import java.awt.Color;
  * PENDING: v0.2: falak, színek
  * 
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
- * TODO: Swing-es komponensek javadoc-ja.
  */
 
 /**

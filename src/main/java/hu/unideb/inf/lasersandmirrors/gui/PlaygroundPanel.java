@@ -3,9 +3,9 @@ package hu.unideb.inf.lasersandmirrors.gui;
 
 import java.awt.Graphics;
 import hu.unideb.inf.lasersandmirrors.Renderer;
-import hu.unideb.inf.lasersandmirrors.Settings;
 
 /**
+ * A játéktér.
  *
  * @author Kerekes Zoltán
  */

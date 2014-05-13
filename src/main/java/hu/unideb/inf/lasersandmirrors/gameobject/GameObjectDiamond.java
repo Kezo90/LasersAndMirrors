@@ -199,6 +199,8 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 		return this.isDraggable();
 	}
 
+	/** Nincs hatása GameObjectDiamond objektumon. {@inheritDoc} */
+	@Deprecated
 	@Override
 	public void setRotatable(boolean val) {
 	}
@@ -288,25 +290,25 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 			return "DiamondShineGO{" + "x=" + x + ", y=" + y + '}';
 		}
 
-		/** No effect on DiamondShineGO */
+		/** Nincs hatása DiamondShineGO objektumon. {@inheritDoc} */
 		@Deprecated
 		@Override
 		public void setRotation(double val){
 		}
 
-		/** No effect on DiamondShineGO */
+		/** Nincs hatása DiamondShineGO objektumon. {@inheritDoc} */
 		@Deprecated
 		@Override
 		public void setX(double val) {
 		}
 
-		/** No effect on DiamondShineGO */
+		/** Nincs hatása DiamondShineGO objektumon. {@inheritDoc} */
 		@Deprecated
 		@Override
 		public void setY(double val) {
 		}
 		
-		/** No effect on DiamondShineGO */
+		/** Nincs hatása DiamondShineGO objektumon. {@inheritDoc} */
 		@Deprecated
 		@Override
 		public void setScale(double val) {
