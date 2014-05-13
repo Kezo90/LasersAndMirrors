@@ -5,6 +5,7 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicBitmap;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicMultiline;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -45,10 +46,11 @@ public class Renderer {
 		// néhány beállítás
 		Graphics2D g2d = (Graphics2D)graphics;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2d.setStroke(new BasicStroke(1.5f));
+		
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-		//g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		// elemek összegyűjtése
 		List<GameObject> gameObjects = Controller.getGameObjects();
@@ -63,6 +65,7 @@ public class Renderer {
 		
 		// elemek kirajzolása
 		for (GameObject gameObject : drawables) {
+			// vonalas objektumok
 			if(gameObject instanceof GraphicMultiline){
 				GraphicMultiline graphicMultiline = ((GraphicMultiline)gameObject);
 				g2d.setColor(graphicMultiline.getColor());
@@ -71,6 +74,7 @@ public class Renderer {
 					g2d.drawLine((int)points.get(i).getX(), (int)points.get(i).getY(), 
 							(int)points.get(i+1).getX(), (int)points.get(i+1).getY());
 				}
+			// grafikus objektumok
 			}else if(gameObject instanceof GraphicBitmap){
 				GraphicBitmap graphicBitmap = ((GraphicBitmap)gameObject);
 				Image image = graphicBitmap.getImage();

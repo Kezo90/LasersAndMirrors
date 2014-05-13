@@ -57,8 +57,8 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 			URL resource = Object.class.getResource("/bitmaps/RedLaser.png");
 			try{
 				image = ImageIO.read(resource);
-				bitmapCenterX = (double)image.getWidth() / 2.0;
-				bitmapCenterY = (double)image.getHeight() / 2.0;
+				bitmapCenterX = 25; //(double)image.getWidth() / 2.0;
+				bitmapCenterY = 66; //(double)image.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
 				logger.error("Can't load bitmap: " + resource);
 			}

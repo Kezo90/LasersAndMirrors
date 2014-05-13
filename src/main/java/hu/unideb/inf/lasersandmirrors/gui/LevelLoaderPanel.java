@@ -53,6 +53,9 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
 		tooltipManager.setInitialDelay(0);
 		tooltipManager.setDismissDelay(15_000);
+		// PENDING: v0.2: Editor
+		editButton.setToolTipText("Not yet supported!");
+		editButton.setEnabled(false);
 		
 		// listaelemek módosíthatóvá tétele
 		levelsListItems = new DefaultListModel<>();
