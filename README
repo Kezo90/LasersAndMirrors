@@ -1,6 +1,8 @@
 A játék irányítása:
 ===================
- - Játékelem kijelölése: Egyszer rá kell kattintani egérrel.
- - Kijelölt játékelem mozgatása: Rá kell kattintani mégegyszer és mielőtt elengednénk az egérgombot, addig lehet mozgatni.
- - Kijelölt játékelem forgatása: Az elemen kívülre kattintva egérmozgással.
-
+ - Játékelem kijelölése: 
+       Egyszer rá kell kattintani egérrel.
+ - Kijelölt játékelem mozgatása: 
+       Rá kell kattintani mégegyszer és mielőtt elengednénk az egérgombot, addig lehet mozgatni.
+ - Kijelölt játékelem forgatása: 
+       Az elemen kívülre kattintva, az elem körüli egérmozgással addig, míg el nem engedjük az egérgombot.
