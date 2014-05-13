@@ -415,7 +415,9 @@ public class DB {
 				"GROUP BY l.id, go.type ORDER BY l.name";
 		String levelsQuery = "SELECT name, completed FROM level ORDER BY name";
 		
-		// darabszámok összegyűjtése
+		// Darabszámok összegyűjtése [és persze a nevek,
+		// de azt nem kell minden sorból eltárolni, 
+		// mert redundánsan (pályanév - számérték párokban) érkezik a lekérdezésből].
 		try{
 			countsStatement = connection.prepareStatement(countsQuery);
 			ResultSet result = countsStatement.executeQuery();
@@ -425,30 +427,28 @@ public class DB {
 				String type = result.getString("type");
 				int count = result.getInt("count");
 
-				
 				if(levelInfo == null){
-					// legelső sornál kell
+					// csak a legelső sornál kell
 					levelInfo = new LevelInfo(name);
 					levelInfos.add(levelInfo);
-				} else {
-					if(!levelInfo.name.equals(name)){
-						levelInfo = new LevelInfo(name);
-						levelInfos.add(levelInfo);
-					}
-					switch(type){
-						case "laser":
-							levelInfo.laserCount = count;
-							break;
-						case "mirror":
-							levelInfo.mirrorCount = count;
-							break;
-						case "diamond":
-							levelInfo.diamondCount = count;
-							break;
-						case "other":
-						default:
-							logger.warn(String.format("Unknown game_object.type readed."));
-					}
+				} else if(!levelInfo.name.equals(name)){
+					// elértünk a következő pályához tartozó adatok soraihoz
+					levelInfo = new LevelInfo(name);
+					levelInfos.add(levelInfo);
+				}
+				switch(type){
+					case "laser":
+						levelInfo.laserCount = count;
+						break;
+					case "mirror":
+						levelInfo.mirrorCount = count;
+						break;
+					case "diamond":
+						levelInfo.diamondCount = count;
+						break;
+					case "other":
+					default:
+						logger.warn(String.format("Unknown game_object.type readed."));
 				}
 			}
 			
