@@ -7,7 +7,7 @@ package hu.unideb.inf.lasersandmirrors.gui;
 import hu.unideb.inf.lasersandmirrors.Controller;
 import hu.unideb.inf.lasersandmirrors.DB;
 import hu.unideb.inf.lasersandmirrors.Settings;
-import java.util.Map;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ToolTipManager;
@@ -19,25 +19,21 @@ import javax.swing.ToolTipManager;
 public class LevelLoaderPanel extends javax.swing.JPanel {
 
 	class ListItem{
-		private String name;
-		private String extraString;
+		private String value;
+		private String text;
 
-		public ListItem(String name, String extraString) {
-			this.name = name;
-			this.extraString = extraString;
+		public ListItem(String value, String text) {
+			this.value = value;
+			this.text = text;
 		}
 		
 		public String getName(){
-			return name;
+			return value;
 		}
 
 		@Override
 		public String toString() {
-			StringBuilder sb = new StringBuilder(name);
-			if(extraString != null){
-				sb.append(extraString);
-			}
-			return sb.toString();
+			return text;
 		}
 	}
 	
@@ -49,10 +45,19 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		initComponents();
 		
 		// tooltip
-		listTitleLabel.setToolTipText("Numbers in brackets means: Lasers, Mirrors and Diamonds on the level.");
+		listTitleLabel.setToolTipText(
+				"<html>"
+					+ "<p style=\"margin-bottom:7px\">"
+						+ "<strong>Numbers in brackets:</strong> Lasers, Mirrors and Diamonds on the level."
+					+ "</p>"
+					+ "<p>"
+						+ "<strong>Star at the end:</strong> level completed."
+					+ "</p>"
+				+ "</html>");
 		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
 		tooltipManager.setInitialDelay(0);
 		tooltipManager.setDismissDelay(15_000);
+		
 		// PENDING: v0.2: Editor
 		editButton.setToolTipText("Not yet supported!");
 		editButton.setEnabled(false);
@@ -60,19 +65,20 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		// listaelemek módosíthatóvá tétele
 		levelsListItems = new DefaultListModel<>();
 		levelsList.setModel(levelsListItems);
-		Map<String, DB.LevelObjectCounts> levelObjectCountsMap = DB.loadLevelInfos();
 		
 		// listaelemek legyártása
-		if(levelObjectCountsMap != null){
-			for (String levelName : levelObjectCountsMap.keySet()) {
-				DB.LevelObjectCounts levelObjectCounts = levelObjectCountsMap.get(levelName);
-				levelsListItems.addElement(new ListItem(levelName, String.format(" (%s, %s, %s)", 
-						levelObjectCounts.laserCount, 
-						levelObjectCounts.mirrorCount, 
-						levelObjectCounts.diamondCount)));
+		List<DB.LevelInfo> levelInfos = DB.loadLevelInfos();
+		if(levelInfos != null){
+			for (DB.LevelInfo levelInfo : levelInfos) {
+				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s%s (%s, %s, %s)", 
+						levelInfo.completed ? "*" : "" ,
+						levelInfo.name,
+						levelInfo.laserCount, 
+						levelInfo.mirrorCount, 
+						levelInfo.diamondCount)));
 			}
 		}
-		levelsListItems.add(0, new ListItem(Settings.EMPTY_LIST_ITEM_STRING, null));
+		levelsListItems.add(0, new ListItem(null, Settings.EMPTY_LIST_ITEM_STRING));
 	}
 
 	/**
@@ -209,7 +215,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
 		JList list = (JList)evt.getSource();
 		String value = ((ListItem)list.getSelectedValue()).getName();
-		if(value.equals(Settings.EMPTY_LIST_ITEM_STRING)){
+		if(value == null){
 			playButton.setEnabled(false);
 		} else {
 			playButton.setEnabled(true);

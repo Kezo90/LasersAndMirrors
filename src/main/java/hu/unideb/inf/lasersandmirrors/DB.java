@@ -14,9 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -374,93 +373,110 @@ public class DB {
 	}
 	
 	/**
-	 * Pályán lévő objektumok darabszámát tárolja.
+	 * Egy pálya információit tárolja.
 	 */
-	public static class LevelObjectCounts{
-		
+	public static class LevelInfo{
 		/** lézerek száma */
 		public int laserCount;
 		/** gyémántok száma */
 		public int diamondCount;
 		/** tükrök száma */
 		public int mirrorCount;
+		/** teljesítették már? */
+		public boolean completed;
+		/** a pálya neve */
+		public String name;
 		
 		/**
-		 * 0 értékekkel hozza létre az objektumot.
+		 * 0 darabszámokkal és nem teljesített állapottal létrehozza az objektumot.
 		 */
-		public LevelObjectCounts(){
+		public LevelInfo(String name){
 			this.laserCount = 0;
 			this.diamondCount = 0;
 			this.mirrorCount = 0;
-		}
-		
-		/**
-		 * Egy pályán lévő objtektumok darabszámát tárolja típusonként csoportosítva.
-		 * 
-		 * @param laserCount lézerek száma
-		 * @param diamondCount gyémántok száma
-		 * @param mirrorCount tükrök száma
-		 */
-		public LevelObjectCounts(int laserCount, int diamondCount, int mirrorCount) {
-			this.laserCount = laserCount;
-			this.diamondCount = diamondCount;
-			this.mirrorCount = mirrorCount;
+			this.completed = false;
+			this.name = name;
 		}
 	}
 	
 	/**
 	 * Betölti az adatbázisban található pályák tulajdonságait.
-	 * A kulcsok tárolják a pályák neveit. Az értékek pedig a pályához tartozó 
-	 * objektumok darabszámát.
 	 * 
 	 * @return Ha nem történt hiba a beolvasás során, 
 	 * akkor a pályák tulajdonságai; egyébként null.
 	 */
-	public static Map<String, LevelObjectCounts> loadLevelInfos(){
+	public static List<LevelInfo> loadLevelInfos(){
 		
-		Map<String, LevelObjectCounts> levelInfos = new HashMap<>();
-		PreparedStatement prepStatement = null;
-		String query = "SELECT l.name, go.type, COUNT(*) \"count\" " +
+		List<LevelInfo> levelInfos = new ArrayList<>();
+		PreparedStatement countsStatement = null;
+		PreparedStatement levelsStatement = null;
+		String countsQuery = "SELECT l.name, go.type, COUNT(*) \"count\" " +
 				"FROM game_object go JOIN level l ON go.level_id=l.id " +
 				"GROUP BY l.id, go.type ORDER BY l.name";
+		String levelsQuery = "SELECT name, completed FROM level ORDER BY name";
 		
+		// darabszámok összegyűjtése
 		try{
-			prepStatement = connection.prepareStatement(query);
-			ResultSet result = prepStatement.executeQuery();
+			countsStatement = connection.prepareStatement(countsQuery);
+			ResultSet result = countsStatement.executeQuery();
+			LevelInfo levelInfo = null;
 			while(result.next()){
 				String name = result.getString("name");
 				String type = result.getString("type");
 				int count = result.getInt("count");
-				LevelObjectCounts level;
-				if(levelInfos.containsKey(name)){
-					level = levelInfos.get(name);
-				} else {
-					level = new LevelObjectCounts();
-					levelInfos.put(name, level);
-				}
+
 				
-				switch(type){
-					case "laser":
-						level.laserCount = count;
-						break;
-					case "mirror":
-						level.mirrorCount = count;
-						break;
-					case "diamond":
-						level.diamondCount = count;
-						break;
-					case "other":
-					default:
-						logger.warn(String.format("Unknown game_object.type readed."));
+				if(levelInfo == null){
+					// legelső sornál kell
+					levelInfo = new LevelInfo(name);
+					levelInfos.add(levelInfo);
+				} else {
+					if(!levelInfo.name.equals(name)){
+						levelInfo = new LevelInfo(name);
+						levelInfos.add(levelInfo);
+					}
+					switch(type){
+						case "laser":
+							levelInfo.laserCount = count;
+							break;
+						case "mirror":
+							levelInfo.mirrorCount = count;
+							break;
+						case "diamond":
+							levelInfo.diamondCount = count;
+							break;
+						case "other":
+						default:
+							logger.warn(String.format("Unknown game_object.type readed."));
+					}
 				}
 			}
+			
+			// pályák teljesítettségének összegyűjtése
+			levelsStatement = connection.prepareStatement(levelsQuery);
+			result = levelsStatement.executeQuery();
+			ListIterator<LevelInfo> levelInfosIterator = levelInfos.listIterator();
+			while(result.next()){
+				levelInfo = levelInfosIterator.next();
+				String name = result.getString("name");
+				boolean completed = result.getBoolean("completed");
+				if(levelInfo.name.equals(name)){
+					levelInfo.completed = completed;
+				} else {
+					logger.warn("Strange thing: wrong ordering or something else within: loadLevelInfos().");
+				}
+			}
+			
 		} catch (SQLException ex) {
 			logger.error("Failed to read levels info.");
 			return null;
 		} finally {
 			try {
-				if(prepStatement != null){
-					prepStatement.close();
+				if(countsStatement != null){
+					countsStatement.close();
+				}
+				if(levelsStatement != null){
+					levelsStatement.close();
 				}
 			} catch (SQLException ex) {
 				logger.warn("Failed to close PreparedStatement.");

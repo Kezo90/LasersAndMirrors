@@ -29,11 +29,11 @@ public class Game {
 	public static void main(String[] args) {
 		DB.connect();
 		
-		/*
+		
 		// TODO: tesztobjektumok: maybe del it
 		Controller.addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
 		Controller.addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
-		Controller.addGameObject(new GameObjectLaser(200, 400, 170, Color.YELLOW));
+		Controller.addGameObject(new GameObjectLaser(200, 400, 170, Color.RED));
 		Controller.addGameObject(new GameObjectDiamond(300, 130, 0));
 		Controller.addGameObject(new GameObjectDiamond(300, 200, 26));
 		Controller.addGameObject(new GameObjectMirror(350, 160, 10));		
@@ -41,8 +41,8 @@ public class Game {
 		Controller.addGameObject(new GameObjectMirror(250, 160, 10));
 		Controller.addGameObject(new GameObjectMirror(200, 160, 10));
 
-		DB.saveLevel("test");
-		*/
+		DB.saveLevel("test2");
+		
 		
 		// ablak megnyitása.
 		PlaygroundFrame frame = new PlaygroundFrame();
