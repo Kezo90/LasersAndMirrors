@@ -66,7 +66,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 						+ "<strong>Numbers in brackets:</strong> Lasers, Mirrors and Diamonds on the level."
 					+ "</p>"
 					+ "<p>"
-						+ "<strong>Star at the end:</strong> level completed."
+						+ "<strong>Star at the beginning:</strong> level completed."
 					+ "</p>"
 				+ "</html>");
 		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
