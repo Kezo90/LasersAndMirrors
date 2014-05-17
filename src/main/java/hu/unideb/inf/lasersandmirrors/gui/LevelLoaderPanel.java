@@ -13,7 +13,7 @@ import javax.swing.JList;
 import javax.swing.ToolTipManager;
 
 /**
- * A főmenü. _
+ * A főmenü. __
  *
  * @author Kerekes Zoltán
  */
