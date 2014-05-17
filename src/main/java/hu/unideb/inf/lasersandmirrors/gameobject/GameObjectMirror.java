@@ -134,7 +134,11 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap, Inter
 	
 	@Override
 	public void setRotation(double rotation){
-		this.rotation = rotation % 360.0;
+		double rot = rotation % 360.0;
+		if(rot < 0.0){
+			rot += 360.0;
+		}
+		this.rotation = rot;
 	}
 
 	@Override

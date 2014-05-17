@@ -128,8 +128,12 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 	}
 	
 	@Override
-	public void setRotation(double val){
-		this.rotation = val % 360.0;
+	public void setRotation(double rotation){
+		double rot = rotation % 360.0;
+		if(rot < 0.0){
+			rot += 360.0;
+		}
+		this.rotation = rot;
 	}
 
 	@Override
