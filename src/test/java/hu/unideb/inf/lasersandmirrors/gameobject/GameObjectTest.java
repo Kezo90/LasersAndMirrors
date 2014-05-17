@@ -6,7 +6,7 @@ import org.junit.*;
 
 /**
  *
- * @author KZ
+ * @author KZ  
  */
 public class GameObjectTest extends TestCase {
 	
