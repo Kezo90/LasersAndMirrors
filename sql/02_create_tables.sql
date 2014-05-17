@@ -1,3 +1,5 @@
+USE lasers_and_mirrors;
+
 CREATE TABLE `level` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(100) NOT NULL,
