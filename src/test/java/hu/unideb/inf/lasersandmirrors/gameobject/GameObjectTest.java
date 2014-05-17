@@ -1,32 +1,68 @@
 
 package hu.unideb.inf.lasersandmirrors.gameobject;
 
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- *
- * @author KZ  
+ * @author Kerekes Zoltán
  */
-public class GameObjectTest extends TestCase {
+public class GameObjectTest {
 	
-	public GameObjectTest(String testName) {
-		super(testName);
+	List<GameObject> gameObjects;
+
+	@BeforeClass
+	public static void setUpClass() {
+	}
+	
+	@AfterClass
+	public static void tearDownClass() {
 	}
 	
 	@Before
-	public void init(){
+	public void setUp() {
+		gameObjects = new ArrayList<>();
 		
+		gameObjects.add(new GameObjectDiamond());
+		gameObjects.add(new GameObjectDiamond());
+		gameObjects.add(new GameObjectLaser());
+		gameObjects.add(new GameObjectMirror());
+		gameObjects.add(new GameObjectLaser());
+		gameObjects.add(new GameObjectDiamond());
+		gameObjects.add(new GameObjectLaser());
+		gameObjects.add(new GameObjectMirror());
+		gameObjects.add(new GameObjectLaserline(Color.yellow));
+		gameObjects.add(new GameObjectDiamond());
+	}
+	
+	@After
+	public void tearDown() {
 	}
 
-	/**
-	 * Test of sortGameObjectsByDepth method, of class GameObject.
-	 */
-	public void testSortGameObjectsByDepth() {
-		System.out.println("sortGameObjectsByDepth");
-		List<GameObject> gameObjects = null;
+	@Test
+	public void testSortGameObjectsByDepth_alreadySorted() {
 		GameObject.sortGameObjectsByDepth(gameObjects);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		
+		for (int i = 0; i < gameObjects.size() - 1; i++) {
+			if(gameObjects.get(i).getDepth() > gameObjects.get(i+1).getDepth()){
+				fail("It's shuffling the list, not ordering.");
+			}
+		}
+	}
+	
+	public void testSortGameObjectsByDepth_reversedOrder(){
+		for (int i = 0; i < gameObjects.size() - 1; i++) {
+			if(gameObjects.get(i).getDepth() > gameObjects.get(i+1).getDepth()){
+				return;
+			}
+		}
+		fail("Tester list already sorted.");
 	}
 }
