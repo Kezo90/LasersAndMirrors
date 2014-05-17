@@ -13,7 +13,7 @@ import javax.swing.JList;
 import javax.swing.ToolTipManager;
 
 /**
- * A főmenü.
+ * A főmenü. __
  *
  * @author Kerekes Zoltán
  */
@@ -234,14 +234,14 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_playButtonActionPerformed
 
 	/**
-	 * Betölti a pályát szerkesztésre vagy csak átlép a szerkezstő menübe.
+	 * Betölti a pályát szerkesztésre vagy csak átlép a szerkesztő menübe.
 	 * 
 	 * <strong>Még nincs implementálva a szerkesztő.</strong>
 	 * 
 	 * @param evt A kiváltó esemény.
 	 */
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // PENDING: Edit button (v0.2)
+        // PENDING: v0.2: Edit button
     }//GEN-LAST:event_editButtonActionPerformed
 
 	/**
