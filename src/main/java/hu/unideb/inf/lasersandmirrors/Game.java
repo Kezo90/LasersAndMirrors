@@ -6,6 +6,10 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
 import java.awt.Color;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * PENDING: v0.2: falak, színek
@@ -19,6 +23,9 @@ import java.awt.Color;
  * @author Kerekes Zoltán
  */
 public class Game {
+	
+	/** Az adott osztály naplózója. */
+	private static final Logger logger = LoggerFactory.getLogger(Game.class);
 	
 	/**
 	 * A program belépési pontja.
@@ -42,8 +49,14 @@ public class Game {
 
 		DB.saveLevel("test2");
 		
-		// TODO: runnable a Frame-nek, hogy hiba esetén is lezáródjon az adatbáziskapcsolat.
-		// ablak megnyitása.
+		// ablak csinosítása
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException 
+				| IllegalAccessException | UnsupportedLookAndFeelException ex) {
+			logger.warn("Failed to load LookAndFeel.");
+		}
+		// ablak megnyitása
 		PlaygroundFrame frame = new PlaygroundFrame();
 		frame.setVisible(true);
 	}
