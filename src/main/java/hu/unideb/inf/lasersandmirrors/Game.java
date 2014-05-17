@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 /*
  * PENDING: v0.2: falak, színek
- * TODO: del this commit (git test)
  * 
  * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  */
