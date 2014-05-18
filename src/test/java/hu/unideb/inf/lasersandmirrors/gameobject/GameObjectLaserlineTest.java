@@ -51,7 +51,7 @@ public class GameObjectLaserlineTest {
 	
 	
 	
-	
+	//--
 	
 	@Test
 	public void testGetPoints() {
