@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * @author Kerekes Zoltán
  */
-public class TestGameObjectDiamond {
+public class GameObjectDiamondTest {
 	
 	@BeforeClass
 	public static void setUpClass() {

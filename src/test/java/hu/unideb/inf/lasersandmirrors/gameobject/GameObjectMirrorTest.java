@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
 /**
  * @author Kerekes Zoltán
  */
-public class TestGameObjectMirror {
+public class GameObjectMirrorTest {
 	
-	public TestGameObjectMirror() {
+	public GameObjectMirrorTest() {
 	}
 	
 	@BeforeClass

@@ -14,11 +14,13 @@ import static org.junit.Assert.*;
 /**
  * @author Kerekes Zoltán
  */
-public class TestGameObjectLaserline {
+public class GameObjectLaserlineTest {
 	
 	private final double delta = 1.0e-10;
 	private GameObjectLaser laser;
 	private GameObjectLaserline laserline;
+	public GameObjectLaserlineTest() {
+	}
 	
 	@BeforeClass
 	public static void setUpClass() {

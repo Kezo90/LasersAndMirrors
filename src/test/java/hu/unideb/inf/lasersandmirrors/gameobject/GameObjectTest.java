@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 /**
  * @author Kerekes Zoltán
  */
-public class TestGameObject {
+public class GameObjectTest {
 	
 	List<GameObject> gameObjects;
 
