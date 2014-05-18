@@ -52,7 +52,7 @@ public class GameObjectLaserlineTest {
 	
 	
 	
-	//
+	
 	@Test
 	public void testGetPoints() {
 		System.out.println("getPoints");
