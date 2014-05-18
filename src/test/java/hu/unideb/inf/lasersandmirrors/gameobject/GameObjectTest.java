@@ -47,6 +47,16 @@ public class GameObjectTest {
 	}
 
 	@Test
+	public void testSortGameObjectsByDepth_reversedOrder(){
+		for (int i = 0; i < gameObjects.size() - 1; i++) {
+			if(gameObjects.get(i).getDepth() > gameObjects.get(i+1).getDepth()){
+				return;
+			}
+		}
+		fail("Tester list already sorted.");
+	}
+	
+	@Test
 	public void testSortGameObjectsByDepth_alreadySorted() {
 		GameObject.sortGameObjectsByDepth(gameObjects);
 		
@@ -55,14 +65,5 @@ public class GameObjectTest {
 				fail("It's shuffling the list, not ordering.");
 			}
 		}
-	}
-	
-	public void testSortGameObjectsByDepth_reversedOrder(){
-		for (int i = 0; i < gameObjects.size() - 1; i++) {
-			if(gameObjects.get(i).getDepth() > gameObjects.get(i+1).getDepth()){
-				return;
-			}
-		}
-		fail("Tester list already sorted.");
 	}
 }
