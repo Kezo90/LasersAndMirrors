@@ -3,7 +3,7 @@ USE lasers_and_mirrors;
 CREATE TABLE `level` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(100) NOT NULL,
-	`completed` ENUM('true','false') NULL DEFAULT 'false',
+	`completed` BIT(1) NOT NULL DEFAULT b'0',
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `name` (`name`)
 )
@@ -17,7 +17,7 @@ CREATE TABLE `game_object` (
 	`type` ENUM('diamond','laser','mirror','other') NOT NULL,
 	`x` DOUBLE NOT NULL DEFAULT '0',
 	`y` DOUBLE NOT NULL DEFAULT '0',
-	`rot` DOUBLE NOT NULL DEFAULT '0' COMMENT 'range: [0, 180)',
+	`rot` DOUBLE NOT NULL DEFAULT '0' COMMENT 'range: [0, 360)',
 	`color` CHAR(7) DEFAULT '#FF0000' COMMENT 'format: #RRGGBB',
 	PRIMARY KEY (`id`),
 	INDEX `type` (`type`),

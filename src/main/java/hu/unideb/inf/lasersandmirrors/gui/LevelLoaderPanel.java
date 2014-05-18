@@ -17,39 +17,6 @@ import javax.swing.ToolTipManager;
 public class LevelLoaderPanel extends javax.swing.JPanel {
 
 	/**
-	 * A pályákat tartalmazó lista egy-egy eleme.
-	 */
-	class ListItem{
-		private String value;
-		private String text;
-
-		/**
-		 * Új listaelem létrehozása.
-		 * 
-		 * @param value A listaelem logikai feldolgozás szerinti értéke.
-		 * @param text A megjelenítendő szöveg.
-		 */
-		public ListItem(String value, String text) {
-			this.value = value;
-			this.text = text;
-		}
-		
-		/**
-		 * A listaelem neve kérdezhető le.
-		 * 
-		 * @return A lista neve.
-		 */
-		public String getValue(){
-			return value;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-	
-	/**
 	 * Creates new form LevelLoaderPanel.
 	 */
 	@SuppressWarnings("unchecked")
@@ -83,7 +50,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		if(levelInfos != null){
 			for (DB.LevelInfo levelInfo : levelInfos) {
 				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s%s (%s, %s, %s)", 
-						levelInfo.completed ? "*" : "" ,
+						levelInfo.completed ? Settings.COMPLETED_LEVEL_MARKER : "" ,
 						levelInfo.name,
 						levelInfo.laserCount, 
 						levelInfo.mirrorCount, 
@@ -260,8 +227,17 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 	/**
 	 * A listaelemek, melyeket a lista létezésekor is tudunk szerkeszteni.
 	 */
-	DefaultListModel<ListItem> levelsListItems;
+	private DefaultListModel<ListItem> levelsListItems;
 	
+	/**
+	 * A pályaválasztó menü elemei kérdezhető le.
+	 * 
+	 * @return A pályaválasztó menü elemei.
+	 */
+	public DefaultListModel<ListItem> getLevelsListItems(){
+		return this.levelsListItems;
+	}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton editButton;
     private javax.swing.JButton exitGameButton;

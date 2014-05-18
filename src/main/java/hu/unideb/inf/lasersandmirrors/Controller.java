@@ -6,11 +6,14 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
+import hu.unideb.inf.lasersandmirrors.gui.LevelLoaderPanel;
+import hu.unideb.inf.lasersandmirrors.gui.ListItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import math.geom2d.Point2D;
@@ -30,8 +33,6 @@ public class Controller {
 	
 	/** A frissítéshez használt időzítő. */
 	private static final Timer timer;
-	/** A pályán lévő {@link GameObject}-ek kollekciója. */
-	private static ArrayList<GameObject> gameObjects = new ArrayList<>();
 	
 	static{
 		// Két frissítés között minimálisan eltelő idő beállítása.
@@ -121,9 +122,8 @@ public class Controller {
 			List<GameObjectMirror> mirrors = new ArrayList<>();
 			List<GameObjectDiamond> diamonds = new ArrayList<>();
 			
-			// GameObject-ek szétválogatása
-			List<GameObject> gameObjects = getGameObjects();
-			for (GameObject gameObject : gameObjects) {
+			// GameObject-ek szétválogatása;
+			for (GameObject gameObject : level.getGameObjects()) {
 				if(gameObject instanceof GameObjectLaser){
 					lasers.add((GameObjectLaser)gameObject);
 				}else if(gameObject instanceof GameObjectMirror){
@@ -246,6 +246,11 @@ public class Controller {
 					}
 				}
 			}
+			
+			// pálya sikerességének elmentése
+			if(!level.isCompleted() && isCurrentLevelConditionsAchieved()){
+				setCurrentLevelToCompleted();
+			}
 		}
 	}
 
@@ -288,78 +293,92 @@ public class Controller {
 	
 	
 	
+	/** Az aktuális pálya. */
+	private static Level level = null;
+	
 	/**
-	 * Új elem felvitele a pályára.
-	 *
-	 * @param gameObject Az új elem.
+	 * Az aktuális pálya kérdezhető le.
+	 * 
+	 * @return Az aktuális pálya.
 	 */
-	public static void addGameObject(GameObject gameObject) {
-		gameObjects.add(gameObject);
+	public static Level getCurrentLevel(){
+		return level;
 	}
-
+	
 	/**
-	 * Az összes objektum eltávolítása a pályáról.
+	 * Jelen pillanatban a pálya teljesítettnek minősül?
+	 * 
+	 * @return Igaz, ha minden feltétel teljesül, hamis ha nem.
 	 */
-	public static void removeAllGameObjects() {
-		gameObjects.clear();
+	private static boolean isCurrentLevelConditionsAchieved(){
+		for (GameObject go : level.getGameObjects()) {
+			if(go instanceof GameObjectDiamond && !((GameObjectDiamond)go).isLightened()){
+				return false;
+			}
+		}
+		return true;
 	}
-
+	
 	/**
-	 * Elem eltávolítása a pályáról.
-	 *
-	 * @param gameObject Az elem, melyet el akarunk tüntetni.
+	 * Teljesítettre állítja az aktuális pályát.
+	 * 
+	 * @return Az adatbázis frissítésének sikerességével tér vissza.
 	 */
-	public static void removeGameObject(GameObject gameObject) {
-		gameObjects.remove(gameObject);
+	private static boolean setCurrentLevelToCompleted(){
+		level.setCompleted(true);
+		JPanel menu = Game.frame.getMenu();
+		if(menu instanceof LevelLoaderPanel){
+			LevelLoaderPanel levelMenu = (LevelLoaderPanel) menu;
+			DefaultListModel<ListItem> listItems = levelMenu.getLevelsListItems();
+			for (int i = 0; i < listItems.size(); i++) {
+				ListItem listItem = listItems.get(i);
+				if(listItem.getValue() == null){
+					continue;
+				}
+				if(listItem.getValue().equals(level.getName())){
+					listItem.setText(Settings.COMPLETED_LEVEL_MARKER + listItem.getText());
+					break;
+				}
+			}
+			levelMenu.repaint();
+		}
+		return DB.updateLevelCompleted(level);
 	}
-
+	
+	/**
+	 * Betölti a paraméterül kapott nevű pályát.
+	 * 
+	 * @param name A betöltendő pálya neve.
+	 * @return Igaz, ha sikerült betölteni; hamis egyébként.
+	 */
+	public static boolean loadLevel(String name){
+		Level loadedLvl = DB.loadLevel(name);
+		if(loadedLvl != null){
+			level = loadedLvl;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Az aktuális pálya elmentése.
+	 * 
+	 * @return Igaz, ha sikerült elmenteni az aktuális pályát; hamis egyébként.
+	 */
+	public static boolean saveCurrentLevel(){
+		return DB.saveLevel(level);
+	}
+	
+	
+	
+	
+	
 	/**
 	 * Az alkalmazás befejezése, erőforrások felszabadítása.
 	 */
 	public static void exitGame() {
 		DB.close();
 		System.exit(0);
-	}
-
-	/**
-	 * A pályán lévő {@link GameObject}-ek kollekcióját lehet lekérdezni.
-	 *
-	 * @return A pályán lévő {@link GameObject}-ek.
-	 */
-	public static ArrayList<GameObject> getGameObjects() {
-		return gameObjects;
-	}
-
-	/**
-	 * Új elemek felvitele a pályára.
-	 *
-	 * @param newObjects Az új elemek.
-	 */
-	public static void addGameObjects(List<GameObject> newObjects) {
-		for (GameObject gameObject : newObjects) {
-			gameObjects.add(gameObject);
-		}
-	}
-	
-	
-	
-	
-	
-	
-	/**
-	 * Betölti a paraméterül kapott pályát.
-	 * 
-	 * @param name A betöltendő pálya neve.
-	 * @return Igaz, ha sikerült betölteni; hamis egyébként.
-	 */
-	public static boolean loadLevel(String name){
-		List<GameObject> level = DB.loadLevel(name);
-		if(level != null){
-			removeAllGameObjects();
-			addGameObjects(level);
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

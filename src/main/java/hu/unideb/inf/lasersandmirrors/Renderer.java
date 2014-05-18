@@ -54,7 +54,7 @@ public class Renderer {
 		g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 		
 		// elemek összegyűjtése
-		List<GameObject> gameObjects = Controller.getGameObjects();
+		List<GameObject> gameObjects = Controller.getCurrentLevel().getGameObjects();
 		List<GameObject> drawables = new ArrayList<>();
 		for (GameObject gameObject : gameObjects) {
 			if(gameObject instanceof GameObjectLaser){

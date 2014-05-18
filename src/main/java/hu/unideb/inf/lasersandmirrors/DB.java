@@ -91,13 +91,15 @@ public class DB {
 	/**
 	 * A pálya elmentése a megadott névvel.
 	 * 
-	 * Ez a metódus a pálya létezéséről nem ad információt. 
+	 * Ez a metódus a pálya adatbázisbeli létezéséről nem ad információt. 
 	 * Azt a {@link #isLevelExists(java.lang.String)} metódussal kell ellenőrizni.
 	 * 
-	 * @param name A pálya neve.
+	 * @param level Az elmentendő pálya.
 	 * @return Igaz, ha sikerült elmenteni/felülírni a pályát, egyébként hamis.
 	 */
-	public static boolean saveLevel(String name){
+	public static boolean saveLevel(Level level){
+		
+		String name = level.getName();
 		
 		PreparedStatement levelStatement = null;
 		PreparedStatement gameObjectStatement = null;
@@ -105,8 +107,8 @@ public class DB {
 		
 		String levelQueryString = 
 				"INSERT INTO level"
-				+ "(name) "
-				+ "VALUES(?)";
+				+ "(name, completed) "
+				+ "VALUES(?, ?)";
 		String gameObjectQueryString = 
 				"INSERT INTO game_object"
 				+ "(level_id, type, x, y, rot, color) "
@@ -127,6 +129,7 @@ public class DB {
 			
 			// levelStatement lefuttatása
 			levelStatement.setString(1, name);
+			levelStatement.setBoolean(2, level.isCompleted());
 			levelStatement.executeUpdate();
 			ResultSet levelResult = levelStatement.getGeneratedKeys();
 			levelResult.next();
@@ -134,7 +137,7 @@ public class DB {
 			logger.info(String.format("level(%s) successfully inserted with id: %s.", name, levelID));
 			
 			// gameObjectStatement-ek lefuttatása
-			List<GameObject> gameObjects = Controller.getGameObjects();
+			List<GameObject> gameObjects = level.getGameObjects();
 			for (GameObject gameObject : gameObjects) {
 				if(gameObject instanceof GraphicBitmap){
 					// alapértelmezett szín
@@ -195,17 +198,73 @@ public class DB {
 	}
 	
 	/**
-	 * Betölti a pályához tartozó {@link GameObject}-eket az adatbázisból.
+	 * A pálya teljesítettségének elmentése az adatbázisba.
+	 * 
+	 * @param level A módosítandó pálya.
+	 * @return Igaz, ha sikerült frissíteni a pálya státuszát, egyébként hamis.
+	 */
+	public static boolean updateLevelCompleted(Level level){
+		
+		String name = level.getName();
+		
+		PreparedStatement levelStatement = null;
+		
+		String levelQueryString = 
+				"UPDATE level "
+				+ "SET completed=? "
+				+ "WHERE name=?";
+		try{
+			levelStatement = connection.prepareStatement(levelQueryString);
+			
+			// létezik egyáltalán?
+			if(!isLevelExists(name)){
+				logger.warn(String.format("Can't update level(%s) because not exists.", name));
+			}
+			
+			// levelStatement lefuttatása
+			levelStatement.setBoolean(1, level.isCompleted());
+			levelStatement.setString(2, name);
+			int affectedRows = levelStatement.executeUpdate();
+			if(affectedRows == 1){
+				logger.info(String.format("level(%s) successfully updated.", name));
+			} else{
+				logger.warn(String.format("Failed to update level(%s).", name));
+				return false;
+			}
+			return true;
+			
+		// Valami gubanc történt.
+		} catch (SQLException ex) {
+			logger.warn(String.format("Failed to update level(%s). (#2)", name));
+			return false;
+		// Erőforrások felszabadítása.
+		} finally{
+			try{
+				if(levelStatement != null){
+					levelStatement.close();
+				}
+			}catch(SQLException ex3){
+				logger.warn("Failed to close PreparedStatement.");
+			}
+		}
+	}
+	
+	/**
+	 * Betölti az adott nevű pályát.
 	 * 
 	 * @param name A pálya neve.
-	 * @return Ha nem történt hiba a beolvasás során, 
-	 * akkor a pályán lévő objektumok; egyébként null.
+	 * @return Ha nem történt hiba a beolvasás során, akkor a pálya adatai; 
+	 * egyébként null.
 	 */
-	public static List<GameObject> loadLevel(String name){
+	public static Level loadLevel(String name){
 
-		List<GameObject> loadedObjects = new ArrayList<>();
+		Level level = new Level(name);
 		
+		PreparedStatement levelStatement = null;
 		PreparedStatement gameObjectStatement = null;
+		String levelQueryString = 
+				"SELECT completed FROM level "
+				+ "WHERE name=?";
 		String gameObjectQueryString = 
 				"SELECT * FROM game_object "
 				+ "WHERE level_id=("
@@ -214,15 +273,21 @@ public class DB {
 				+ ")";
 		
 		try{
+			levelStatement = connection.prepareStatement(levelQueryString);
 			gameObjectStatement = connection.prepareStatement(gameObjectQueryString);
-			
-			gameObjectStatement.setString(1, name);
-			ResultSet gameObjectResult = gameObjectStatement.executeQuery();
 			
 			if(!isLevelExists(name)){
 				logger.error(String.format("Can't load level(%s) because not exists.", name));
 				return null;
 			}
+			
+			levelStatement.setString(1, name);
+			ResultSet levelResult = levelStatement.executeQuery();
+			levelResult.next();
+			level.setCompleted(levelResult.getBoolean("completed"));
+			
+			gameObjectStatement.setString(1, name);
+			ResultSet gameObjectResult = gameObjectStatement.executeQuery();
 			
 			while(gameObjectResult.next()){
 				String type = gameObjectResult.getString("type");
@@ -252,7 +317,7 @@ public class DB {
 					newGraphicBitmap.setY(gameObjectResult.getInt("y"));
 					newGraphicBitmap.setRotation(gameObjectResult.getInt("rot"));
 				}
-				loadedObjects.add(newGameObject);
+				level.addGameObject(newGameObject);
 				logger.trace(String.format("game_object loaded (id=%s)", id));
 			}
 		} catch (SQLException ex) {
@@ -260,6 +325,9 @@ public class DB {
 			return null;
 		} finally {
 			try {
+				if(levelStatement != null){
+					levelStatement.close();
+				}
 				if(gameObjectStatement != null){
 					gameObjectStatement.close();
 				}
@@ -269,7 +337,7 @@ public class DB {
 		}
 		
 		logger.info(String.format("level(%s) successfully loaded.", name));
-		return loadedObjects;
+		return level;
 	}
 	
 	/**

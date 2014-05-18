@@ -27,6 +27,9 @@ public class Game {
 	/** Az adott osztály naplózója. */
 	private static final Logger logger = LoggerFactory.getLogger(Game.class);
 	
+	/** Az aktuális ablak. */
+	public static PlaygroundFrame frame;
+	
 	/**
 	 * A program belépési pontja.
 	 * 
@@ -37,7 +40,7 @@ public class Game {
 		
 		
 		// TODO: tesztobjektumok: maybe del it
-		Controller.addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
+		/*Controller.addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
 		Controller.addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
 		Controller.addGameObject(new GameObjectLaser(200, 400, 170, Color.RED));
 		Controller.addGameObject(new GameObjectDiamond(300, 130, 0));
@@ -48,6 +51,8 @@ public class Game {
 		Controller.addGameObject(new GameObjectMirror(200, 160, 10));
 
 		DB.saveLevel("test2");
+		*/
+		Controller.loadLevel("test");
 		
 		// ablak csinosítása
 		try {
@@ -57,7 +62,7 @@ public class Game {
 			logger.warn("Failed to load LookAndFeel.");
 		}
 		// ablak megnyitása
-		PlaygroundFrame frame = new PlaygroundFrame();
+		frame = new PlaygroundFrame();
 		frame.setVisible(true);
 	}
 }

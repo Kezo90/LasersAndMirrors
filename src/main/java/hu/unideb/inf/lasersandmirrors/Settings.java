@@ -32,4 +32,7 @@ public class Settings {
 	/** Üres listaelembeli szöveg. */
 	public static final String EMPTY_LIST_ITEM_STRING = "<Empty>";
 	
+	/** Teljesített pálya jelzője. */
+	public static final String COMPLETED_LEVEL_MARKER = "*";
+	
 }
