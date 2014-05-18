@@ -105,6 +105,7 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		);
 		*/
 		// </editor-fold>
+		menuPanel = menu;
 		JPanel contentPane = new JPanel();
 		setContentPane(contentPane);
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
