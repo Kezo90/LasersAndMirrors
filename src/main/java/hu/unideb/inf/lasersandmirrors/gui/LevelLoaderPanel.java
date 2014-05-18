@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package hu.unideb.inf.lasersandmirrors.gui;
 
 import hu.unideb.inf.lasersandmirrors.Controller;
