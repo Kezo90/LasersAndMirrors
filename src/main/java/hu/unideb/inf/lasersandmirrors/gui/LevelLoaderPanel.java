@@ -42,7 +42,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 		 * 
 		 * @return A lista neve.
 		 */
-		public String getName(){
+		public String getValue(){
 			return value;
 		}
 
@@ -230,7 +230,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 	 * @param evt A kiváltó esemény.
 	 */
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-		Controller.loadLevel( ((ListItem)levelsList.getSelectedValue()).getName() );
+		Controller.loadLevel( ((ListItem)levelsList.getSelectedValue()).getValue() );
     }//GEN-LAST:event_playButtonActionPerformed
 
 	/**
@@ -252,7 +252,7 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 	 */
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
 		JList list = (JList)evt.getSource();
-		String value = ((ListItem)list.getSelectedValue()).getName();
+		String value = ((ListItem)list.getSelectedValue()).getValue();
 		if(value == null){
 			playButton.setEnabled(false);
 		} else {
