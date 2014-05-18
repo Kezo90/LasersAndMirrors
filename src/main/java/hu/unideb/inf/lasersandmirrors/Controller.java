@@ -16,7 +16,7 @@ import javax.swing.Timer;
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.line.Ray2D;
-
+//
 /**
  * Az aktivitások kiinduló osztálya.
  * Minden történésnek innen kell kiindulnia.
