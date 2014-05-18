@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 /**
  * @author Kerekes Zoltán
  */
-public class GameObjectLaserTest {
+public class TestGameObjectLaser {
 	
-	public GameObjectLaserTest() {
+	public TestGameObjectLaser() {
 	}
 	
 	@BeforeClass
