@@ -185,6 +185,21 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.7</version>
 			</plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+				<configuration>
+					<instrumentation>
+						<ignores>
+							<ignore>hu.unideb.inf.lasersandmirrors.gui.*</ignore>
+						</ignores>
+						<excludes>
+							<exclude>hu/unideb/inf/lasersandmirrors/gui/**/*.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
+            </plugin>
         </plugins>
     </build>
 	
