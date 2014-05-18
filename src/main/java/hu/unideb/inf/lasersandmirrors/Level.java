@@ -19,7 +19,7 @@ public class Level {
 	private String name;
 	
 	/** A pályán lévő {@link GameObject}-ek kollekciója. */
-	private ArrayList<GameObject> gameObjects = new ArrayList<>();
+	private ArrayList<GameObject> gameObjects;
 	
 	/**
 	 * Új pálya inicializálása az adott néven.
@@ -28,6 +28,8 @@ public class Level {
 	 */
 	public Level(String name){
 		this.name = name;
+		this.completed = false;
+		this.gameObjects = new ArrayList<>();
 	}
 	
 	/**
@@ -40,7 +42,7 @@ public class Level {
 	public Level(Level level){
 		this.completed = level.completed;
 		this.name = level.name;
-		this.gameObjects = level.getGameObjects();
+		this.gameObjects = level.getAllGameObject();
 	}
 	
 	/**
@@ -66,7 +68,7 @@ public class Level {
 	 *
 	 * @param newObjects Az új elemek.
 	 */
-	public void addGameObjects(List<GameObject> newObjects) {
+	public void addAllGameObject(List<GameObject> newObjects) {
 		gameObjects.addAll(newObjects);
 	}
 	
@@ -82,7 +84,7 @@ public class Level {
 	/**
 	 * Az összes objektum eltávolítása a pályáról.
 	 */
-	public void removeAllGameObjects() {
+	public void removeAllGameObject() {
 		gameObjects.clear();
 	}
 	
@@ -91,7 +93,7 @@ public class Level {
 	 *
 	 * @return A pályán lévő {@link GameObject}-ek.
 	 */
-	public ArrayList<GameObject> getGameObjects() {
+	public ArrayList<GameObject> getAllGameObject() {
 		return gameObjects;
 	}
 

@@ -41,7 +41,7 @@ public class RendererTest {
 	
 	@Before
 	public void setUp() {
-		Controller.loadLevel("test");
+		Controller.startNewLevel("testingRenderer");
 	}
 	
 	@After
@@ -63,7 +63,7 @@ public class RendererTest {
 		gos.add(new GameObjectDiamond(55, 232, 353));
 		gos.add(new GameObjectMirror(34.565, 23, 22.222));
 		
-		Controller.getCurrentLevel().addGameObjects(gos);
+		Controller.getCurrentLevel().addAllGameObject(gos);
 		
 		// rajzterület
 		JFrame frame = new JFrame("test", null);
@@ -81,7 +81,7 @@ public class RendererTest {
 		
 		// ********************************************************************
 		// ellenőrzés innestől ************************************************
-		List<GameObject> returnedGOs = Controller.getCurrentLevel().getGameObjects();
+		List<GameObject> returnedGOs = Controller.getCurrentLevel().getAllGameObject();
 		
 		assertTrue("Number of GameObjects in the Controller's storage modified!",
 				gos.size() == returnedGOs.size());

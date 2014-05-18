@@ -47,7 +47,7 @@ public class InputHandler implements MouseInputListener{
 	public void mouseClicked(MouseEvent e) {
 		Point2D mousePos = e.getPoint();
 		// objektum kijelölése kattintással
-		ArrayList<GameObject> gameObjects = Controller.getCurrentLevel().getGameObjects();
+		ArrayList<GameObject> gameObjects = Controller.getCurrentLevel().getAllGameObject();
 		GameObject.sortGameObjectsByDepth(gameObjects);
 		for (int i = gameObjects.size() - 1; i >= 0; i--) {
 			GameObject gameObject = gameObjects.get(i);

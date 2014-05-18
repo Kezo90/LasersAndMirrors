@@ -137,7 +137,7 @@ public class DB {
 			logger.info(String.format("level(%s) successfully inserted with id: %s.", name, levelID));
 			
 			// gameObjectStatement-ek lefuttatása
-			List<GameObject> gameObjects = level.getGameObjects();
+			List<GameObject> gameObjects = level.getAllGameObject();
 			for (GameObject gameObject : gameObjects) {
 				if(gameObject instanceof GraphicBitmap){
 					// alapértelmezett szín

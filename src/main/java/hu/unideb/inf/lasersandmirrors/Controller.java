@@ -123,7 +123,7 @@ public class Controller {
 			List<GameObjectDiamond> diamonds = new ArrayList<>();
 			
 			// GameObject-ek szétválogatása;
-			for (GameObject gameObject : level.getGameObjects()) {
+			for (GameObject gameObject : level.getAllGameObject()) {
 				if(gameObject instanceof GameObjectLaser){
 					lasers.add((GameObjectLaser)gameObject);
 				}else if(gameObject instanceof GameObjectMirror){
@@ -297,6 +297,15 @@ public class Controller {
 	private static Level level = null;
 	
 	/**
+	 * Új üres pálya létrehozása.
+	 * 
+	 * @param name A pálya neve.
+	 */
+	public static void startNewLevel(String name){
+		level = new Level(name);
+	}
+	
+	/**
 	 * Az aktuális pálya kérdezhető le.
 	 * 
 	 * @return Az aktuális pálya.
@@ -311,7 +320,7 @@ public class Controller {
 	 * @return Igaz, ha minden feltétel teljesül, hamis ha nem.
 	 */
 	private static boolean isCurrentLevelConditionsAchieved(){
-		for (GameObject go : level.getGameObjects()) {
+		for (GameObject go : level.getAllGameObject()) {
 			if(go instanceof GameObjectDiamond && !((GameObjectDiamond)go).isLightened()){
 				return false;
 			}
