@@ -37,7 +37,6 @@ public class RendererTest {
 	
 	@AfterClass
 	public static void tearDownClass() {
-		//Controller.removeAllGameObjects();
 	}
 	
 	@Before
