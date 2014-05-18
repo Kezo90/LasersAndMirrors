@@ -33,6 +33,9 @@ public class MyMath {
 	public static double reflectionAngle(double rayAngle, double mirrorAngle){
 		double reflectionAngle = 2 * mirrorAngle - rayAngle;
 		reflectionAngle %= Math.PI * 2;
+		if(reflectionAngle < 0){
+			reflectionAngle += Math.PI * 2;
+		}
 		return reflectionAngle;
 	}
 	
