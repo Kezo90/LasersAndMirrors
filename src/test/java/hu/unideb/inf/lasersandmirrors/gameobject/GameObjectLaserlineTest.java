@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class GameObjectLaserlineTest {
 	
-	private final double delta = 1.0e-10;
+	private final double DELTA = 1.0e-10;
 	private GameObjectLaser laser;
 	private GameObjectLaserline laserline;
 	public GameObjectLaserlineTest() {
@@ -62,13 +62,13 @@ public class GameObjectLaserlineTest {
 		
 		List<Point2D> points = laserline.getPoints();
 		
-		assertEquals(pt1.getX(), points.get(0).getX(), delta);
-		assertEquals(pt3.getX(), points.get(2).getX(), delta);
-		assertEquals(pt2.getX(), points.get(1).getX(), delta);
+		assertEquals(pt1.getX(), points.get(0).getX(), DELTA);
+		assertEquals(pt3.getX(), points.get(2).getX(), DELTA);
+		assertEquals(pt2.getX(), points.get(1).getX(), DELTA);
 		
-		assertEquals(pt1.getY(), points.get(0).getY(), delta);
-		assertEquals(pt3.getY(), points.get(2).getY(), delta);
-		assertEquals(pt2.getY(), points.get(1).getY(), delta);
+		assertEquals(pt1.getY(), points.get(0).getY(), DELTA);
+		assertEquals(pt3.getY(), points.get(2).getY(), DELTA);
+		assertEquals(pt2.getY(), points.get(1).getY(), DELTA);
 	}
 
 	@Test
@@ -79,8 +79,8 @@ public class GameObjectLaserlineTest {
 		laserline.addPoint(pt2);
 		
 		Point2D returnedPt2 = laserline.getPoints().get(1);
-		assertEquals(pt2.getX(), returnedPt2.getX(), delta);
-		assertEquals(pt2.getY(), returnedPt2.getY(), delta);
+		assertEquals(pt2.getX(), returnedPt2.getX(), DELTA);
+		assertEquals(pt2.getY(), returnedPt2.getY(), DELTA);
 	}
 
 	@Test
@@ -91,8 +91,8 @@ public class GameObjectLaserlineTest {
 		laserline.addPoint(pt2);
 		
 		Point2D returnedPt2 = laserline.getPoints().get(1);
-		assertEquals(pt2.x(), returnedPt2.getX(), delta);
-		assertEquals(pt2.y(), returnedPt2.getY(), delta);
+		assertEquals(pt2.x(), returnedPt2.getX(), DELTA);
+		assertEquals(pt2.y(), returnedPt2.getY(), DELTA);
 	}
 
 	@Test
@@ -111,9 +111,9 @@ public class GameObjectLaserlineTest {
 		
 		List<Point2D> points = laserline.getPoints();
 		
-		assertEquals(  10, points.get(0).getX(), delta);
-		assertEquals(-5.3, points.get(0).getY(), delta);
-		assertEquals( 3.8, points.get(1).getX(), delta);
-		assertEquals(   2, points.get(1).getY(), delta);
+		assertEquals(  10, points.get(0).getX(), DELTA);
+		assertEquals(-5.3, points.get(0).getY(), DELTA);
+		assertEquals( 3.8, points.get(1).getX(), DELTA);
+		assertEquals(   2, points.get(1).getY(), DELTA);
 	}
 }
