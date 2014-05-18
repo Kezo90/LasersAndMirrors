@@ -4,13 +4,15 @@ package hu.unideb.inf.lasersandmirrors;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.Arrays;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,36 +37,50 @@ public class RendererTest {
 	
 	@AfterClass
 	public static void tearDownClass() {
+		//Controller.removeAllGameObjects();
 	}
 	
 	@Before
 	public void setUp() {
+		Controller.removeAllGameObjects();
 	}
 	
 	@After
 	public void tearDown() {
-		Controller.removeAllGameObjects();
 	}
 
 	@Test
 	public void testRenderGame_modifiedSomething() {
-		List<GameObject> gos = Arrays.asList(new GameObject[]{
-			new GameObjectDiamond(34, 78, 43.3),
-			new GameObjectLaser(5, -4, 3.33, Color.GREEN),
-			new GameObjectDiamond(55, 232, 353),
-			new GameObjectMirror(34.565, 23, 22.222)
-		});
+		// objektumok létrehozása
+		List<GameObject> gos = new ArrayList<>();
+		GameObjectDiamond go1 = new GameObjectDiamond(34, 78, 43.3);
+		go1.setLightened(true);
+		gos.add(go1);
+		GameObjectLaser go2 = new GameObjectLaser(5, -4, 3.33, Color.GREEN);
+		GameObjectLaserline go2Laserline = go2.getLaserLine();
+		go2Laserline.addPoint(new Point2D.Double(40, 80));
+		go2Laserline.addPoint(new Point2D.Double(80, 85));
+		gos.add(go2);
+		gos.add(new GameObjectDiamond(55, 232, 353));
+		gos.add(new GameObjectMirror(34.565, 23, 22.222));
+		
 		Controller.addGameObjects(gos);
 		
-		final JPanel panel = new JPanel(){
+		// rajzterület
+		JFrame frame = new JFrame("test", null);
+		JPanel panel = new JPanel(true){
 			@Override
 			public void paint(Graphics g) {
-				Graphics2D g2d = (Graphics2D)g;
-				Renderer.renderGame(g2d, this);
+				Renderer.renderGame(g, this);
 			}
 		};
+		panel.setSize(Settings.WINDOW_SIZE);
+		frame.add(panel);
+		frame.pack();
+		frame.setVisible(true);
 		panel.repaint();
 		
+		// ellenőrzés innestől ************************************************
 		List<GameObject> returnedGOs = Controller.getGameObjects();
 		
 		assertTrue("Number of GameObjects in the Controller's storage modified!",
@@ -75,7 +91,7 @@ public class RendererTest {
 					gos.get(i), returnedGOs.get(i));
 		}
 		
-		// GameObject values changed or not
+		// GameObject értékek megváltoztak a kirajzolás után?
 		assertEquals(((InteractiveGO)gos.get(0)).getX(), 34, DELTA);
 		assertEquals(((InteractiveGO)gos.get(1)).getX(), 5, DELTA);
 		assertEquals(((InteractiveGO)gos.get(2)).getX(), 55, DELTA);
