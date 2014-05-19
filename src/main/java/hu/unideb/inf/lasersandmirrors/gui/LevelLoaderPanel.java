@@ -23,6 +23,9 @@ public class LevelLoaderPanel extends javax.swing.JPanel {
 	public LevelLoaderPanel() {
 		initComponents();
 		
+		// A kezdeti állapotban ne tudjuk betölteni a semmit
+		playButton.setEnabled(false);
+		
 		// tooltip
 		listTitleLabel.setToolTipText(
 				"<html>"

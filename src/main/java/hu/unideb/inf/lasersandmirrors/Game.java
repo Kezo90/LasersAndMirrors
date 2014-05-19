@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 /*
  * PENDING: v0.2: falak, színek
- * 
- * TODO: Progkörny: JUnit (assertEquals("ennek kellene lennie", testMethod()), @Before, @Test)
  */
 
 /**
@@ -38,7 +36,7 @@ public class Game {
 	public static void main(String[] args) {
 		DB.connect();
 		
-		
+		// TODO: pályák legyártása
 		// TODO: tesztobjektumok: maybe del it
 		/*Controller.addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
 		Controller.addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
@@ -52,7 +50,8 @@ public class Game {
 
 		DB.saveLevel("test2");
 		*/
-		Controller.loadLevel("test");
+		//Controller.loadLevel("test");
+		Controller.startNewLevel("testing");
 		
 		// ablak csinosítása
 		try {
