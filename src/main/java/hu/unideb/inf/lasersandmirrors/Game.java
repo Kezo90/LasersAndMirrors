@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class Game {
 	
 	/** Az adott osztály naplózója. */
-	private static final Logger logger = LoggerFactory.getLogger(Game.class);
+	private static final Logger log = LoggerFactory.getLogger(Game.class);
 	
 	/** Az aktuális ablak. */
 	public static PlaygroundFrame frame;
@@ -58,7 +58,7 @@ public class Game {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException 
 				| IllegalAccessException | UnsupportedLookAndFeelException ex) {
-			logger.warn("Failed to load LookAndFeel.");
+			log.warn("Failed to load LookAndFeel.");
 		}
 		// ablak megnyitása
 		frame = new PlaygroundFrame();

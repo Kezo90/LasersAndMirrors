@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class GameObjectDiamond extends GameObject implements GraphicBitmap, InteractiveGO {
 	
 	/** Az adott osztályon belüli naplózó. */
-	private static final Logger logger = LoggerFactory.getLogger(GameObjectDiamond.class);
+	private static final Logger log = LoggerFactory.getLogger(GameObjectDiamond.class);
 	
 	/** Az objektum x koordinátája. */
 	private double x;
@@ -55,7 +55,7 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 				bitmapCenterX = (double)image.getWidth() / 2.0;
 				bitmapCenterY = (double)image.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
-				logger.error("Can't load bitmap: " + resource);
+				log.error("Can't load bitmap: " + resource);
 			}
 		}
 		
@@ -236,7 +236,7 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 				shineBitmapCenterX = (double)shineImage.getWidth() / 2.0;
 				shineBitmapCenterY = (double)shineImage.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
-				logger.error("Can't load bitmap: " + resource);
+				log.error("Can't load bitmap: " + resource);
 			}
 		}
 	}

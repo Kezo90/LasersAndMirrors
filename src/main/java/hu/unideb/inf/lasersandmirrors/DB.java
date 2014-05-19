@@ -30,7 +30,7 @@ public class DB {
 	private static Connection connection = null;
 	
 	/** Az adott osztály naplózója. */
-	private static final Logger logger = LoggerFactory.getLogger(DB.class);
+	private static final Logger log = LoggerFactory.getLogger(DB.class);
 	
 	/** A játék adatbázisának neve. */
 	private static final String DB = "lasers_and_mirrors";
@@ -50,13 +50,13 @@ public class DB {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "lasersandmirrors", "123");
 			connection.createStatement().executeUpdate("USE " + DB);
-			logger.info("Database connection successfully established.");
+			log.info("Database connection successfully established.");
 			return true;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-			logger.error("MySQL JDBC Driver not found.");
+			log.error("MySQL JDBC Driver not found.");
 			return false;
 		} catch (SQLException ex) {
-			logger.error("Failed to connect to database.");
+			log.error("Failed to connect to database.");
 			return false;
 		}
 	}
@@ -72,17 +72,17 @@ public class DB {
 				try{
 					connection.close();
 				} catch (SQLException ex) {
-					logger.error("Failed to close database connection.");
+					log.error("Failed to close database connection.");
 					return false;
 				}
-				logger.info("Database connection successfully closed.");
+				log.info("Database connection successfully closed.");
 				return true;
 			}else{
-				logger.info("Trying to close database connection, but already closed.");
+				log.info("Trying to close database connection, but already closed.");
 				return true;
 			}
 		} catch (SQLException ex) {
-			logger.warn("Error occured while checking database "
+			log.warn("Error occured while checking database "
 					+ "connection status, but maybe already closed.");
 			return false;
 		}
@@ -134,7 +134,7 @@ public class DB {
 			ResultSet levelResult = levelStatement.getGeneratedKeys();
 			levelResult.next();
 			int levelID = levelResult.getInt(1);
-			logger.info(String.format("level(%s) successfully inserted with id: %s.", name, levelID));
+			log.info(String.format("level(%s) successfully inserted with id: %s.", name, levelID));
 			
 			// gameObjectStatement-ek lefuttatása
 			List<GameObject> gameObjects = level.getAllGameObject();
@@ -156,12 +156,12 @@ public class DB {
 					}else if(gameObject instanceof GameObjectMirror){
 						gameObjectStatement.setString(2, "mirror");
 					}else{
-						logger.warn("Unsupported type of GameObject while saving level.");
+						log.warn("Unsupported type of GameObject while saving level.");
 					}
 					String colorInHex = '#' + Integer.toHexString(color.getRGB()).substring(2).toUpperCase();
 					gameObjectStatement.setString(6, colorInHex);
 					gameObjectStatement.executeUpdate();
-					logger.trace("game_object inserted successfully");
+					log.trace("game_object inserted successfully");
 				}
 			}
 			// Minden adat sikeresen lett feltöltve az adatbázisba.
@@ -169,12 +169,12 @@ public class DB {
 		
 		// Valami gubanc történt az adatok feltöltése közben.
 		} catch (SQLException ex) {
-			logger.warn("Trying to rollback (saving level).");
+			log.warn("Trying to rollback (saving level).");
 			try{
 				connection.rollback();
-				logger.warn("Rollback completed (saving level).");
+				log.warn("Rollback completed (saving level).");
 			} catch (SQLException ex2) {
-				logger.error("Error: Failed to rollback database!");
+				log.error("Error: Failed to rollback database!");
 			} finally{
 				return false;
 			}
@@ -192,7 +192,7 @@ public class DB {
 				}
 				connection.setAutoCommit(true);
 			}catch(SQLException ex3){
-				logger.warn("Failed to close PreparedStatements and set back autoCommit.");
+				log.warn("Failed to close PreparedStatements and set back autoCommit.");
 			}
 		}
 	}
@@ -218,7 +218,7 @@ public class DB {
 			
 			// létezik egyáltalán?
 			if(!isLevelExists(name)){
-				logger.warn(String.format("Can't update level(%s) because not exists.", name));
+				log.warn(String.format("Can't update level(%s) because not exists.", name));
 			}
 			
 			// levelStatement lefuttatása
@@ -226,16 +226,16 @@ public class DB {
 			levelStatement.setString(2, name);
 			int affectedRows = levelStatement.executeUpdate();
 			if(affectedRows == 1){
-				logger.info(String.format("level(%s) successfully updated.", name));
+				log.info(String.format("level(%s) successfully updated.", name));
 			} else{
-				logger.warn(String.format("Failed to update level(%s).", name));
+				log.warn(String.format("Failed to update level(%s).", name));
 				return false;
 			}
 			return true;
 			
 		// Valami gubanc történt.
 		} catch (SQLException ex) {
-			logger.warn(String.format("Failed to update level(%s). (#2)", name));
+			log.warn(String.format("Failed to update level(%s). (#2)", name));
 			return false;
 		// Erőforrások felszabadítása.
 		} finally{
@@ -244,7 +244,7 @@ public class DB {
 					levelStatement.close();
 				}
 			}catch(SQLException ex3){
-				logger.warn("Failed to close PreparedStatement.");
+				log.warn("Failed to close PreparedStatement.");
 			}
 		}
 	}
@@ -277,7 +277,7 @@ public class DB {
 			gameObjectStatement = connection.prepareStatement(gameObjectQueryString);
 			
 			if(!isLevelExists(name)){
-				logger.error(String.format("Can't load level(%s) because not exists.", name));
+				log.error(String.format("Can't load level(%s) because not exists.", name));
 				return null;
 			}
 			
@@ -308,7 +308,7 @@ public class DB {
 						break;
 					case "other":
 					default:
-						logger.warn(String.format("game_object readed from database with unknown type (id=%s)", id));
+						log.warn(String.format("game_object readed from database with unknown type (id=%s)", id));
 				}
 				if(newGameObject instanceof GraphicBitmap){
 					GraphicBitmap newGraphicBitmap = 
@@ -318,10 +318,10 @@ public class DB {
 					newGraphicBitmap.setRotation(gameObjectResult.getInt("rot"));
 				}
 				level.addGameObject(newGameObject);
-				logger.trace(String.format("game_object loaded (id=%s)", id));
+				log.trace(String.format("game_object loaded (id=%s)", id));
 			}
 		} catch (SQLException ex) {
-			logger.error(String.format("Failed to load level(%s) from database.", name));
+			log.error(String.format("Failed to load level(%s) from database.", name));
 			return null;
 		} finally {
 			try {
@@ -332,11 +332,11 @@ public class DB {
 					gameObjectStatement.close();
 				}
 			} catch (SQLException ex) {
-				logger.warn("Failed to close PreparedStatement.");
+				log.warn("Failed to close PreparedStatement.");
 			}
 		}
 		
-		logger.info(String.format("level(%s) successfully loaded.", name));
+		log.info(String.format("level(%s) successfully loaded.", name));
 		return level;
 	}
 	
@@ -387,12 +387,12 @@ public class DB {
 			}
 		// Valami gubanc történt az adatbáziskapcsolattal/tranzakciókezeléssel.
 		} catch (SQLException ex) {
-			logger.warn(String.format("Trying to rollback. (level.name: %s)", name));
+			log.warn(String.format("Trying to rollback. (level.name: %s)", name));
 			try{
 				connection.rollback();
-				logger.warn("Rollback completed.");
+				log.warn("Rollback completed.");
 			} catch (SQLException ex2) {
-				logger.error("Failed to rollback database!");
+				log.error("Failed to rollback database!");
 			} finally{
 				return false;
 			}
@@ -401,7 +401,7 @@ public class DB {
 			try{
 				connection.setAutoCommit(true);
 			}catch(SQLException e){
-				logger.warn("Failed to set back autoCommit.");
+				log.warn("Failed to set back autoCommit.");
 			}
 		}
 	}
@@ -424,17 +424,17 @@ public class DB {
 			deleteStatement = connection.prepareStatement(queryString);
 			deleteStatement.setString(1, name);
 			deleteStatement.executeUpdate();
-			logger.info(String.format("level(%s) successfully deleted", name));
+			log.info(String.format("level(%s) successfully deleted", name));
 			return true;
 		} catch (SQLException ex) {
-			logger.error(String.format("level(%s) deletion unsuccessful", name));
+			log.error(String.format("level(%s) deletion unsuccessful", name));
 			return false;
 		} finally{
 			if(deleteStatement != null){
 				try{
 					deleteStatement.close();
 				} catch (SQLException ex) {
-					logger.warn("Failed to close a PreparedStatement.");
+					log.warn("Failed to close a PreparedStatement.");
 				}
 			}
 		}
@@ -518,7 +518,7 @@ public class DB {
 						break;
 					case "other":
 					default:
-						logger.warn(String.format("Unknown game_object.type readed."));
+						log.warn(String.format("Unknown game_object.type readed."));
 				}
 			}
 			
@@ -533,12 +533,12 @@ public class DB {
 				if(levelInfo.name.equals(name)){
 					levelInfo.completed = completed;
 				} else {
-					logger.warn("Strange thing: wrong ordering or something else within: loadLevelInfos().");
+					log.warn("Strange thing: wrong ordering or something else within: loadLevelInfos().");
 				}
 			}
 			
 		} catch (SQLException ex) {
-			logger.error("Failed to read levels info.");
+			log.error("Failed to read levels info.");
 			return null;
 		} finally {
 			try {
@@ -549,11 +549,11 @@ public class DB {
 					levelsStatement.close();
 				}
 			} catch (SQLException ex) {
-				logger.warn("Failed to close PreparedStatement.");
+				log.warn("Failed to close PreparedStatement.");
 			}
 		}
 		
-		logger.info("Level infos successfully loaded.");
+		log.info("Level infos successfully loaded.");
 		return levelInfos;
 	}
 	

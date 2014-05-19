@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class InputHandler implements MouseInputListener{
 	
 	/** Az {@link InputHandler} osztály naplózója. */
-	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(InputHandler.class);
 	
 	/** Az aktuálisan kijelölt objektum. */
 	private static InteractiveGO selectedGO = null;
@@ -59,7 +59,7 @@ public class InputHandler implements MouseInputListener{
 				double distance = mousePos.distance(interactiveGO.getX(), interactiveGO.getY());
 				if(distance < Settings.GO_SELECTION_RADIUS){
 					selectedGO = interactiveGO;
-					logger.trace("GameObject selected: " + gameObject);
+					log.trace("GameObject selected: " + gameObject);
 					return;
 				}
 			}
