@@ -39,7 +39,7 @@ public class ListItem{
 	/**
 	 * A lista értéke állítható be.
 	 * 
-	 * @param val A listaelem új értéke.
+	 * @param value A listaelem új értéke.
 	 */
 	public void setValue(String value){
 		this.value = value;
@@ -57,7 +57,7 @@ public class ListItem{
 	/**
 	 * A lista megjelenítendő szövege állítható be.
 	 * 
-	 * @param val A listaelem új szövege.
+	 * @param text A listaelem új szövege.
 	 */
 	public void setText(String text){
 		this.text = text;
