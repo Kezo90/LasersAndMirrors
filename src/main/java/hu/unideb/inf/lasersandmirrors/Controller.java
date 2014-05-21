@@ -196,7 +196,6 @@ public class Controller {
 		}
 	}
 	
-	// TODO: kisebb massza
 	/**
 	 * Kiszámolja a lézerek útjait. 
 	 * (Az eredményt a {@link GameObjectLaserline} objektumokban tárolja le.)

@@ -1,15 +1,9 @@
 
 package hu.unideb.inf.lasersandmirrors;
 
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
-import java.awt.Color;
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -18,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /*
  * PENDING: v0.2: falak, színek
+ * TODO: pályák legyártása
  */
 
 /**
@@ -45,8 +40,6 @@ public class Game {
 		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
 		tooltipManager.setInitialDelay(0);
 		tooltipManager.setDismissDelay(15_000);
-		
-		// TODO: pályák legyártása
 		
 		// ablak csinosítása
 		try {
