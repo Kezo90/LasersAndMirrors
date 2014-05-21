@@ -19,7 +19,7 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 	public PlaygroundFrame() {
 		initComponents();
 		setSize(Settings.WINDOW_SIZE);
-		setMenu(new LevelLoaderPanel());
+		setMenu(new PlayMenu());
 		setLocationRelativeTo(null);
 		Controller.setActivePanel(playgroundPanel);
 	}

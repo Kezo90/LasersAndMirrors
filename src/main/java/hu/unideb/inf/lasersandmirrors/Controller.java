@@ -6,7 +6,7 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
-import hu.unideb.inf.lasersandmirrors.gui.LevelLoaderPanel;
+import hu.unideb.inf.lasersandmirrors.gui.PlayMenu;
 import hu.unideb.inf.lasersandmirrors.gui.ListItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -336,8 +336,8 @@ public class Controller {
 	private static boolean setCurrentLevelToCompleted(){
 		level.setCompleted(true);
 		JPanel menu = Game.frame.getMenu();
-		if(menu instanceof LevelLoaderPanel){
-			LevelLoaderPanel levelMenu = (LevelLoaderPanel) menu;
+		if(menu instanceof PlayMenu){
+			PlayMenu levelMenu = (PlayMenu) menu;
 			DefaultListModel<ListItem> listItems = levelMenu.getLevelsListItems();
 			for (int i = 0; i < listItems.size(); i++) {
 				ListItem listItem = listItems.get(i);

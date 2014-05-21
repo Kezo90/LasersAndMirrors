@@ -14,13 +14,13 @@ import javax.swing.ToolTipManager;
  *
  * @author Kerekes Zoltán
  */
-public class LevelLoaderPanel extends javax.swing.JPanel {
+public class PlayMenu extends javax.swing.JPanel {
 
 	/**
-	 * Creates new form LevelLoaderPanel.
+	 * Creates new form PlayMenu.
 	 */
 	@SuppressWarnings("unchecked")
-	public LevelLoaderPanel() {
+	public PlayMenu() {
 		initComponents();
 		
 		// A kezdeti állapotban ne tudjuk betölteni a semmit
