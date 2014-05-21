@@ -74,6 +74,11 @@ public class WelcomeArea extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * A készítő nevére rákattintottak: töltse be a honapot.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void developersNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_developersNameMouseClicked
         if(Desktop.isDesktopSupported()){
 			Desktop browser = Desktop.getDesktop();
