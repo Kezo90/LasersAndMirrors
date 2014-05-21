@@ -4,8 +4,13 @@ package hu.unideb.inf.lasersandmirrors;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
+import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
 import java.awt.Color;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
@@ -26,7 +31,7 @@ public class Game {
 	private static final Logger log = LoggerFactory.getLogger(Game.class);
 	
 	/** Az aktuális ablak. */
-	public static PlaygroundFrame frame;
+	public static GameFrame frame;
 	
 	/**
 	 * A program belépési pontja.
@@ -36,22 +41,12 @@ public class Game {
 	public static void main(String[] args) {
 		DB.connect();
 		
+		// Globális tooltip beállítások.
+		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
+		tooltipManager.setInitialDelay(0);
+		tooltipManager.setDismissDelay(15_000);
+		
 		// TODO: pályák legyártása
-		// TODO: tesztobjektumok: maybe del it
-		/*Controller.addGameObject(new GameObjectLaser(200, 200, 240, Color.RED));
-		Controller.addGameObject(new GameObjectLaser(300, 200, 60, Color.RED));
-		Controller.addGameObject(new GameObjectLaser(200, 400, 170, Color.RED));
-		Controller.addGameObject(new GameObjectDiamond(300, 130, 0));
-		Controller.addGameObject(new GameObjectDiamond(300, 200, 26));
-		Controller.addGameObject(new GameObjectMirror(350, 160, 10));		
-		Controller.addGameObject(new GameObjectMirror(300, 160, 10));
-		Controller.addGameObject(new GameObjectMirror(250, 160, 10));
-		Controller.addGameObject(new GameObjectMirror(200, 160, 10));
-
-		DB.saveLevel("test2");
-		*/
-		//Controller.loadLevel("test");
-		Controller.startNewLevel("testing");
 		
 		// ablak csinosítása
 		try {
@@ -63,5 +58,9 @@ public class Game {
 		// ablak megnyitása
 		frame = new PlaygroundFrame();
 		frame.setVisible(true);
+		
+		// billentyűleütés kezelő regisztrálása
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		manager.addKeyEventDispatcher(new InputHandler());
 	}
 }

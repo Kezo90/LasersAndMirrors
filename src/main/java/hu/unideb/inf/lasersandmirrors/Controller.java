@@ -1,11 +1,13 @@
 
 package hu.unideb.inf.lasersandmirrors;
 
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
+import hu.unideb.inf.lasersandmirrors.gui.EditMenu;
+import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
+import hu.unideb.inf.lasersandmirrors.gui.GameMenu;
 import hu.unideb.inf.lasersandmirrors.gui.PlayMenu;
 import hu.unideb.inf.lasersandmirrors.gui.ListItem;
 import java.awt.event.ActionEvent;
@@ -19,6 +21,8 @@ import javax.swing.Timer;
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.line.Ray2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Az aktivitások kiinduló osztálya.
@@ -27,6 +31,9 @@ import math.geom2d.line.Ray2D;
  * @author Kerekes Zoltán
  */
 public class Controller {
+	
+	/** Az adott osztály naplózója. */
+	private static final Logger log = LoggerFactory.getLogger(Controller.class);
 	
 	/** A felhasználói interakciókat kezelő osztály egyetlen példánya. */
 	private static final InputHandler imputHandler = new InputHandler();
@@ -41,17 +48,21 @@ public class Controller {
 		timer.setCoalesce(true);
 	}
 	
-	/** Az aktuálisan működő panel. */
-	private static JPanel activePanel = null;
+	/** Az aktuális játéktér. */
+	private static JPanel drawArea = null;
 	
 	/**
-	 * Az aktuálisan működő panel beállítása.
+	 * Az aktuális játéktér beállítása.
 	 * 
-	 * @param panel Az aktívnak beállítandó panel.
+	 * <p><strong>Fontos:</strong> csak {@link GameFrame}-ből ajánlott 
+	 * meghívni ezt a metódust.
+	 * <br/>Minden más helyen a {@link GameFrame#setGameArea(javax.swing.JPanel)}-t érdemes használni.</p>
+	 * 
+	 * @param gameArea Az új játéktér.
 	 */
-	public static void setActivePanel(JPanel panel){
+	public static void setGameArea(JPanel gameArea){
 		timer.stop();
-		activePanel = panel;
+		Controller.drawArea = gameArea;
 		
 		// előző listener eltávolítása
 		ActionListener[] listenersToRemove = timer.getActionListeners();
@@ -60,7 +71,7 @@ public class Controller {
 		}
 		
 		// új listener regisztrálása
-		final JPanel _panel = panel;
+		final JPanel _panel = gameArea;
 		timer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -71,21 +82,25 @@ public class Controller {
 		
 		timer.start();
 		
-		panel.addMouseListener(imputHandler);
-		panel.addMouseMotionListener(imputHandler);
+		gameArea.addMouseListener(imputHandler);
+		gameArea.addMouseMotionListener(imputHandler);
 	}
 	
 	/**
-	 * Az aktuálisan működő panel lekérdezése.
+	 * Az aktuális játéktér lekérdezése.
 	 * 
-	 * @return Az aktív panel.
+	 * <p><strong>Fontos:</strong> csak {@link GameFrame}-ből ajánlott 
+	 * meghívni ezt a metódust.
+	 * <br/>Minden más helyen a {@link GameFrame#getGameArea()}-t érdemes használni.</p>
+	 * 
+	 * @return A aktuális játéktér.
 	 */
-	public static JPanel getActivePanel(){
-		return activePanel;
+	public static JPanel getGameArea(){
+		return drawArea;
 	}
 	
 	/**
-	 * A paraméterül adott koordinátákat korlátozhatjuk a rajzterületre.
+	 * A paraméterül adott koordinátákat korlátozhatjuk a játéktéren belülre.
 	 * <p>
 	 * <strong>Note:</strong><br>
 	 * Ez a metódus az objektumot {@link Settings#GO_SELECTION_RADIUS}-nyi 
@@ -95,12 +110,12 @@ public class Controller {
 	 * @param y Az objektum y pozíciója.
 	 * @return A limitált pozíció.
 	 */
-	public static Point2D limitGOPositionToCurrentPanel(double x, double y){
+	public static Point2D limitGOPositionToCurrentGameArea(double x, double y){
 		double r = Settings.GO_SELECTION_RADIUS;
-		x = Math.max(x, activePanel.getX()      + r);
-		x = Math.min(x, activePanel.getWidth()  - r);
-		y = Math.max(y, activePanel.getY()      + r);
-		y = Math.min(y, activePanel.getHeight() - r);
+		x = Math.max(x, drawArea.getX()      + r);
+		x = Math.min(x, drawArea.getWidth()  - r);
+		y = Math.max(y, drawArea.getY()      + r);
+		y = Math.min(y, drawArea.getHeight() - r);
 		return new Point2D(x, y);
 	}
 	
@@ -108,137 +123,40 @@ public class Controller {
 	
 	
 	
-	// TODO: massza
 	/**
 	 * A játékbeli történések frissítése.
 	 */
 	private static void updateGame(){
-		
-		JPanel panel = getActivePanel();
-		
-		if(panel.getName().equals("playArea")){
+		JPanel gameArea = getGameArea();
+		if(gameArea.getName().equals("playArea")){
 			
-			if(level.getName() == null){
+			updateLaserLinePaths();
+			List<LineSegment2D> lines = getLaserlineSegments();
+			updateDiamondsLightenedStatus(lines);
+			
+			GameMenu menu = Game.frame.getMenu();
+			if(menu == null 
+					|| menu.getName() == null 
+					|| level.getName() == null 
+					|| level.getName().equals("")){
 				return;
 			}
-			
-			List<LineSegment2D> reflectiveSurfaces = new ArrayList<>();
-			List<LineSegment2D> mattSurfaces = new ArrayList<>();
-			
-			for (GameObjectMirror mirror : level.getMirrors()) {
-				reflectiveSurfaces.addAll(mirror.getReflectiveLines());
-				mattSurfaces.addAll(mirror.getMattLines());
-			}
-			
-			double drawAreaWidth = panel.getWidth();
-			double drawAreaHeight = panel.getHeight();
-			// a rajzterület szélei
-			LineSegment2D[] drawAreaSides = {
-				new LineSegment2D(0, 0, drawAreaWidth, 0),
-				new LineSegment2D(drawAreaWidth, 0, drawAreaWidth, drawAreaHeight),
-				new LineSegment2D(drawAreaWidth, drawAreaHeight, 0, drawAreaHeight),
-				new LineSegment2D(0, drawAreaHeight, 0, 0)
-			};
-			mattSurfaces.addAll(Arrays.asList(drawAreaSides));
-			
-			// lézer útjának kiszámolása
-			for (GameObjectLaser laser : level.getLasers()) {
-				double remainingLength = Settings.LASERLINE_LENGTH;
-				double x = laser.getX();
-				double y = laser.getY();
-				double rot = laser.getRotation() - 90;
-				Ray2D ray = new Ray2D(x, y, Math.toRadians(rot));
-				GameObjectLaserline laserline = laser.getLaserLine();
-				laserline.clearPoints();
-				laserline.addPoint(ray.firstPoint());
-				LineSegment2D lastActor = null;
-				// Amíg ki nem rajzoltuk a teljes hosszúságú lézervonalat...
-				drawLineUntilTooShort:
-				while(remainingLength > 0){
-					List<Intersection> intersections = new ArrayList<>();					
-					// tükröződő metszéspontok összeszedése
-					for (LineSegment2D reflectiveSurface : reflectiveSurfaces) {
-						if(reflectiveSurface == lastActor){ // ne pattogjon egy pontban
-							continue;
-						}
-						Point2D intersection = ray.intersection(reflectiveSurface);
-						if(intersection != null){
-							double squareDist = MyMath.squareDist(intersection, ray.firstPoint());
-							intersections.add(new Intersection(
-									intersection, squareDist, reflectiveSurface, true));
-						}
+			switch (menu.getName()) {
+				case "playMenu":
+					// pálya sikerességének elmentése
+					if(!level.isCompleted() && isCurrentLevelConditionsAchieved()){
+						log.info(String.format("Setting level(%s) to completed.", level.getName()));
+						setCurrentLevelToCompleted();
 					}
-					// elnyelő metszéspontok összeszedése
-					for (LineSegment2D mattSurface : mattSurfaces) {
-						Point2D intersection = ray.intersection(mattSurface);
-						if(intersection != null){
-							double squareDist = MyMath.squareDist(intersection, ray.firstPoint());
-							intersections.add(new Intersection(
-									intersection, squareDist, mattSurface, false));
-						}
-					}
-					// Van metszéspont. Elér odáig a lézersugár?
-					if(intersections.size() > 0){
-						// Legközelebbi kiválasztása.
-						Intersection nearestIntersection = intersections.remove(0);
-						for (Intersection intersection : intersections) {
-							if(intersection.squareDist < nearestIntersection.squareDist){
-								nearestIntersection = intersection;
-							}
-						}
-						double distance = Math.sqrt(nearestIntersection.squareDist);
-						// Nem ér el odáig a lézer?
-						if(distance > remainingLength){
-							laserline.addPoint(ray.point(remainingLength));
-							break;
-						// Elér odáig a lézer.
-						}else{
-							lastActor = nearestIntersection.lineSegment;
-							laserline.addPoint(nearestIntersection.point);
-							// új hossz beállítása
-							if(nearestIntersection.reflective){
-								remainingLength -= distance;
-							} else{
-								remainingLength = 0;								
-							}
-							// Az új Ray2D szögének kiszámolása.
-							ray = new Ray2D(nearestIntersection.point, 
-									MyMath.reflectionAngle(ray.horizontalAngle(), 
-									nearestIntersection.lineSegment.horizontalAngle()));
-						}
-					}
-				}
-			}
-			
-			// lézersugarak összeszedése
-			List<LineSegment2D> lines = new ArrayList<>();
-			for (GameObjectLaser laser : level.getLasers()) {
-				GameObjectLaserline laserline = laser.getLaserLine();
-				List<java.awt.geom.Point2D> laserlinePoints = laserline.getPoints();
-				int size = laserlinePoints.size();
-				for (int i = 0; i < size - 1; i++) {
-					lines.add(new LineSegment2D(
-							new Point2D(laserlinePoints.get(i)),
-							new Point2D(laserlinePoints.get(i + 1))
-							));
-				}
-			}
-			// gyémántok csillogásának beállítása
-			for (GameObjectDiamond diamond : level.getDiamonds()) {
-				diamond.setLightened(false);
-				double radius = diamond.getRadius();
-				Point2D diamondOrigo = new Point2D(diamond.getX(), diamond.getY());
-				for (LineSegment2D line : lines) {
-					if(line.distance(diamondOrigo) < radius){
-						diamond.setLightened(true);
-						break;
-					}
-				}
-			}
-			
-			// pálya sikerességének elmentése
-			if(!level.isCompleted() && isCurrentLevelConditionsAchieved()){
-				setCurrentLevelToCompleted();
+					break;
+				
+				case "editMenu":
+					EditMenu editMenu = (EditMenu)menu;
+					// edit gomb állapotának frissítése
+					editMenu.updateByGameAchieveableStatus(
+							level.getNumberOfDiamonds() > 0 &&
+							level.getNumberOfLasers() > 0);
+					break;
 			}
 		}
 	}
@@ -278,12 +196,147 @@ public class Controller {
 		}
 	}
 	
+	// TODO: kisebb massza
+	/**
+	 * Kiszámolja a lézerek útjait. 
+	 * (Az eredményt a {@link GameObjectLaserline} objektumokban tárolja le.)
+	 */
+	private static void updateLaserLinePaths(){
+		List<LineSegment2D> reflectiveSurfaces = new ArrayList<>();
+		List<LineSegment2D> mattSurfaces = new ArrayList<>();
+
+		for (GameObjectMirror mirror : level.getMirrors()) {
+			reflectiveSurfaces.addAll(mirror.getReflectiveLines());
+			mattSurfaces.addAll(mirror.getMattLines());
+		}
+
+		double drawAreaWidth = getGameArea().getWidth();
+		double drawAreaHeight = getGameArea().getHeight();
+		// a rajzterület szélei
+		LineSegment2D[] drawAreaSides = {
+			new LineSegment2D(0, 0, drawAreaWidth, 0),
+			new LineSegment2D(drawAreaWidth, 0, drawAreaWidth, drawAreaHeight),
+			new LineSegment2D(drawAreaWidth, drawAreaHeight, 0, drawAreaHeight),
+			new LineSegment2D(0, drawAreaHeight, 0, 0)
+		};
+		mattSurfaces.addAll(Arrays.asList(drawAreaSides));
+
+		// lézer útjának kiszámolása
+		for (GameObjectLaser laser : level.getLasers()) {
+			double remainingLength = Settings.LASERLINE_LENGTH;
+			double x = laser.getX();
+			double y = laser.getY();
+			double rot = laser.getRotation() - 90;
+			Ray2D ray = new Ray2D(x, y, Math.toRadians(rot));
+			GameObjectLaserline laserline = laser.getLaserLine();
+			laserline.clearPoints();
+			laserline.addPoint(ray.firstPoint());
+			LineSegment2D lastActor = null;
+			// Amíg ki nem rajzoltuk a teljes hosszúságú lézervonalat...
+			drawLineUntilTooShort:
+			while(remainingLength > 0){
+				List<Intersection> intersections = new ArrayList<>();					
+				// tükröződő metszéspontok összeszedése
+				for (LineSegment2D reflectiveSurface : reflectiveSurfaces) {
+					if(reflectiveSurface == lastActor){ // ne pattogjon egy pontban
+						continue;
+					}
+					Point2D intersection = ray.intersection(reflectiveSurface);
+					if(intersection != null){
+						double squareDist = MyMath.squareDist(intersection, ray.firstPoint());
+						intersections.add(new Intersection(
+								intersection, squareDist, reflectiveSurface, true));
+					}
+				}
+				// elnyelő metszéspontok összeszedése
+				for (LineSegment2D mattSurface : mattSurfaces) {
+					Point2D intersection = ray.intersection(mattSurface);
+					if(intersection != null){
+						double squareDist = MyMath.squareDist(intersection, ray.firstPoint());
+						intersections.add(new Intersection(
+								intersection, squareDist, mattSurface, false));
+					}
+				}
+				// Van metszéspont. Elér odáig a lézersugár?
+				if(intersections.size() > 0){
+					// Legközelebbi kiválasztása.
+					Intersection nearestIntersection = intersections.remove(0);
+					for (Intersection intersection : intersections) {
+						if(intersection.squareDist < nearestIntersection.squareDist){
+							nearestIntersection = intersection;
+						}
+					}
+					double distance = Math.sqrt(nearestIntersection.squareDist);
+					// Nem ér el odáig a lézer?
+					if(distance > remainingLength){
+						laserline.addPoint(ray.point(remainingLength));
+						break;
+					// Elér odáig a lézer.
+					}else{
+						lastActor = nearestIntersection.lineSegment;
+						laserline.addPoint(nearestIntersection.point);
+						// új hossz beállítása
+						if(nearestIntersection.reflective){
+							remainingLength -= distance;
+						} else{
+							remainingLength = 0;								
+						}
+						// Az új Ray2D szögének kiszámolása.
+						ray = new Ray2D(nearestIntersection.point, 
+								MyMath.reflectionAngle(ray.horizontalAngle(), 
+								nearestIntersection.lineSegment.horizontalAngle()));
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Összegyűjti a lézersugarak útjait szakaszok formájában.
+	 * 
+	 * @return A lézersugarak által alkotott szakaszok.
+	 */
+	private static List<LineSegment2D> getLaserlineSegments(){
+		List<LineSegment2D> lines = new ArrayList<>();
+		for (GameObjectLaser laser : level.getLasers()) {
+			GameObjectLaserline laserline = laser.getLaserLine();
+			List<java.awt.geom.Point2D> laserlinePoints = laserline.getPoints();
+			int size = laserlinePoints.size();
+			for (int i = 0; i < size - 1; i++) {
+				lines.add(new LineSegment2D(
+						new Point2D(laserlinePoints.get(i)),
+						new Point2D(laserlinePoints.get(i + 1))
+						));
+			}
+		}
+		return lines;
+	}
+	
+	/**
+	 * A pályán lévő gyémántoknak beállítja, hogy meg vannak világítva vagy sem.
+	 * 
+	 * @param laserlineSegments A lézersugarak szakaszai.
+	 */
+	private static void updateDiamondsLightenedStatus(List<LineSegment2D> laserlineSegments){
+		for (GameObjectDiamond diamond : level.getDiamonds()) {
+			diamond.setLightened(false);
+			double radius = diamond.getRadius();
+			Point2D diamondOrigo = new Point2D(diamond.getX(), diamond.getY());
+			for (LineSegment2D line : laserlineSegments) {
+				if(line.distance(diamondOrigo) < radius){
+					diamond.setLightened(true);
+					break;
+				}
+			}
+		}
+	}
+	
 	
 	
 	
 	
 	/** Az aktuális pálya. */
-	private static Level level = null;
+	private static Level level = new Level(new String());
 	
 	/**
 	 * Új üres pálya létrehozása.
@@ -309,8 +362,8 @@ public class Controller {
 	 * @return Igaz, ha minden feltétel teljesül, hamis ha nem.
 	 */
 	private static boolean isCurrentLevelConditionsAchieved(){
-		for (GameObject go : level.getAllGameObject()) {
-			if(go instanceof GameObjectDiamond && !((GameObjectDiamond)go).isLightened()){
+		for (GameObjectDiamond go : level.getDiamonds()) {
+			if(!go.isLightened()){
 				return false;
 			}
 		}
@@ -324,7 +377,7 @@ public class Controller {
 	 */
 	private static boolean setCurrentLevelToCompleted(){
 		level.setCompleted(true);
-		JPanel menu = Game.frame.getMenu();
+		GameMenu menu = Game.frame.getMenu();
 		if(menu instanceof PlayMenu){
 			PlayMenu levelMenu = (PlayMenu) menu;
 			DefaultListModel<ListItem> listItems = levelMenu.getLevelsListItems();

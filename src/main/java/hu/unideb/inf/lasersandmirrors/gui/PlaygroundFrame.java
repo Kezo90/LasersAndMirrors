@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  *
  * @author Kerekes Zoltán
  */
-public class PlaygroundFrame extends javax.swing.JFrame {
+public class PlaygroundFrame extends javax.swing.JFrame implements GameFrame {
 	
 	/**
 	 * Creates new form PlaygroundFrame.
@@ -19,9 +19,9 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 	public PlaygroundFrame() {
 		initComponents();
 		setSize(Settings.WINDOW_SIZE);
-		setMenu(new PlayMenu());
+		setGameArea(new WelcomeArea());
+		setMenu(new MainMenu());
 		setLocationRelativeTo(null);
-		Controller.setActivePanel(playArea);
 	}
 
 	/**
@@ -37,7 +37,6 @@ public class PlaygroundFrame extends javax.swing.JFrame {
         setTitle("Lasers & Mirrors, by: Zoltán Kerekes");
         setBackground(new java.awt.Color(153, 153, 153));
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setName("playArea"); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -58,22 +57,37 @@ public class PlaygroundFrame extends javax.swing.JFrame {
     private void windowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowClosing
         Controller.exitGame();
     }//GEN-LAST:event_windowClosing
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+	
+	/** A játéktér panel. */
+	private JPanel gameArea = new WelcomeArea();
+	/** Az aktuális menü. */
+	private GameMenu gameMenu = null;
 	
 	/**
-	 * Az aktuális menü kérdezhető le.
-	 * 
-	 * @return Az aktuális menu referenciája.
+	 * Frissíti a képernyőn elhelyezkedő JPaneleket.
+	 * (A rajzterületet és a menüt.)
 	 */
-	public JPanel getMenu(){
-		return this.menuPanel;
+	private void updateLayout(){
+		if(this.gameArea == null || this.gameMenu == null){
+			return;
+		}
+		JPanel contentPane = new JPanel();
+		setContentPane(contentPane);
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		contentPane.setLayout(layout);
+		contentPane.setMaximumSize(Settings.WINDOW_SIZE);
+		
+		add(gameArea);
+		add((JPanel)gameMenu);
+		
+		pack();
 	}
 	
-	/**
-	 * Új menü állítható be.
-	 * 
-	 * @param menu Az új menü.
-	 */
-	public final void setMenu(JPanel menu){
+	@Override
+	public final void setMenu(GameMenu menu){
 		// <editor-fold defaultstate="collapsed" desc="GroupLayout-os kódom (kikommentelve)">  
 		/*
 		remove(menuPanel);
@@ -105,24 +119,25 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		);
 		*/
 		// </editor-fold>
-		menuPanel = menu;
-		JPanel contentPane = new JPanel();
-		setContentPane(contentPane);
-		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
-		contentPane.setLayout(layout);
-		contentPane.setMaximumSize(Settings.WINDOW_SIZE);
-		
-		add(playArea);
-		add(menu);
-		
-		pack();
+		this.gameMenu = menu;
+		updateLayout();
 	}
 	
-	/** A játéktér panel. */
-	private JPanel playArea = new PlayArea();
-	/** Az aktuális menü. */
-	private JPanel menuPanel = null;
+	@Override
+	public GameMenu getMenu(){
+		return this.gameMenu;
+	}
 	
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
+	@Override
+	public final void setGameArea(JPanel gameArea) {
+		this.gameArea = gameArea;
+		Controller.setGameArea(gameArea);
+		updateLayout();
+	}
+
+	@Override
+	public JPanel getGameArea() {
+		return this.gameArea;
+	}
+	
 }

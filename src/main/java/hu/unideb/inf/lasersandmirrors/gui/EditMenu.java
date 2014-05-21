@@ -8,35 +8,36 @@ import hu.unideb.inf.lasersandmirrors.Settings;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.ToolTipManager;
 
 /**
- * Játék menü.
+ * Szerkesztő menü.
  *
  * @author Kerekes Zoltán
  */
-public class PlayMenu extends javax.swing.JPanel implements GameMenu {
+public class EditMenu extends javax.swing.JPanel implements GameMenu {
 
 	/**
-	 * Creates new form PlayMenu.
+	 * Creates new form EditMenu.
 	 */
 	@SuppressWarnings("unchecked")
-	public PlayMenu() {
+	public EditMenu() {
 		initComponents();
 		
-		// A kezdeti állapotban ne tudjunk betölteni a semmit
-		playButton.setEnabled(false);
+		// A kezdeti állapotban ne tudjuk betölteni a semmit
+		editButton.setEnabled(false);
 		
 		// tooltip
-		listTitleLabel.setToolTipText(
+		levelsTitleLabel.setToolTipText(
 				"<html>"
 					+ "<p style=\"margin-bottom:7px\">"
 						+ "<strong>Numbers in brackets:</strong> Lasers, Mirrors and Diamonds on the level."
 					+ "</p>"
-					+ "<p>"
-						+ "<strong>Star at the beginning:</strong> level completed."
-					+ "</p>"
 				+ "</html>");
-		
+		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
+		tooltipManager.setInitialDelay(0);
+		tooltipManager.setDismissDelay(15_000);
+
 		// listaelemek módosíthatóvá tétele
 		levelsListItems = new DefaultListModel<>();
 		levelsList.setModel(levelsListItems);
@@ -45,14 +46,14 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
 		List<DB.LevelInfo> levelInfos = DB.loadLevelInfos();
 		if(levelInfos != null){
 			for (DB.LevelInfo levelInfo : levelInfos) {
-				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s%s (%s, %s, %s)", 
-						levelInfo.completed ? Settings.COMPLETED_LEVEL_MARKER : "" ,
+				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s (%s, %s, %s)", 
 						levelInfo.name,
 						levelInfo.laserCount, 
 						levelInfo.mirrorCount, 
 						levelInfo.diamondCount)));
 			}
 		}
+		levelsListItems.add(0, new ListItem(null, Settings.EMPTY_LIST_ITEM_STRING));
 	}
 
 	/**
@@ -66,24 +67,26 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
 
         titleLabel = new javax.swing.JLabel();
         levelsContainer = new javax.swing.JPanel();
-        listTitleLabel = new javax.swing.JLabel();
-        levelsListScrolPane = new javax.swing.JScrollPane();
+        levelsTitleLabel = new javax.swing.JLabel();
+        levelsListScrollPane = new javax.swing.JScrollPane();
         levelsList = new javax.swing.JList();
-        playButton = new javax.swing.JButton();
+        saveContainer = new javax.swing.JPanel();
+        editButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         goBackButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 227, 227));
-        setName("playMenu"); // NOI18N
+        setName("editMenu"); // NOI18N
         setPreferredSize(new java.awt.Dimension(224, 650));
 
         titleLabel.setBackground(new java.awt.Color(102, 102, 102));
         titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setText("Play Menu");
+        titleLabel.setText("Edit Menu");
 
         levelsContainer.setOpaque(false);
 
-        listTitleLabel.setText("Available levels");
+        levelsTitleLabel.setText("Existing levels");
 
         levelsList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         levelsList.setModel(new javax.swing.AbstractListModel() {
@@ -99,34 +102,59 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
                 levelsListValueChanged(evt);
             }
         });
-        levelsListScrolPane.setViewportView(levelsList);
+        levelsListScrollPane.setViewportView(levelsList);
 
         javax.swing.GroupLayout levelsContainerLayout = new javax.swing.GroupLayout(levelsContainer);
         levelsContainer.setLayout(levelsContainerLayout);
         levelsContainerLayout.setHorizontalGroup(
             levelsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(levelsListScrolPane)
-            .addComponent(listTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(levelsListScrollPane)
+            .addComponent(levelsTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         levelsContainerLayout.setVerticalGroup(
             levelsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(levelsContainerLayout.createSequentialGroup()
-                .addComponent(listTitleLabel)
+                .addComponent(levelsTitleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(levelsListScrolPane, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                .addComponent(levelsListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
         );
 
-        playButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        playButton.setText("Play");
-        playButton.addActionListener(new java.awt.event.ActionListener() {
+        saveContainer.setOpaque(false);
+
+        editButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playButtonActionPerformed(evt);
+                editButtonActionPerformed(evt);
             }
         });
 
+        saveButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout saveContainerLayout = new javax.swing.GroupLayout(saveContainer);
+        saveContainer.setLayout(saveContainerLayout);
+        saveContainerLayout.setHorizontalGroup(
+            saveContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(saveContainerLayout.createSequentialGroup()
+                .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        saveContainerLayout.setVerticalGroup(
+            saveContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         goBackButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         goBackButton.setForeground(new java.awt.Color(155, 25, 25));
-        goBackButton.setText("Main menu");
+        goBackButton.setText("Main Menu");
         goBackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goBackButtonActionPerformed(evt);
@@ -143,7 +171,7 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
                     .addComponent(levelsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
                     .addComponent(goBackButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(playButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -154,7 +182,7 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
                 .addGap(18, 18, 18)
                 .addComponent(levelsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(playButton)
+                .addComponent(saveContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE)
                 .addComponent(goBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -162,7 +190,7 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
     }// </editor-fold>//GEN-END:initComponents
 
 	/**
-	 * Visszalépés a főmenübe.
+	 * A kilépés gombot megnyomjuk: visszalép a főmenübe.
 	 * 
 	 * @param evt A kiváltó esemény.
 	 */
@@ -171,13 +199,29 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
     }//GEN-LAST:event_goBackButtonActionPerformed
 
 	/**
-	 * A Play gombot megnyomjuk: betölti a kijelölt pályát a játék.
+	 * A Play gombot megnyomjuk: betöltia  kijelölt pályát a játék.
 	 * 
 	 * @param evt A kiváltó esemény.
 	 */
-    private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-		Controller.loadLevel( ((ListItem)levelsList.getSelectedValue()).getValue() );
-    }//GEN-LAST:event_playButtonActionPerformed
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+		String levelName = ((ListItem)levelsList.getSelectedValue()).getValue();
+		if(levelName == null){
+			Controller.startNewLevel(null);
+		} else{
+			Controller.loadLevel(levelName);
+		}
+    }//GEN-LAST:event_editButtonActionPerformed
+
+	/**
+	 * Betölti a pályát szerkesztésre vagy csak átlép a szerkesztő menübe.
+	 * 
+	 * <strong>Még nincs implementálva a szerkesztő.</strong>
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        // TODO: save button
+    }//GEN-LAST:event_saveButtonActionPerformed
 
 	/**
 	 * A listában kijelöltünk valamit: a Play gomb elszürkülhet, 
@@ -187,20 +231,18 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
 	 */
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
 		JList list = (JList)evt.getSource();
-		String value = ((ListItem)list.getSelectedValue()).getValue();
-		if(value == null){
-			playButton.setEnabled(false);
-		} else {
-			playButton.setEnabled(true);
-		}
+		editButton.setEnabled(list.getSelectedIndex() != -1);
     }//GEN-LAST:event_levelsListValueChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton editButton;
     private javax.swing.JButton goBackButton;
     private javax.swing.JPanel levelsContainer;
     private javax.swing.JList levelsList;
-    private javax.swing.JScrollPane levelsListScrolPane;
-    private javax.swing.JLabel listTitleLabel;
-    private javax.swing.JButton playButton;
+    private javax.swing.JScrollPane levelsListScrollPane;
+    private javax.swing.JLabel levelsTitleLabel;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JPanel saveContainer;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 
@@ -218,6 +260,15 @@ public class PlayMenu extends javax.swing.JPanel implements GameMenu {
 		return this.levelsListItems;
 	}
 	
+	/**
+	 * Frissíti a felületet aszerint, hogy teljesíthető-e az aktuális pálya.
+	 * 
+	 * @param status Teljesíthető az aktuális pálya?
+	 */
+	public void updateByGameAchieveableStatus(boolean status){
+		saveButton.setEnabled(status);
+	}
+
 	@Override
 	public void goBack() {
 		Controller.startNewLevel(null);
