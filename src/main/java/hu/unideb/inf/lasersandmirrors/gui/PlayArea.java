@@ -9,12 +9,12 @@ import hu.unideb.inf.lasersandmirrors.Renderer;
  *
  * @author Kerekes Zoltán
  */
-public class PlaygroundPanel extends javax.swing.JPanel {
+public class PlayArea extends javax.swing.JPanel {
 
 	/**
-	 * Creates new form PlaygroundPanel.
+	 * Creates new form PlayArea.
 	 */
-	public PlaygroundPanel() {
+	public PlayArea() {
 		initComponents();
 	}
 	
@@ -35,7 +35,7 @@ public class PlaygroundPanel extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(800, 650));
         setMinimumSize(new java.awt.Dimension(800, 650));
-        setName("playgroundPanel"); // NOI18N
+        setName("playArea"); // NOI18N
         setPreferredSize(new java.awt.Dimension(800, 650));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

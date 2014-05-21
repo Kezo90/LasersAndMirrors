@@ -10,7 +10,7 @@
     <Property name="bounds" type="java.awt.Rectangle" editor="org.netbeans.beaninfo.editors.RectangleEditor">
       <Rectangle value="[0, 0, 0, 0]"/>
     </Property>
-    <Property name="name" type="java.lang.String" value="playgroundFrame" noResource="true"/>
+    <Property name="name" type="java.lang.String" value="playArea" noResource="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>

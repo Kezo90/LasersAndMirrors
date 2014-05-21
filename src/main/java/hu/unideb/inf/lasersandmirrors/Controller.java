@@ -116,7 +116,7 @@ public class Controller {
 		
 		JPanel panel = getActivePanel();
 		
-		if(panel.getName().equals("playgroundPanel")){
+		if(panel.getName().equals("playArea")){
 			
 			List<GameObjectLaser> lasers = new ArrayList<>();
 			List<GameObjectMirror> mirrors = new ArrayList<>();

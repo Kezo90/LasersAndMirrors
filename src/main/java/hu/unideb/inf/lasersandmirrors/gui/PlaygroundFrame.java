@@ -21,7 +21,7 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		setSize(Settings.WINDOW_SIZE);
 		setMenu(new PlayMenu());
 		setLocationRelativeTo(null);
-		Controller.setActivePanel(playgroundPanel);
+		Controller.setActivePanel(playArea);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class PlaygroundFrame extends javax.swing.JFrame {
         setTitle("Lasers & Mirrors, by: Zoltán Kerekes");
         setBackground(new java.awt.Color(153, 153, 153));
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setName("playgroundFrame"); // NOI18N
+        setName("playArea"); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -112,14 +112,14 @@ public class PlaygroundFrame extends javax.swing.JFrame {
 		contentPane.setLayout(layout);
 		contentPane.setMaximumSize(Settings.WINDOW_SIZE);
 		
-		add(playgroundPanel);
+		add(playArea);
 		add(menu);
 		
 		pack();
 	}
 	
 	/** A játéktér panel. */
-	private JPanel playgroundPanel = new PlaygroundPanel();
+	private JPanel playArea = new PlayArea();
 	/** Az aktuális menü. */
 	private JPanel menuPanel = null;
 	
