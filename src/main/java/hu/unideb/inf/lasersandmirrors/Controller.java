@@ -118,25 +118,14 @@ public class Controller {
 		
 		if(panel.getName().equals("playArea")){
 			
-			List<GameObjectLaser> lasers = new ArrayList<>();
-			List<GameObjectMirror> mirrors = new ArrayList<>();
-			List<GameObjectDiamond> diamonds = new ArrayList<>();
-			
-			// GameObject-ek szétválogatása;
-			for (GameObject gameObject : level.getAllGameObject()) {
-				if(gameObject instanceof GameObjectLaser){
-					lasers.add((GameObjectLaser)gameObject);
-				}else if(gameObject instanceof GameObjectMirror){
-					mirrors.add((GameObjectMirror)gameObject);
-				}else if(gameObject instanceof GameObjectDiamond){
-					diamonds.add((GameObjectDiamond)gameObject);
-				}
+			if(level.getName() == null){
+				return;
 			}
 			
 			List<LineSegment2D> reflectiveSurfaces = new ArrayList<>();
 			List<LineSegment2D> mattSurfaces = new ArrayList<>();
 			
-			for (GameObjectMirror mirror : mirrors) {
+			for (GameObjectMirror mirror : level.getMirrors()) {
 				reflectiveSurfaces.addAll(mirror.getReflectiveLines());
 				mattSurfaces.addAll(mirror.getMattLines());
 			}
@@ -153,7 +142,7 @@ public class Controller {
 			mattSurfaces.addAll(Arrays.asList(drawAreaSides));
 			
 			// lézer útjának kiszámolása
-			for (GameObjectLaser laser : lasers) {
+			for (GameObjectLaser laser : level.getLasers()) {
 				double remainingLength = Settings.LASERLINE_LENGTH;
 				double x = laser.getX();
 				double y = laser.getY();
@@ -223,7 +212,7 @@ public class Controller {
 			
 			// lézersugarak összeszedése
 			List<LineSegment2D> lines = new ArrayList<>();
-			for (GameObjectLaser laser : lasers) {
+			for (GameObjectLaser laser : level.getLasers()) {
 				GameObjectLaserline laserline = laser.getLaserLine();
 				List<java.awt.geom.Point2D> laserlinePoints = laserline.getPoints();
 				int size = laserlinePoints.size();
@@ -235,7 +224,7 @@ public class Controller {
 				}
 			}
 			// gyémántok csillogásának beállítása
-			for (GameObjectDiamond diamond : diamonds) {
+			for (GameObjectDiamond diamond : level.getDiamonds()) {
 				diamond.setLightened(false);
 				double radius = diamond.getRadius();
 				Point2D diamondOrigo = new Point2D(diamond.getX(), diamond.getY());

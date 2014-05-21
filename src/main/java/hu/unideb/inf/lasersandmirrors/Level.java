@@ -2,6 +2,9 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,4 +135,77 @@ public class Level {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * A pályán lévő lézer objektumok száma.
+	 * 
+	 * @return A pályán lévő lézer objektumok száma.
+	 */
+	public int getNumberOfLasers(){
+		return this.getLasers().size();
+	}
+	
+	/**
+	 * A pályán lévő gyémánt objektumok száma.
+	 * 
+	 * @return A pályán lévő gyémánt objektumok száma.
+	 */
+	public int getNumberOfDiamonds(){
+		return this.getDiamonds().size();
+	}
+	
+	/**
+	 * A pályán lévő tükör objektumok száma.
+	 * 
+	 * @return A pályán lévő tükör objektumok száma.
+	 */
+	public int getNumberOfMirrors(){
+		return this.getMirrors().size();
+	}
+	
+	/**
+	 * A pályán lévő lézer objektumok.
+	 * 
+	 * @return A pályán lévő lézer objektumok.
+	 */
+	public List<GameObjectLaser> getLasers(){
+		List<GameObjectLaser> gos = new ArrayList<>();
+		for (GameObject go : gameObjects) {
+			if(go instanceof GameObjectLaser){
+				gos.add((GameObjectLaser)go);
+			}
+		}
+		return gos;
+	}
+	
+	/**
+	 * A pályán lévő gyémánt objektumok.
+	 * 
+	 * @return A pályán lévő gyémánt objektumok.
+	 */
+	public List<GameObjectDiamond> getDiamonds(){
+		List<GameObjectDiamond> gos = new ArrayList<>();
+		for (GameObject go : gameObjects) {
+			if(go instanceof GameObjectDiamond){
+				gos.add((GameObjectDiamond)go);
+			}
+		}
+		return gos;
+	}
+	
+	/**
+	 * A pályán lévő tükör objektumok.
+	 * 
+	 * @return A pályán lévő tükör objektumok.
+	 */
+	public List<GameObjectMirror> getMirrors(){
+		List<GameObjectMirror> gos = new ArrayList<>();
+		for (GameObject go : gameObjects) {
+			if(go instanceof GameObjectMirror){
+				gos.add((GameObjectMirror)go);
+			}
+		}
+		return gos;
+	}
+	
 }
