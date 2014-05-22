@@ -45,6 +45,7 @@ public class WelcomeArea extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(800, 650));
 
         developersName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        developersName.setForeground(new java.awt.Color(0, 153, 255));
         developersName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         developersName.setText("By: Zoltán Kerekes");
         developersName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -53,7 +54,7 @@ public class WelcomeArea extends javax.swing.JPanel {
                 developersNameMouseClicked(evt);
             }
         });
-        developersName.setBounds(450, 370, 114, 17);
+        developersName.setBounds(460, 350, 114, 17);
         jLayeredPane1.add(developersName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         gameNameLabel.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N

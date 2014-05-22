@@ -16,7 +16,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-	<description>Egy egyszerű játék, melyben az a cél, hogy minden gyémántot világítsunk meg a lézerek segítségével.</description>
+	<description>
+		Egy egyszerű játék, melyben az a cél, hogy minden gyémántot világítsunk meg a lézerek segítségével.
+		A legfrissebb verzió itt található meg: https://github.com/Kezo90/LasersAndMirrors
+	</description>
 	<developers>
 		<developer>
 			<id>kezo90</id>

@@ -4,11 +4,12 @@ package hu.unideb.inf.lasersandmirrors.gui;
 import hu.unideb.inf.lasersandmirrors.Controller;
 import hu.unideb.inf.lasersandmirrors.DB;
 import hu.unideb.inf.lasersandmirrors.Game;
+import hu.unideb.inf.lasersandmirrors.Level;
 import hu.unideb.inf.lasersandmirrors.Settings;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.ToolTipManager;
+import org.slf4j.LoggerFactory;
 
 /**
  * Szerkesztő menü.
@@ -17,6 +18,9 @@ import javax.swing.ToolTipManager;
  */
 public class EditMenu extends javax.swing.JPanel implements GameMenu {
 
+	/** Az adott osztály naplózója. */
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(EditMenu.class);
+	
 	/**
 	 * Creates new form EditMenu.
 	 */
@@ -24,36 +28,15 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	public EditMenu() {
 		initComponents();
 		
-		// A kezdeti állapotban ne tudjuk betölteni a semmit
-		editButton.setEnabled(false);
-		
 		// tooltip
 		levelsTitleLabel.setToolTipText(
 				"<html>"
-					+ "<p style=\"margin-bottom:7px\">"
+					+ "<p>"
 						+ "<strong>Numbers in brackets:</strong> Lasers, Mirrors and Diamonds on the level."
 					+ "</p>"
 				+ "</html>");
-		ToolTipManager tooltipManager = ToolTipManager.sharedInstance();
-		tooltipManager.setInitialDelay(0);
-		tooltipManager.setDismissDelay(15_000);
-
-		// listaelemek módosíthatóvá tétele
-		levelsListItems = new DefaultListModel<>();
-		levelsList.setModel(levelsListItems);
 		
-		// listaelemek legyártása
-		List<DB.LevelInfo> levelInfos = DB.loadLevelInfos();
-		if(levelInfos != null){
-			for (DB.LevelInfo levelInfo : levelInfos) {
-				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s (%s, %s, %s)", 
-						levelInfo.name,
-						levelInfo.laserCount, 
-						levelInfo.mirrorCount, 
-						levelInfo.diamondCount)));
-			}
-		}
-		levelsListItems.add(0, new ListItem(null, Settings.EMPTY_LIST_ITEM_STRING));
+		updateList();
 	}
 
 	/**
@@ -73,7 +56,13 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
         saveContainer = new javax.swing.JPanel();
         editButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
+        outputField = new javax.swing.JTextField();
         goBackButton = new javax.swing.JButton();
+        addObjectLabel = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        toggleBtnSelect = new javax.swing.JToggleButton();
+        toggleBtnAdd = new javax.swing.JToggleButton();
+        toggleBtnRemove = new javax.swing.JToggleButton();
 
         setBackground(new java.awt.Color(227, 227, 227));
         setName("editMenu"); // NOI18N
@@ -130,10 +119,20 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
         });
 
         saveButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        saveButton.setText("Save");
+        saveButton.setText("Save as:");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
+            }
+        });
+
+        outputField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        outputField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                outputFieldKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                outputFieldKeyTyped(evt);
             }
         });
 
@@ -141,15 +140,20 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
         saveContainer.setLayout(saveContainerLayout);
         saveContainerLayout.setHorizontalGroup(
             saveContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(saveContainerLayout.createSequentialGroup()
-                .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(outputField))
         );
         saveContainerLayout.setVerticalGroup(
             saveContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(saveContainerLayout.createSequentialGroup()
+                .addComponent(editButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(saveContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveButton)
+                    .addComponent(outputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         goBackButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -161,6 +165,20 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
             }
         });
 
+        addObjectLabel.setText("Tools");
+
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Laser", "Mirror", "Diamond" }));
+
+        toggleBtnSelect.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        toggleBtnSelect.setText("Sel");
+
+        toggleBtnAdd.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        toggleBtnAdd.setText("Add");
+
+        toggleBtnRemove.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        toggleBtnRemove.setText("Rem");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,9 +187,19 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(levelsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(goBackButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(saveContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addObjectLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(toggleBtnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toggleBtnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toggleBtnRemove)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -183,7 +211,16 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
                 .addComponent(levelsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(addObjectLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(toggleBtnSelect)
+                    .addComponent(toggleBtnAdd)
+                    .addComponent(toggleBtnRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(goBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -210,6 +247,7 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 		} else{
 			Controller.loadLevel(levelName);
 		}
+		updateSaveButtonStatus();
     }//GEN-LAST:event_editButtonActionPerformed
 
 	/**
@@ -220,7 +258,29 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	 * @param evt A kiváltó esemény.
 	 */
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO: save button
+        String levelName = ((ListItem)levelsList.getSelectedValue()).getValue();
+		String outputName = outputField.getText().trim();
+		if(outputName == null || outputName.equals(""))
+			return;
+		if(isLevelExistsInLocalList(outputName)){
+			showWarningLevelExists();
+			return;
+		}
+		try{
+			if(DB.isLevelExists(outputName)){
+				showWarningLevelExists();
+				return;
+			}
+		} catch (SQLException ex) {
+			log.warn(String.format("Not possible to known: level(%s) exists or not.", outputName));
+			return;
+		}
+		Controller.getCurrentLevel().setName(outputName);
+		Controller.saveCurrentLevel();
+		if(levelName != null){
+			DB.removeLevel(levelName);
+		}
+		updateList();
     }//GEN-LAST:event_saveButtonActionPerformed
 
 	/**
@@ -230,20 +290,44 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	 * @param evt A kiváltó esemény.
 	 */
     private void levelsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_levelsListValueChanged
-		JList list = (JList)evt.getSource();
-		editButton.setEnabled(list.getSelectedIndex() != -1);
+		editButton.setEnabled(levelsList.getSelectedIndex() != -1);
+		
+		if(levelsList.getSelectedValue() != null){
+			String selectedValue = ((ListItem)levelsList.getSelectedValue()).getValue();
+			if(selectedValue == null){
+				outputField.setText("");
+			} else {
+				outputField.setText(selectedValue);
+			}
+		}
+		
+		updateSaveButtonStatus();
     }//GEN-LAST:event_levelsListValueChanged
 
+    private void outputFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_outputFieldKeyTyped
+        updateSaveButtonStatus();
+    }//GEN-LAST:event_outputFieldKeyTyped
+
+    private void outputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_outputFieldKeyReleased
+        updateSaveButtonStatus();
+    }//GEN-LAST:event_outputFieldKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel addObjectLabel;
     private javax.swing.JButton editButton;
     private javax.swing.JButton goBackButton;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JPanel levelsContainer;
     private javax.swing.JList levelsList;
     private javax.swing.JScrollPane levelsListScrollPane;
     private javax.swing.JLabel levelsTitleLabel;
+    private javax.swing.JTextField outputField;
     private javax.swing.JButton saveButton;
     private javax.swing.JPanel saveContainer;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JToggleButton toggleBtnAdd;
+    private javax.swing.JToggleButton toggleBtnRemove;
+    private javax.swing.JToggleButton toggleBtnSelect;
     // End of variables declaration//GEN-END:variables
 
 	/**
@@ -262,11 +346,69 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	
 	/**
 	 * Frissíti a felületet aszerint, hogy teljesíthető-e az aktuális pálya.
-	 * 
-	 * @param status Teljesíthető az aktuális pálya?
 	 */
-	public void updateByGameAchieveableStatus(boolean status){
-		saveButton.setEnabled(status);
+	public void updateSaveButtonStatus(){
+		Level level = Controller.getCurrentLevel();
+		int selectedIndex = levelsList.getSelectedIndex();
+		if(level == null || level.getNumberOfDiamonds() == 0
+				|| level.getNumberOfLasers() == 0
+				|| selectedIndex == -1 
+				|| outputField.getText().trim().equals("")){
+			saveButton.setEnabled(false);
+		} else {
+			saveButton.setEnabled(true);
+		}
+	}
+	
+	/**
+	 * Le lehet kérdezni, hogy a letöltött listában szerepel-e 
+	 * a paraméterül kapott néven pálya.
+	 * 
+	 * @param levelName A pálya neve.
+	 * @return Igaz, ha létezik; hamis, ha nem.
+	 */
+	private boolean isLevelExistsInLocalList(String levelName){
+		for (int i = 1; i < levelsListItems.size(); i++) {
+			if(levelsListItems.get(i).getValue().equals(levelName))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Megjelenít egy üzenetet a felhasználó számára, miszerint az adott néven
+	 * már létezik pálya.
+	 */
+	private void showWarningLevelExists(){
+		// TODO: warning "Another level exists with same name."
+	}
+	// TODO objektumok pakolása
+	
+	/**
+	 * A listaelemeket legyártja az adatbázisbeli adatok szerint.
+	 */
+	@SuppressWarnings("unchecked")
+	private void updateList(){
+		// A kezdeti állapotban ne tudjuk betölteni vagy menteni
+		editButton.setEnabled(false);
+		saveButton.setEnabled(false);
+		
+		// listaelemek módosíthatóvá tétele
+		levelsListItems = new DefaultListModel<>();
+		levelsList.setModel(levelsListItems);
+		
+		// listaelemek legyártása
+		List<DB.LevelInfo> levelInfos = DB.loadLevelInfos();
+		if(levelInfos != null){
+			for (DB.LevelInfo levelInfo : levelInfos) {
+				levelsListItems.addElement(new ListItem(levelInfo.name, String.format("%s (%s, %s, %s)", 
+						levelInfo.name,
+						levelInfo.laserCount, 
+						levelInfo.mirrorCount, 
+						levelInfo.diamondCount)));
+			}
+		}
+		levelsListItems.add(0, new ListItem(null, Settings.EMPTY_LIST_ITEM_STRING));
 	}
 
 	@Override

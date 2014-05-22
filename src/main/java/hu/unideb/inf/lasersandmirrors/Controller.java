@@ -151,11 +151,6 @@ public class Controller {
 					break;
 				
 				case "editMenu":
-					EditMenu editMenu = (EditMenu)menu;
-					// edit gomb állapotának frissítése
-					editMenu.updateByGameAchieveableStatus(
-							level.getNumberOfDiamonds() > 0 &&
-							level.getNumberOfLasers() > 0);
 					break;
 			}
 		}
