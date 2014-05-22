@@ -1,8 +1,29 @@
-A játék irányítása:
-===================
- - Játékelem kijelölése: 
-       Egyszer rá kell kattintani egérrel.
- - Kijelölt játékelem mozgatása: 
-       Rá kell kattintani mégegyszer és mielőtt elengednénk az egérgombot, addig lehet mozgatni.
- - Kijelölt játékelem forgatása: 
-       Az elemen kívülre kattintva, az elem körüli egérmozgással addig, míg el nem engedjük az egérgombot.
+Installation:
+======================================================
+ * Relational database required! MySQL 5.5 recommended.
+
+ * Execute SQL queries contained in <project directory>/sql/*.sql files.
+
+ * Require Apache Maven 3
+
+
+Run:
+======================================================
+ * Run from terminal/command line (choose one):
+
+    * mvn process-classes exec:exec
+
+    * mvn package && java -jar ./target/lasers-and-mirrors-0.1.jar
+
+
+Control:
+======================================================
+ * Select an object: click on it.
+
+ * Rotate selected object: click outer of the object and turn around the mouse pointer while holding down the mouse button.
+
+ * Drag selected object: click on it again and drag it.
+
+ * Keybindings:
+
+    * Escape: go back to parent menu.
