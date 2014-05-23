@@ -36,6 +36,7 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 					+ "</p>"
 				+ "</html>");
 		
+		setEditorAction(EditorAction.SELECT);
 		updateList();
 	}
 
@@ -58,11 +59,12 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
         saveButton = new javax.swing.JButton();
         outputField = new javax.swing.JTextField();
         goBackButton = new javax.swing.JButton();
+        toolsContainer = new javax.swing.JPanel();
         addObjectLabel = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
         toggleBtnSelect = new javax.swing.JToggleButton();
         toggleBtnAdd = new javax.swing.JToggleButton();
         toggleBtnRemove = new javax.swing.JToggleButton();
+        objectTypeSelectorComboBox = new javax.swing.JComboBox();
 
         setBackground(new java.awt.Color(227, 227, 227));
         setName("editMenu"); // NOI18N
@@ -165,19 +167,64 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
             }
         });
 
-        addObjectLabel.setText("Tools");
+        toolsContainer.setOpaque(false);
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Laser", "Mirror", "Diamond" }));
+        addObjectLabel.setText("Tools");
 
         toggleBtnSelect.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         toggleBtnSelect.setText("Sel");
+        toggleBtnSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleBtnSelectActionPerformed(evt);
+            }
+        });
 
         toggleBtnAdd.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         toggleBtnAdd.setText("Add");
+        toggleBtnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleBtnAddActionPerformed(evt);
+            }
+        });
 
         toggleBtnRemove.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         toggleBtnRemove.setText("Rem");
+        toggleBtnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleBtnRemoveActionPerformed(evt);
+            }
+        });
+
+        objectTypeSelectorComboBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectTypeSelectorComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Laser", "Mirror", "Diamond" }));
+
+        javax.swing.GroupLayout toolsContainerLayout = new javax.swing.GroupLayout(toolsContainer);
+        toolsContainer.setLayout(toolsContainerLayout);
+        toolsContainerLayout.setHorizontalGroup(
+            toolsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(objectTypeSelectorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(toolsContainerLayout.createSequentialGroup()
+                .addComponent(toggleBtnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toggleBtnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toggleBtnRemove))
+            .addGroup(toolsContainerLayout.createSequentialGroup()
+                .addComponent(addObjectLabel)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        toolsContainerLayout.setVerticalGroup(
+            toolsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolsContainerLayout.createSequentialGroup()
+                .addComponent(addObjectLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(toolsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(toggleBtnSelect)
+                    .addComponent(toggleBtnAdd)
+                    .addComponent(toggleBtnRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(objectTypeSelectorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -187,19 +234,10 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(levelsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                     .addComponent(goBackButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(saveContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(addObjectLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(toggleBtnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggleBtnAdd)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggleBtnRemove)))
+                    .addComponent(toolsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -212,14 +250,7 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(addObjectLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toggleBtnSelect)
-                    .addComponent(toggleBtnAdd)
-                    .addComponent(toggleBtnRemove))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(toolsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(goBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -312,15 +343,27 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
         updateSaveButtonStatus();
     }//GEN-LAST:event_outputFieldKeyReleased
 
+    private void toggleBtnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnSelectActionPerformed
+        setEditorAction(EditorAction.SELECT);
+    }//GEN-LAST:event_toggleBtnSelectActionPerformed
+
+    private void toggleBtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnAddActionPerformed
+        setEditorAction(EditorAction.ADD);
+    }//GEN-LAST:event_toggleBtnAddActionPerformed
+
+    private void toggleBtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnRemoveActionPerformed
+        setEditorAction(EditorAction.REMOVE);
+    }//GEN-LAST:event_toggleBtnRemoveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel addObjectLabel;
     private javax.swing.JButton editButton;
     private javax.swing.JButton goBackButton;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JPanel levelsContainer;
     private javax.swing.JList levelsList;
     private javax.swing.JScrollPane levelsListScrollPane;
     private javax.swing.JLabel levelsTitleLabel;
+    private javax.swing.JComboBox objectTypeSelectorComboBox;
     private javax.swing.JTextField outputField;
     private javax.swing.JButton saveButton;
     private javax.swing.JPanel saveContainer;
@@ -328,11 +371,10 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
     private javax.swing.JToggleButton toggleBtnAdd;
     private javax.swing.JToggleButton toggleBtnRemove;
     private javax.swing.JToggleButton toggleBtnSelect;
+    private javax.swing.JPanel toolsContainer;
     // End of variables declaration//GEN-END:variables
 
-	/**
-	 * A listaelemek, melyeket a lista létezésekor is tudunk szerkeszteni.
-	 */
+	/** A listaelemek, melyeket a lista létezésekor is tudunk szerkeszteni. */
 	private DefaultListModel<ListItem> levelsListItems;
 	
 	/**
@@ -416,5 +458,47 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 		Controller.startNewLevel(null);
 		Game.frame.setGameArea(new WelcomeArea());
 		Game.frame.setMenu(new MainMenu());
+	}
+	
+	/**
+	 * Szerkesztői műveletek típusai.
+	 */
+	private enum EditorAction{
+		SELECT,
+		ADD,
+		REMOVE,
+	}
+	
+	/** Az aktuálisan beállított szerkesztői művelet. */
+	private EditorAction editorAction;
+	
+	/**
+	 * A szerkesztői műveletet állíthatjuk be.
+	 * 
+	 * @param action A művelet típusa.
+	 */
+	private void setEditorAction(EditorAction action){
+		toggleBtnAdd.setSelected(false);
+		toggleBtnRemove.setSelected(false);
+		toggleBtnSelect.setSelected(false);
+		objectTypeSelectorComboBox.setEnabled(false);
+		
+		switch(action){
+			case SELECT:
+				toggleBtnSelect.setSelected(true);
+				break;
+				
+			case ADD:
+				toggleBtnAdd.setSelected(true);
+				objectTypeSelectorComboBox.setEnabled(true);
+				break;
+				
+			case REMOVE:
+				toggleBtnRemove.setSelected(true);
+				break;
+				
+			default:
+				log.warn("Unhandled " + EditorAction.class.getName());
+		}
 	}
 }
