@@ -7,6 +7,7 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import java.awt.Color;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,6 +36,9 @@ public class DB {
 	/** A játék adatbázisának neve. */
 	private static final String DB = "lasers_and_mirrors";
 	
+	/** Az adatbázis típusa MySQL vagy SQLite. */
+	private static final boolean MYSQL = false;
+	
 	/**
 	 * Az adatbáziskapcsolat létrehozása.
 	 * 
@@ -47,13 +51,25 @@ public class DB {
 			return true;
 		}
 		try{
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "lasersandmirrors", "123");
-			connection.createStatement().executeUpdate("USE " + DB);
+			
+			if(MYSQL){
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "lasersandmirrors", "123");
+				connection.createStatement().executeUpdate("USE " + DB);
+			} else {
+				Class.forName("org.sqlite.JDBC").newInstance();
+				URL dbFileName = Object.class.getResource("/data.sqlite");
+				connection = DriverManager.getConnection("jdbc:sqlite:" + dbFileName);
+				connection.createStatement().execute("PRAGMA foreign_keys = ON");
+			}
 			log.info("Database connection successfully established.");
 			return true;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-			log.error("MySQL JDBC Driver not found.");
+			if(MYSQL){
+				log.error("MySQL JDBC Driver not found.");
+			} else {
+				log.error("SQLite JDBC Driver not found.");
+			}
 			return false;
 		} catch (SQLException ex) {
 			log.error("Failed to connect to database.");
