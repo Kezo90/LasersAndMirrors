@@ -1,4 +1,10 @@
-Installation:
+In a nutshell
+======================================================
+ * This is a simple game where the goal to illuminate all diamonds. 
+ * It's have a simple editor.
+
+
+Installation
 ======================================================
  * Require Apache Maven 3.0+
 
@@ -11,7 +17,7 @@ Installation:
    * Set DB.MYSQL value to true in the source.
 
 
-Run:
+Run
 ======================================================
  * From terminal/command line (choose one):
 
@@ -22,7 +28,7 @@ Run:
      * Not works with packaged SQLite database.
 
 
-Control:
+Control
 ======================================================
  * Select an object: click on it.
 
