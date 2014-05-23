@@ -293,12 +293,12 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 		String outputName = outputField.getText().trim();
 		if(outputName == null || outputName.equals(""))
 			return;
-		if(isLevelExistsInLocalList(outputName)){
+		if(isLevelExistsInLocalList(outputName) && !levelName.equals(outputName)){
 			showWarningLevelExists();
 			return;
 		}
 		try{
-			if(DB.isLevelExists(outputName)){
+			if(DB.isLevelExists(outputName) && !levelName.equals(outputName)){
 				showWarningLevelExists();
 				return;
 			}
@@ -306,11 +306,12 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 			log.warn(String.format("Not possible to known: level(%s) exists or not.", outputName));
 			return;
 		}
+		
 		Controller.getCurrentLevel().setName(outputName);
-		Controller.saveCurrentLevel();
 		if(levelName != null){
 			DB.removeLevel(levelName);
 		}
+		Controller.saveCurrentLevel();
 		updateList();
     }//GEN-LAST:event_saveButtonActionPerformed
 
