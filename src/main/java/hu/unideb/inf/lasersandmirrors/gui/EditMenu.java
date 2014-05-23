@@ -335,22 +335,48 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 		updateSaveButtonStatus();
     }//GEN-LAST:event_levelsListValueChanged
 
+	/**
+	 * Gépelés történt a pálya új nevét tartalmazó beviteli mezőn.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void outputFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_outputFieldKeyTyped
         updateSaveButtonStatus();
     }//GEN-LAST:event_outputFieldKeyTyped
 
+	/**
+	 * Felengedtek egy billentyűt, mikután gépeltek 
+	 * a pálya új nevét tartalmazó beviteli mezőbe.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void outputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_outputFieldKeyReleased
         updateSaveButtonStatus();
     }//GEN-LAST:event_outputFieldKeyReleased
 
+	/**
+	 * A kijelölő gombot megnyomták.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void toggleBtnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnSelectActionPerformed
         setEditorAction(EditorAction.SELECT);
     }//GEN-LAST:event_toggleBtnSelectActionPerformed
 
+	/**
+	 * A hozzáadó gombot megnyomták.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void toggleBtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnAddActionPerformed
         setEditorAction(EditorAction.ADD);
     }//GEN-LAST:event_toggleBtnAddActionPerformed
 
+	/**
+	 * A törlő gombot megnyomták.
+	 * 
+	 * @param evt A kiváltó esemény.
+	 */
     private void toggleBtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleBtnRemoveActionPerformed
         setEditorAction(EditorAction.REMOVE);
     }//GEN-LAST:event_toggleBtnRemoveActionPerformed

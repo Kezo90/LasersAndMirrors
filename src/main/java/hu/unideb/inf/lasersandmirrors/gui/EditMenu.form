@@ -221,7 +221,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="objectTypeSelectorComboBox" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="toggleBtnSelect" max="32767" attributes="0"/>
+                  <Component id="toggleBtnSelect" pref="62" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="toggleBtnAdd" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
