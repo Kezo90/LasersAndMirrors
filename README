@@ -1,8 +1,10 @@
 Installation:
 ======================================================
- * Relational database required! MySQL 5.5 recommended.
+ * (Optional) MySQL database : 
 
- * Execute SQL queries contained in <project directory>/sql/*.sql files.
+   * Version 5.5 recommended.
+
+   * Execute SQL queries contained in <project directory>/sql/mysql_*.sql files.
 
  * Require Apache Maven 3
 
@@ -14,6 +16,8 @@ Run:
     * mvn process-classes exec:exec
 
     * mvn package && java -jar ./target/lasers-and-mirrors-0.1.jar
+
+      * Not works with packaged SQLite database.
 
 
 Control:
