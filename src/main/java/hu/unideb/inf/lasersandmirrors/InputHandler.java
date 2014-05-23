@@ -132,7 +132,7 @@ public class InputHandler implements MouseInputListener, KeyEventDispatcher{
 				double newAngle = Math.toDegrees(newRay.horizontalAngle());
 				double angleDiff = newAngle - oldAngle;
 				
-				// ne legyenek ugrások 0 forknál
+				// ne legyenek ugrások 0 foknál
 				if(angleDiff > 180){
 					angleDiff = angleDiff - 360;
 				} else if(angleDiff < - 180){
@@ -161,10 +161,6 @@ public class InputHandler implements MouseInputListener, KeyEventDispatcher{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
-	
-	
-	
-	
 	
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
