@@ -3,8 +3,6 @@ package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
-import java.awt.KeyEventDispatcher;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -18,10 +16,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kerekes Zoltán
  */
-public class InputHandler implements MouseInputListener, KeyEventDispatcher{
+public class MouseHandler implements MouseInputListener {
 	
-	/** Az {@link InputHandler} osztály naplózója. */
-	private static final Logger log = LoggerFactory.getLogger(InputHandler.class);
+	/** Az {@link MouseHandler} osztály naplózója. */
+	private static final Logger log = LoggerFactory.getLogger(MouseHandler.class);
 	
 	/** Az aktuálisan kijelölt objektum. */
 	private static InteractiveGO selectedGO = null;
@@ -161,17 +159,5 @@ public class InputHandler implements MouseInputListener, KeyEventDispatcher{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
-	
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		if(e.getID() == KeyEvent.KEY_RELEASED){
-			switch(e.getKeyCode()){
-				case KeyEvent.VK_ESCAPE:
-					Game.frame.getMenu().goBack();
-					break;
-			}
-		}
-		return false;
-	}
-		
+
 }

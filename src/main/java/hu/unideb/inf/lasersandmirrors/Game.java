@@ -65,6 +65,6 @@ public class Game {
 		
 		// billentyűleütés kezelő regisztrálása
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		manager.addKeyEventDispatcher(new InputHandler());
+		manager.addKeyEventDispatcher(new KeystrokeHandler());
 	}
 }

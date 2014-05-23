@@ -34,9 +34,6 @@ public class Controller {
 	/** Az adott osztály naplózója. */
 	private static final Logger log = LoggerFactory.getLogger(Controller.class);
 	
-	/** A felhasználói interakciókat kezelő osztály egyetlen példánya. */
-	private static final InputHandler imputHandler = new InputHandler();
-	
 	/** A frissítéshez használt időzítő. */
 	private static final Timer timer;
 	
@@ -81,6 +78,7 @@ public class Controller {
 		
 		timer.start();
 		
+		MouseHandler imputHandler = new MouseHandler();
 		gameArea.addMouseListener(imputHandler);
 		gameArea.addMouseMotionListener(imputHandler);
 	}
