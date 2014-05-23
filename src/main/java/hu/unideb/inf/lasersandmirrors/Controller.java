@@ -5,7 +5,6 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
-import hu.unideb.inf.lasersandmirrors.gui.EditMenu;
 import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
 import hu.unideb.inf.lasersandmirrors.gui.GameMenu;
 import hu.unideb.inf.lasersandmirrors.gui.PlayMenu;
