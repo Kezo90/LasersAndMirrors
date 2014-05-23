@@ -1,25 +1,25 @@
 Installation:
 ======================================================
- * (Optional) MySQL database : 
+ * Require Apache Maven 3.0+
+
+ * (Optional) MySQL database:
 
    * Version 5.5 recommended.
 
    * Execute SQL queries contained in <project directory>/sql/mysql_*.sql files.
 
-   * Update DB.MYSQL value in the source.
-
- * Require Apache Maven 3
+   * Set DB.MYSQL value to true in the source.
 
 
 Run:
 ======================================================
- * Run from terminal/command line (choose one):
+ * From terminal/command line (choose one):
 
-    * mvn process-classes exec:exec
+   * mvn process-classes exec:exec
 
-    * mvn package && java -jar ./target/lasers-and-mirrors-0.1.jar
+   * mvn package && java -jar ./target/lasers-and-mirrors-0.1.jar
 
-      * Not works with packaged SQLite database.
+     * Not works with packaged SQLite database.
 
 
 Control:
