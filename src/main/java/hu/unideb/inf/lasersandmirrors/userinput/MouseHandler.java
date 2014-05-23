@@ -1,6 +1,8 @@
 
-package hu.unideb.inf.lasersandmirrors;
+package hu.unideb.inf.lasersandmirrors.userinput;
 
+import hu.unideb.inf.lasersandmirrors.Controller;
+import hu.unideb.inf.lasersandmirrors.Settings;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
 import java.awt.event.MouseEvent;

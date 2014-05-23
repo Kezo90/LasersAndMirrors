@@ -1,6 +1,7 @@
 
 package hu.unideb.inf.lasersandmirrors;
 
+import hu.unideb.inf.lasersandmirrors.userinput.KeystrokeHandler;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;

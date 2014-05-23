@@ -1,6 +1,7 @@
 
-package hu.unideb.inf.lasersandmirrors;
+package hu.unideb.inf.lasersandmirrors.userinput;
 
+import hu.unideb.inf.lasersandmirrors.Game;
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
 
