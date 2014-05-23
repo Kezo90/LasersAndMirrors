@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A felhasználói interakciókat kezelő osztály.
+ * Egérműveleteket kezelő osztály.
  *
  * @author Kerekes Zoltán
  */

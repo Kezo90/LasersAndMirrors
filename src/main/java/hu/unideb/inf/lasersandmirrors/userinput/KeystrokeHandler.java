@@ -6,7 +6,9 @@ import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
 
 /**
- * @author KZ - Kerekes Zoltán (NK: x5rj0x)
+ * Billentyűleütéseket kezelő osztály.
+ * 
+ * @author Kerekes Zoltán
  */
 public class KeystrokeHandler implements KeyEventDispatcher {
 	
