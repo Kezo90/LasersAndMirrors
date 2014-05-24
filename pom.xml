@@ -8,7 +8,7 @@
 
 	<groupId>hu.unideb.inf</groupId>
 	<artifactId>lasers-and-mirrors</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>jar</packaging>
 	
 	<name>LasersAndMirrors</name>
