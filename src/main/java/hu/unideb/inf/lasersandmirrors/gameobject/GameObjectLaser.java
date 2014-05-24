@@ -198,6 +198,10 @@ public class GameObjectLaser extends BitmapGO implements GraphicBitmap, Interact
 
 		@Override
 		public void addPoint(Point2D point){
+			if(this.points.size() > 0 && 
+					point.distance(this.points.get(this.points.size() - 1)) < 0.1){
+				return;
+			}
 			this.points.add(point);
 		}
 
@@ -207,7 +211,7 @@ public class GameObjectLaser extends BitmapGO implements GraphicBitmap, Interact
 		 * @param point A törtvonal végéhez adott pont. (math.geom2d.Point2D)
 		 */
 		public void addPoint(math.geom2d.Point2D point){
-			this.points.add(new Point2D.Double(point.x(), point.y()));
+			this.addPoint(new Point2D.Double(point.x(), point.y()));
 		}
 
 		@Override
