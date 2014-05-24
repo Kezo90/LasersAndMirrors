@@ -199,7 +199,7 @@ public class GameObjectLaser extends BitmapGO implements GraphicBitmap, Interact
 		@Override
 		public void addPoint(Point2D point){
 			if(this.points.size() > 0 && 
-					point.distance(this.points.get(this.points.size() - 1)) < 0.1){
+					point.distance(this.points.get(this.points.size() - 1)) < 0.01){
 				return;
 			}
 			this.points.add(point);

@@ -139,7 +139,6 @@ public class Controller {
 	 * A játékbeli történések frissítése.
 	 */
 	private static void updateGame(){
-		JPanel gameArea = getGameArea();
 		if(gameArea.getName().equals("playArea")){
 			
 			updateLaserLinePaths();
@@ -238,9 +237,15 @@ public class Controller {
 			laserline.clearPoints();
 			laserline.addPoint(ray.firstPoint());
 			LineSegment2D lastActor = null;
+			int iterations = 0;
+			
 			// Amíg ki nem rajzoltuk a teljes hosszúságú lézervonalat...
+			// (Vagy el nem értük a maximális iterációszámot.)
 			drawLineUntilTooShort:
 			while(remainingLength > 0){
+				if(iterations++ > Settings.MAX_REFLECTIONS_PER_LASER){
+					break;
+				}
 				List<Intersection> intersections = new ArrayList<>();					
 				// tükröződő metszéspontok összeszedése
 				for (LineSegment2D reflectiveSurface : reflectiveSurfaces) {
