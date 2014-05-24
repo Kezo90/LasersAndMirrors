@@ -1,7 +1,7 @@
 In a nutshell
 ======================================================
  * This is a simple game where the goal to illuminate all diamonds. 
- * (Very soon) It's have a simple editor.
+ * It's have a simple editor!
 
 Installation
 ======================================================

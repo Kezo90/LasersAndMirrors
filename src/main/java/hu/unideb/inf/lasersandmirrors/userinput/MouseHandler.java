@@ -24,7 +24,7 @@ public class MouseHandler implements MouseInputListener {
 	private static final Logger log = LoggerFactory.getLogger(MouseHandler.class);
 	
 	/** Az aktuálisan kijelölt objektum. */
-	private static InteractiveGO selectedGO = null;
+	private InteractiveGO selectedGO = null;
 
 	/**
 	 * Az objektumon végrehajtás alatt álló egérművelet típusai.
@@ -37,13 +37,13 @@ public class MouseHandler implements MouseInputListener {
 	}
 	
 	/** Az objektumon végrehajtás alatt álló egérművelet típusa. */
-	private static MouseActionType mouseActionType = null;
+	private MouseActionType mouseActionType = null;
 	
 	/** Az objektum és az egérkurzor pozíciója közti különbség a mozgatás kezdetekor. */
-	private static Point2D draggingDiff = null;
+	private Point2D draggingDiff = null;
 	
 	/** Az egérkurzor helye az előző eseménynél. */
-	private static Point2D mouseLastPos = null;
+	private Point2D mouseLastPos = null;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {

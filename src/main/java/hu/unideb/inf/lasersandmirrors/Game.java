@@ -2,12 +2,8 @@
 package hu.unideb.inf.lasersandmirrors;
 
 import hu.unideb.inf.lasersandmirrors.userinput.KeystrokeHandler;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
 import hu.unideb.inf.lasersandmirrors.gui.PlaygroundFrame;
-import java.awt.Color;
 import java.awt.KeyboardFocusManager;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -16,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
- * PENDING: v0.2: falak, színek
+ * PENDING: v0.2: falak, színek, nem mozgatható tükrök
  * TODO: pályák legyártása
  */
 
@@ -56,13 +52,6 @@ public class Game {
 		// ablak megnyitása
 		frame = new PlaygroundFrame();
 		frame.setVisible(true);
-		
-		// TODO: tesztobjektumok
-		Controller.getCurrentLevel().addGameObject(new GameObjectLaser(10, 20, 50, Color.RED));
-		Controller.getCurrentLevel().addGameObject(new GameObjectDiamond(300, 320, 0));
-		Controller.getCurrentLevel().addGameObject(new GameObjectMirror(500, 200, 40));
-		Controller.getCurrentLevel().setName("newTest");
-		Controller.saveCurrentLevel();
 		
 		// billentyűleütés kezelő regisztrálása
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();

@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.event.MouseInputListener;
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.line.Ray2D;
@@ -45,7 +46,10 @@ public class Controller {
 	}
 	
 	/** Az aktuális játéktér. */
-	private static JPanel drawArea = null;
+	private static JPanel gameArea = null;
+	
+	/** A játéktér aktuális egérkezelője. */
+	private static MouseInputListener gameAreaMouseListener;
 	
 	/**
 	 * Az aktuális játéktér beállítása.
@@ -58,7 +62,7 @@ public class Controller {
 	 */
 	public static void setGameArea(JPanel gameArea){
 		timer.stop();
-		Controller.drawArea = gameArea;
+		Controller.gameArea = gameArea;
 		
 		// előző listener eltávolítása
 		ActionListener[] listenersToRemove = timer.getActionListeners();
@@ -76,11 +80,9 @@ public class Controller {
 			}
 		});
 		
-		timer.start();
+		replaceGameAreaMouseListener(new MouseHandler());
 		
-		MouseHandler imputHandler = new MouseHandler();
-		gameArea.addMouseListener(imputHandler);
-		gameArea.addMouseMotionListener(imputHandler);
+		timer.start();
 	}
 	
 	/**
@@ -93,7 +95,15 @@ public class Controller {
 	 * @return A aktuális játéktér.
 	 */
 	public static JPanel getGameArea(){
-		return drawArea;
+		return gameArea;
+	}
+	
+	public static void replaceGameAreaMouseListener(MouseInputListener newListener){
+		gameArea.removeMouseListener(gameAreaMouseListener);
+		gameArea.removeMouseMotionListener(gameAreaMouseListener);
+		gameAreaMouseListener = newListener;
+		gameArea.addMouseListener(newListener);
+		gameArea.addMouseMotionListener(newListener);
 	}
 	
 	/**
@@ -109,10 +119,10 @@ public class Controller {
 	 */
 	public static Point2D limitGOPositionToCurrentGameArea(double x, double y){
 		double r = Settings.GO_SELECTION_RADIUS;
-		x = Math.max(x, drawArea.getX()      + r);
-		x = Math.min(x, drawArea.getWidth()  - r);
-		y = Math.max(y, drawArea.getY()      + r);
-		y = Math.min(y, drawArea.getHeight() - r);
+		x = Math.max(x, gameArea.getX()      + r);
+		x = Math.min(x, gameArea.getWidth()  - r);
+		y = Math.max(y, gameArea.getY()      + r);
+		y = Math.min(y, gameArea.getHeight() - r);
 		return new Point2D(x, y);
 	}
 	

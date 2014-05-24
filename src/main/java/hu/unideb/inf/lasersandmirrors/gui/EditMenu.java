@@ -6,6 +6,18 @@ import hu.unideb.inf.lasersandmirrors.DB;
 import hu.unideb.inf.lasersandmirrors.Game;
 import hu.unideb.inf.lasersandmirrors.Level;
 import hu.unideb.inf.lasersandmirrors.Settings;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
+import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectOther;
+import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
+import hu.unideb.inf.lasersandmirrors.userinput.CallbackPoint2D;
+import hu.unideb.inf.lasersandmirrors.userinput.CallbackVoid;
+import hu.unideb.inf.lasersandmirrors.userinput.DeleteGOMouseHandler;
+import hu.unideb.inf.lasersandmirrors.userinput.InsertGOMouseHandler;
+import hu.unideb.inf.lasersandmirrors.userinput.MouseHandler;
+import java.awt.geom.Point2D;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -36,6 +48,7 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 					+ "</p>"
 				+ "</html>");
 		
+		setGOsDraggable();
 		setEditorAction(EditorAction.SELECT);
 		updateList();
 	}
@@ -277,6 +290,7 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 			Controller.startNewLevel(null);
 		} else{
 			Controller.loadLevel(levelName);
+			setGOsDraggable();
 		}
 		updateSaveButtonStatus();
     }//GEN-LAST:event_editButtonActionPerformed
@@ -451,7 +465,6 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	private void showWarningLevelExists(){
 		// TODO: warning "Another level exists with same name."
 	}
-	// TODO objektumok pakolása
 	
 	/**
 	 * A listaelemeket legyártja az adatbázisbeli adatok szerint.
@@ -510,22 +523,76 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 		toggleBtnSelect.setSelected(false);
 		objectTypeSelectorComboBox.setEnabled(false);
 		
+		if(editorAction == action){
+			return;
+		}
+		editorAction = action;
+		
 		switch(action){
 			case SELECT:
 				toggleBtnSelect.setSelected(true);
+				Controller.replaceGameAreaMouseListener(new MouseHandler());
 				break;
 				
 			case ADD:
 				toggleBtnAdd.setSelected(true);
 				objectTypeSelectorComboBox.setEnabled(true);
+				Controller.replaceGameAreaMouseListener(
+						new InsertGOMouseHandler(new CallbackPoint2D() {
+					@Override
+					public void callback(Point2D pt) {
+						GameObject go;
+						switch(objectTypeSelectorComboBox.getSelectedItem().toString()){
+							case "Diamond":
+								go = new GameObjectDiamond(pt.getX(), pt.getY(), 0);
+								break;
+								
+							case "Laser":
+								go = new GameObjectLaser(pt.getX(), pt.getY(), 0, Settings.DEFAULT_COLOR);
+								break;
+								
+							case "Mirror":
+								go = new GameObjectMirror(pt.getX(), pt.getY(), 0);
+								break;
+								
+							default:
+								go = new GameObjectOther();
+								log.warn("Unhandled GameObject type. Placed GO into level.");
+						}
+						if(go instanceof InteractiveGO){
+							((InteractiveGO)go).setDraggable(true);
+						}
+						Controller.getCurrentLevel().addGameObject(go);
+						updateSaveButtonStatus();
+					}
+				}));
 				break;
 				
 			case REMOVE:
 				toggleBtnRemove.setSelected(true);
+				Controller.replaceGameAreaMouseListener(
+						new DeleteGOMouseHandler(new CallbackVoid() {
+					@Override
+					public void callback() {
+						updateSaveButtonStatus();
+					}
+				}));
 				break;
 				
 			default:
 				log.warn("Unhandled " + EditorAction.class.getName());
+		}
+	}
+	
+	/**
+	 * Minden objektumot mozgathatóvá tesz.
+	 */
+	private void setGOsDraggable(){
+		for (GameObjectLaser laser : Controller.getCurrentLevel().getLasers()) {
+			laser.setDraggable(true);
+		}
+		for (GameObjectDiamond diamond : Controller.getCurrentLevel().getDiamonds()) {
+			diamond.setDraggable(true);
 		}
 	}
 }
