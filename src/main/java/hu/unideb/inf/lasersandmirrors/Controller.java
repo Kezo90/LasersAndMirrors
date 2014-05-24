@@ -98,6 +98,11 @@ public class Controller {
 		return gameArea;
 	}
 	
+	/**
+	 * Kicseréli a rajzterület egér-eseménykezelőjét.
+	 * 
+	 * @param newListener Az új egér-eseménykezelő.
+	 */
 	public static void replaceGameAreaMouseListener(MouseInputListener newListener){
 		gameArea.removeMouseListener(gameAreaMouseListener);
 		gameArea.removeMouseMotionListener(gameAreaMouseListener);

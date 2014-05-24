@@ -9,5 +9,11 @@ import java.awt.geom.Point2D;
  * @author Kerekes Zoltán
  */
 public interface CallbackPoint2D {
+	
+	/**
+	 * A visszahívandó függvény.
+	 * 
+	 * @param pt A visszaküldendő pont információ.
+	 */
 	public void callback(Point2D pt);
 }

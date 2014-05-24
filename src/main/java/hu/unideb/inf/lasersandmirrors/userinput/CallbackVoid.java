@@ -7,5 +7,9 @@ package hu.unideb.inf.lasersandmirrors.userinput;
  * @author Kerekes Zoltán
  */
 public interface CallbackVoid {
+	
+	/**
+	 * A visszahívandó függvény.
+	 */
 	public void callback();
 }
