@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 /*
  * PENDING: v0.2: falak, színek, nem mozgatható tükrök
- * TODO: pályák legyártása
  */
 
 /**
