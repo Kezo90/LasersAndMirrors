@@ -190,7 +190,7 @@ public class Controller {
 	
 	/**
 	 * Kiszámolja a lézerek útjait. 
-	 * (Az eredményt a {@link GameObjectLaserline} objektumokban tárolja le.)
+	 * (Az eredményt a {@link GameObjectLaser#laserLine} objektumokban tárolja le.)
 	 */
 	private static void updateLaserLinePaths(){
 		List<LineSegment2D> reflectiveSurfaces = new ArrayList<>();
