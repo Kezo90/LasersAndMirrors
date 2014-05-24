@@ -4,7 +4,6 @@ package hu.unideb.inf.lasersandmirrors;
 import hu.unideb.inf.lasersandmirrors.userinput.MouseHandler;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gui.GameFrame;
 import hu.unideb.inf.lasersandmirrors.gui.GameMenu;
@@ -220,7 +219,7 @@ public class Controller {
 			double y = laser.getY();
 			double rot = laser.getRotation() - 90;
 			Ray2D ray = new Ray2D(x, y, Math.toRadians(rot));
-			GameObjectLaserline laserline = laser.getLaserLine();
+			GameObjectLaser.Laserline laserline = laser.getLaserLine();
 			laserline.clearPoints();
 			laserline.addPoint(ray.firstPoint());
 			LineSegment2D lastActor = null;
@@ -291,7 +290,7 @@ public class Controller {
 	private static List<LineSegment2D> getLaserlineSegments(){
 		List<LineSegment2D> lines = new ArrayList<>();
 		for (GameObjectLaser laser : level.getLasers()) {
-			GameObjectLaserline laserline = laser.getLaserLine();
+			GameObjectLaser.Laserline laserline = laser.getLaserLine();
 			List<java.awt.geom.Point2D> laserlinePoints = laserline.getPoints();
 			int size = laserlinePoints.size();
 			for (int i = 0; i < size - 1; i++) {

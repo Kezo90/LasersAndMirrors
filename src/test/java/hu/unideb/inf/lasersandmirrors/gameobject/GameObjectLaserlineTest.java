@@ -18,7 +18,7 @@ public class GameObjectLaserlineTest {
 	
 	private final double DELTA = 1.0e-10;
 	private GameObjectLaser laser;
-	private GameObjectLaserline laserline;
+	private GameObjectLaser.Laserline laserline;
 	public GameObjectLaserlineTest() {
 	}
 	

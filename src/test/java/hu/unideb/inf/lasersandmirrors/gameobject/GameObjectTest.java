@@ -1,7 +1,6 @@
 
 package hu.unideb.inf.lasersandmirrors.gameobject;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -38,7 +37,6 @@ public class GameObjectTest {
 		gameObjects.add(new GameObjectDiamond());
 		gameObjects.add(new GameObjectLaser());
 		gameObjects.add(new GameObjectMirror());
-		gameObjects.add(new GameObjectLaserline(Color.yellow));
 		gameObjects.add(new GameObjectDiamond());
 	}
 	

@@ -4,7 +4,6 @@ package hu.unideb.inf.lasersandmirrors;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
-import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaserline;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectMirror;
 import hu.unideb.inf.lasersandmirrors.gameobject.InteractiveGO;
 import java.awt.Color;
@@ -56,7 +55,7 @@ public class RendererTest {
 		go1.setLightened(true);
 		gos.add(go1);
 		GameObjectLaser go2 = new GameObjectLaser(5, -4, 3.33, Color.GREEN);
-		GameObjectLaserline go2Laserline = go2.getLaserLine();
+		GameObjectLaser.Laserline go2Laserline = go2.getLaserLine();
 		go2Laserline.addPoint(new Point2D.Double(40, 80));
 		go2Laserline.addPoint(new Point2D.Double(80, 85));
 		gos.add(go2);

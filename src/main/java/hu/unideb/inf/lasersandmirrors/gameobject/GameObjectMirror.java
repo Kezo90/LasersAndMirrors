@@ -19,31 +19,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kerekes Zoltán
  */
-public class GameObjectMirror extends GameObject implements GraphicBitmap, InteractiveGO {
+public class GameObjectMirror extends BitmapGO implements GraphicBitmap, InteractiveGO {
 	
 	/** Az adott osztályon belüli naplózó. */
 	private static final Logger log = LoggerFactory.getLogger(GameObjectDiamond.class);
 	
-	/** Az objektum x koordinátája. */
-	private double x;
-	
-	/** Az objektum y koordinátája. */
-	private double y;
-	
-	/** Az objektum elforgatás fokban mérve. */
-	private double rotation;
-	
 	/** Az objetkum rasztergrafikus képe. */
 	private static BufferedImage image;
-	
-	/** A rasztergrafikus kép középpontjának x koordinátája. */
-	private static double bitmapCenterX;
-	
-	/** A rasztergrafikus kép középpontjának y koordinátája. */
-	private static double bitmapCenterY;
-	
-	/** Az objektum rasztergrafikus képének és tényleges méretének aránya. */
-	private double scale;
 	
 	/** Mozgatható? */
 	private boolean draggable;
@@ -57,13 +39,14 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap, Inter
 			URL resource = Object.class.getResource("/bitmaps/Mirror.png");
 			try{
 				image = ImageIO.read(resource);
-				bitmapCenterX = (double)image.getWidth() / 2.0;
-				bitmapCenterY = (double)image.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
 				log.error("Can't load bitmap: " + resource);
 			}
 		}
 		
+		bitmapCenterX = (double)image.getWidth() / 2.0;
+		bitmapCenterY = (double)image.getHeight() / 2.0;
+		this.depth = Graphic.DEPTH_MIRROR;
 		this.scale = 75.0 / (double)image.getWidth();
 		this.rotatable = true;
 		this.draggable = true;
@@ -91,71 +74,12 @@ public class GameObjectMirror extends GameObject implements GraphicBitmap, Inter
 		this.y = y;
 		this.rotation = rotation;
 	}
-	
-	@Override
-	public int getDepth() {
-		return Graphic.DEPTH_MIRROR;
-	}
-
-	@Override
-	public double getX() {
-		return this.x;
-	}
-
-	@Override
-	public double getY() {
-		return this.y;
-	}
-
-	@Override
-	public double getRotation() {
-		return this.rotation;
-	}
-
-	@Override
-	public double getBitmapCenterX() {
-		return bitmapCenterX;
-	}
-
-	@Override
-	public double getBitmapCenterY() {
-		return bitmapCenterY;
-	}
-
-	@Override
-	public double getScale() {
-		return scale;
-	}
 
 	@Override
 	public Image getImage() {
 		return image;
 	}
-	
-	@Override
-	public void setRotation(double rotation){
-		double rot = rotation % 360.0;
-		if(rot < 0.0){
-			rot += 360.0;
-		}
-		this.rotation = rot;
-	}
 
-	@Override
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	@Override
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	@Override
-	public void setScale(double val) {
-		this.scale = val;
-	}
-	
 	/**
 	 * A tükör szélességét lehet lekérdezni.
 	 * 

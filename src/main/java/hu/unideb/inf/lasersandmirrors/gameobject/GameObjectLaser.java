@@ -4,9 +4,12 @@ package hu.unideb.inf.lasersandmirrors.gameobject;
 import hu.unideb.inf.lasersandmirrors.Settings;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,34 +19,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kerekes Zoltán
  */
-public class GameObjectLaser extends GameObject implements GraphicBitmap, InteractiveGO {
+public class GameObjectLaser extends BitmapGO implements GraphicBitmap, InteractiveGO {
 	
 	/** Az adott osztályon belüli naplózó. */
 	private static final Logger log = LoggerFactory.getLogger(GameObjectDiamond.class);
 	
-	/** Az objektum x koordinátája. */
-	private double x;
-	
-	/** Az objektum y koordinátája. */
-	private double y;
-	
-	/** Az objektum elforgatás fokban mérve. */
-	private double rotation;
-	
 	/** Az objetkum rasztergrafikus képe. */
 	private static BufferedImage image;
 	
-	/** A rasztergrafikus kép középpontjának x koordinátája. */
-	private static double bitmapCenterX;
-	
-	/** A rasztergrafikus kép középpontjának y koordinátája. */
-	private static double bitmapCenterY;
-	
-	/** Az objektum rasztergrafikus képének és tényleges méretének aránya. */
-	private double scale;
-	
 	/** A lézerből kilőtt lézernyaláb. */
-	private GameObjectLaserline laserLine;
+	private Laserline laserLine;
 	
 	/** Mozgatható? */
 	private boolean draggable;
@@ -57,13 +42,14 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 			URL resource = Object.class.getResource("/bitmaps/RedLaser.png");
 			try{
 				image = ImageIO.read(resource);
-				bitmapCenterX = 25; //(double)image.getWidth() / 2.0;
-				bitmapCenterY = 66; //(double)image.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
 				log.error("Can't load bitmap: " + resource);
 			}
 		}
 		
+		this.bitmapCenterX = 25; //(double)image.getWidth() / 2.0;
+		this.bitmapCenterY = 66; //(double)image.getHeight() / 2.0;
+		this.depth = Graphic.DEPTH_LASER;
 		this.scale = 25.0 / (double)image.getWidth();
 		this.draggable = false;
 		this.rotatable = true;
@@ -77,7 +63,7 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 		this.x = 0;
 		this.y = 0;
 		this.rotation = 0;
-		this.laserLine = new GameObjectLaserline(Settings.DEFAULT_COLOR);
+		this.laserLine = new Laserline(Settings.DEFAULT_COLOR);
 	}
 	
 	/**
@@ -92,42 +78,7 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 		this.x = x;
 		this.y = y;
 		this.rotation = rotation;
-		this.laserLine = new GameObjectLaserline(color);
-	}
-	
-	@Override
-	public int getDepth() {
-		return Graphic.DEPTH_LASER;
-	}
-
-	@Override
-	public double getX() {
-		return this.x;
-	}
-
-	@Override
-	public double getY() {
-		return this.y;
-	}
-
-	@Override
-	public double getRotation() {
-		return this.rotation;
-	}
-
-	@Override
-	public double getBitmapCenterX() {
-		return bitmapCenterX;
-	}
-
-	@Override
-	public double getBitmapCenterY() {
-		return bitmapCenterY;
-	}
-
-	@Override
-	public double getScale() {
-		return scale;
+		this.laserLine = new Laserline(color);
 	}
 
 	@Override
@@ -135,42 +86,18 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 		return image;
 	}
 	
-	@Override
-	public void setRotation(double rotation){
-		double rot = rotation % 360.0;
-		if(rot < 0.0){
-			rot += 360.0;
-		}
-		this.rotation = rot;
-	}
-
-	@Override
-	public void setX(double x) {
-		this.x = x;
-	}
-	
-	@Override
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	@Override
-	public void setScale(double val) {
-		this.scale = val;
-	}
-	
 	/**
 	 * A lézerhez tartozó lézersugarat kérdezhetjük le.
 	 * 
 	 * @return A lézer sugara.
 	 */
-	public GameObjectLaserline getLaserLine() {
+	public Laserline getLaserLine() {
 		return laserLine;
 	}
 	
 	/**
 	 * A lézer színe kérdezhető le, 
-	 * ami egyben a lézersugár({@link GameObjectLaserline}) színe is.
+	 * ami egyben a lézersugár({@link Laserline}) színe is.
 	 * 
 	 * @return A lézer színe.
 	 */
@@ -180,7 +107,7 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 	
 	/**
 	 * A lézer színe állítható be, 
-	 * ami egyben a lézersugár({@link GameObjectLaserline}) színe is.
+	 * ami egyben a lézersugár({@link Laserline}) színe is.
 	 * 
 	 * @param color A lézer új színe.
 	 */
@@ -222,4 +149,70 @@ public class GameObjectLaser extends GameObject implements GraphicBitmap, Intera
 		this.draggable = val;
 	}
 	
+	
+	
+	
+	
+	/**
+	* Egy lézer vonalait tároló objektum.
+	*
+	* @author Kerekes Zoltán
+	*/
+	public class Laserline implements GraphicMultiline{
+		
+		/** A törtvonalat jelképező pontok listája. */
+		private ArrayList<Point2D> points;
+
+		/** A lézernyaláb színe. */
+		private Color color;
+
+		/**
+		 * Egy lézerhez kötődő lézersugár.
+		 * 
+		 * @param color A lézervonal ilyen színű lesz.
+		 */
+		public Laserline(Color color) {
+			this.points = new ArrayList<>();
+			this.color = color;
+		}
+
+		@Override
+		public int getDepth() {
+			return Graphic.DEPTH_LASER_LINE;
+		}
+
+		@Override
+		public List<Point2D> getPoints() {
+			return this.points;
+		}
+
+		@Override
+		public Color getColor() {
+			return this.color;
+		}
+
+		@Override
+		public void setColor(Color color){
+			this.color = color;
+		}
+
+		@Override
+		public void addPoint(Point2D point){
+			this.points.add(point);
+		}
+
+		/**
+		 * Új pont hozzáfűzése a törtvonal végéhez.
+		 * 
+		 * @param point A törtvonal végéhez adott pont. (math.geom2d.Point2D)
+		 */
+		public void addPoint(math.geom2d.Point2D point){
+			this.points.add(new Point2D.Double(point.x(), point.y()));
+		}
+
+		@Override
+		public void clearPoints() {
+			this.points.clear();
+		}
+	}
 }

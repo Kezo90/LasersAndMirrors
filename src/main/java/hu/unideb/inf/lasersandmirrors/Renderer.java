@@ -5,6 +5,7 @@ import hu.unideb.inf.lasersandmirrors.gameobject.GameObject;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectDiamond;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicBitmap;
 import hu.unideb.inf.lasersandmirrors.gameobject.GameObjectLaser;
+import hu.unideb.inf.lasersandmirrors.gameobject.Graphic;
 import hu.unideb.inf.lasersandmirrors.gameobject.GraphicMultiline;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +16,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -55,7 +58,7 @@ public class Renderer {
 		
 		// elemek összegyűjtése
 		List<GameObject> gameObjects = Controller.getCurrentLevel().getAllGameObject();
-		List<GameObject> drawables = new ArrayList<>();
+		List<Graphic> drawables = new ArrayList<>();
 		for (GameObject gameObject : gameObjects) {
 			if(gameObject instanceof GameObjectLaser){
 				drawables.add(((GameObjectLaser)gameObject).getLaserLine());
@@ -68,10 +71,10 @@ public class Renderer {
 			}
 			drawables.add(gameObject);
 		}
-		GameObject.sortGameObjectsByDepth(drawables);
+		sortGraphicsByDepth(drawables);
 		
 		// elemek kirajzolása
-		for (GameObject gameObject : drawables) {
+		for (Graphic gameObject : drawables) {
 			// vonalas objektumok
 			if(gameObject instanceof GraphicMultiline){
 				GraphicMultiline graphicMultiline = ((GraphicMultiline)gameObject);
@@ -102,6 +105,21 @@ public class Renderer {
 		
 		// erőforrások felszabadítása
 		g2d.dispose();
+	}
+	
+	/**
+	 * Az elemek rendezése mélység (láthatóság) szerint. 
+	 * A legalsó kerül legelőre.
+	 * 
+	 * @param graphics A rendezendő elemek.
+	 */
+	public static void sortGraphicsByDepth(List<Graphic> graphics){
+		Collections.sort(graphics, new Comparator<Graphic>(){
+			@Override
+			public int compare(Graphic g1, Graphic g2) {
+				return g1.getDepth() - g2.getDepth();
+			}
+		});
 	}
 	
 }

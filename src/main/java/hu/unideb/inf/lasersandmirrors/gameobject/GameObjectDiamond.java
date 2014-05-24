@@ -14,32 +14,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kerekes Zoltán
  */
-public class GameObjectDiamond extends GameObject implements GraphicBitmap, InteractiveGO {
+public class GameObjectDiamond extends BitmapGO implements GraphicBitmap, InteractiveGO {
 	
 	/** Az adott osztályon belüli naplózó. */
 	private static final Logger log = LoggerFactory.getLogger(GameObjectDiamond.class);
-	
-	/** Az objektum x koordinátája. */
-	private double x;
-	
-	/** Az objektum y koordinátája. */
-	private double y;
-	
-	/** Az objektum elforgatás fokban mérve. */
-	private double rotation;
-	
+		
 	/** Az objetkum rasztergrafikus képe. */
 	private static BufferedImage image;
-	
-	/** A rasztergrafikus kép középpontjának x koordinátája. */
-	private static double bitmapCenterX;
-	
-	/** A rasztergrafikus kép középpontjának y koordinátája. */
-	private static double bitmapCenterY;
-	
-	/** Az objektum rasztergrafikus képének és tényleges méretének aránya. */
-	private double scale;
-	
+
 	/** A gyémánt meg van világítva? */
 	private boolean lightened;
 
@@ -52,13 +34,14 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 			URL resource = Object.class.getResource("/bitmaps/Diamond.png");
 			try{
 				image = ImageIO.read(resource);
-				bitmapCenterX = (double)image.getWidth() / 2.0;
-				bitmapCenterY = (double)image.getHeight() / 2.0;
 			}catch(IOException | IllegalArgumentException e){
 				log.error("Can't load bitmap: " + resource);
 			}
 		}
 		
+		this.bitmapCenterX = (double)image.getWidth() / 2.0;
+		this.bitmapCenterY = (double)image.getHeight() / 2.0;
+		this.depth = Graphic.DEPTH_DIAMOND;
 		this.scale = 50.0 / (double)image.getWidth();
 		this.lightened = false;
 		this.draggable = false;
@@ -88,67 +71,8 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 	}
 	
 	@Override
-	public int getDepth() {
-		return Graphic.DEPTH_DIAMOND;
-	}
-
-	@Override
-	public double getX() {
-		return this.x;
-	}
-
-	@Override
-	public double getY() {
-		return this.y;
-	}
-
-	@Override
-	public double getRotation() {
-		return this.rotation;
-	}
-
-	@Override
-	public double getBitmapCenterX() {
-		return bitmapCenterX;
-	}
-
-	@Override
-	public double getBitmapCenterY() {
-		return bitmapCenterY;
-	}
-
-	@Override
-	public double getScale() {
-		return scale;
-	}
-
-	@Override
 	public Image getImage() {
 		return image;
-	}
-	
-	@Override
-	public void setRotation(double rotation){
-		double rot = rotation % 360.0;
-		if(rot < 0.0){
-			rot += 360.0;
-		}
-		this.rotation = rot;
-	}
-
-	@Override
-	public void setX(double val) {
-		this.x = val;
-	}
-
-	@Override
-	public void setY(double val) {
-		this.y = val;
-	}
-
-	@Override
-	public void setScale(double val) {
-		this.scale = val;
 	}
 	
 	/**
@@ -246,8 +170,10 @@ public class GameObjectDiamond extends GameObject implements GraphicBitmap, Inte
 	 * 
 	 * Akkor kell megejeleníteni, ha a {@link GameObjectDiamond#isLightened()} 
 	 * igazzal tér vissza.
+	 * 
+	 * @author Kerekes Zoltán
 	 */
-	public class DiamondShineGO extends GameObject implements GraphicBitmap {
+	public class DiamondShineGO implements GraphicBitmap {
 
 		@Override
 		public int getDepth() {
