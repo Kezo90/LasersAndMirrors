@@ -21,6 +21,7 @@ import java.awt.geom.Point2D;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -463,7 +464,11 @@ public class EditMenu extends javax.swing.JPanel implements GameMenu {
 	 * már létezik pálya.
 	 */
 	private void showWarningLevelExists(){
-		// TODO: warning "Another level exists with same name."
+		JOptionPane.showMessageDialog(this, 
+				"<html>"
+					+ "<p>Another level exists with same name.</p>"
+					+ "<p><strong>Level not saved!</strong></p>"
+				+ "</html>");
 	}
 	
 	/**
